@@ -1,0 +1,12 @@
+background_b: 255
+background_g: 86
+background_r: 69
+rosdistro: 'indigo
+
+  '
+roslaunch:
+  uris: {host_laptop__53402: 'http://laptop:53402/'}
+rosversion: '1.11.9
+
+  '
+run_id: c528d400-8d15-11e4-8f95-00e04c000001

@@ -1,0 +1,72 @@
+controller_list:
+  - name: fake_right_arm_controller
+    joints:
+      - right_shoulder_swing_joint
+      - right_shoulder_lateral_joint
+      - right_elbow_joint
+  - name: fake_left_arm_controller
+    joints:
+      - left_shoulder_swing_joint
+      - left_shoulder_lateral_joint
+      - left_elbow_joint
+  - name: fake_right_leg_controller
+    joints:
+      - right_hip_twist_joint
+      - right_hip_lateral_joint
+      - right_hip_swing_joint
+      - right_knee_joint
+      - right_ankle_swing_joint
+      - right_ankle_lateral_joint
+  - name: fake_left_leg_controller
+    joints:
+      - left_hip_twist_joint
+      - left_hip_lateral_joint
+      - left_hip_swing_joint
+      - left_knee_joint
+      - left_ankle_swing_joint
+      - left_ankle_lateral_joint
+  - name: fake_both_arms_controller
+    joints:
+      - left_shoulder_swing_joint
+      - left_shoulder_lateral_joint
+      - left_elbow_joint
+      - right_shoulder_swing_joint
+      - right_shoulder_lateral_joint
+      - right_elbow_joint
+  - name: fake_both_legs_controller
+    joints:
+      - left_hip_twist_joint
+      - left_hip_lateral_joint
+      - left_hip_swing_joint
+      - left_knee_joint
+      - left_ankle_swing_joint
+      - left_ankle_lateral_joint
+      - right_hip_twist_joint
+      - right_hip_lateral_joint
+      - right_hip_swing_joint
+      - right_knee_joint
+      - right_ankle_swing_joint
+      - right_ankle_lateral_joint
+  - name: fake_robot_controller
+    joints:
+      - left_hip_twist_joint
+      - left_hip_lateral_joint
+      - left_hip_swing_joint
+      - left_knee_joint
+      - left_ankle_swing_joint
+      - left_ankle_lateral_joint
+      - left_shoulder_swing_joint
+      - left_shoulder_lateral_joint
+      - left_elbow_joint
+      - right_hip_twist_joint
+      - right_hip_lateral_joint
+      - right_hip_swing_joint
+      - right_knee_joint
+      - right_ankle_swing_joint
+      - right_ankle_lateral_joint
+      - right_shoulder_swing_joint
+      - right_shoulder_lateral_joint
+      - right_elbow_joint
+  - name: fake_torso_controller
+    joints:
+      []

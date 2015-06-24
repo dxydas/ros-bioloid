@@ -1,0 +1,4 @@
+uint16 dxlID
+float32 value
+---
+bool txSuccess

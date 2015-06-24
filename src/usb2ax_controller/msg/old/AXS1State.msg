@@ -1,0 +1,12 @@
+#Header header
+uint32 irLeft
+uint32 irCentre
+uint32 irRight
+uint32 lightLeft
+uint32 lightCentre
+uint32 lightRight
+uint32 irObstacleDetected
+bool isLightDetected
+uint32 sound
+uint32 soundDetectedCount
+uint32 soundDetectedTime

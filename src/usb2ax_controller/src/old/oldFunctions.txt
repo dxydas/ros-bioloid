@@ -1,0 +1,178 @@
+
+
+//    void setAllMotorsGoalSpeedInRadPerSec(float speed);
+//    void setAllMotorsMaxTorqueInDecimal(float torque);
+//    void setAllMotorsTorqueEnabled(bool enabled);
+
+//    bool setAllMotorsGoalSpeedInRadPerSec(usb2ax_controller::SetAllMotorsParam::Request &req,
+//                                          usb2ax_controller::SetAllMotorsParam::Response &res);
+//    bool setAllMotorsMaxTorqueInDecimal(usb2ax_controller::SetAllMotorsParam::Request &req,
+//                                        usb2ax_controller::SetAllMotorsParam::Response &res);
+//    bool setAllMotorsTorqueEnabled(usb2ax_controller::SetAllMotorsParam::Request &req,
+//                                   usb2ax_controller::SetAllMotorsParam::Response &res);
+
+
+
+
+//    ros::ServiceServer SetAllMotorsGoalSpeedInRadPerSecService =
+//            n.advertiseService("SetAllMotorsGoalSpeedInRadPerSec",
+//                               &JointController::setAllMotorsGoalSpeedInRadPerSec, &jointController);
+//    ros::ServiceServer SetAllMotorsMaxTorqueInDecimalService =
+//            n.advertiseService("SetAllMotorsMaxTorqueInDecimal",
+//                               &JointController::setAllMotorsMaxTorqueInDecimal, &jointController);
+//    ros::ServiceServer SetAllMotorsTorqueEnabledService =
+//            n.advertiseService("SetAllMotorsTorqueEnabled",
+//                               &JointController::setAllMotorsTorqueEnabled, &jointController);
+
+
+//void JointController::setAllMotorsGoalPositionInRad(float pos)
+//{
+//    // Non-sync write version
+//    //for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
+//    //    if (connectedMotors[dxlID])
+//    //        setMotorGoalPositionInRad(dxlID, pos);
+
+//    // Sync write version
+//    std::vector<int> values(NUM_OF_MOTORS, 0);
+//    for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
+//        if (connectedMotors[dxlID])
+//            values[dxlID-1] = radToAxPosition(directionSign[dxlID]*(pos - positionOffsets[dxlID]));
+//    setAllMotorsSyncValues(AX12_GOAL_POSITION_L, values);
+//}
+
+
+//void JointController::setAllMotorsGoalSpeedInRadPerSec(float speed)
+//{
+//    // Non-sync write version
+//    //for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
+//    //    if (connectedMotors[dxlID])
+//    //        setMotorGoalSpeedInRadPerSec(dxlID, speed);
+
+//    // Sync write version
+//    std::vector<int> values(NUM_OF_MOTORS, 0);
+//    for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
+//        if (connectedMotors[dxlID])
+//            values[dxlID-1] = radPerSecToAxSpeed(speed);
+//    setAllMotorsSyncValues(AX12_MOVING_SPEED_L, values);
+//}
+
+
+//void JointController::setAllMotorsMaxTorqueInDecimal(float torque)
+//{
+//    // Non-sync write version
+//    //for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
+//    //    if (connectedMotors[dxlID])
+//    //        setMotorMaxTorqueInDecimal(dxlID, torque);
+
+//    // Sync write version
+//    std::vector<int> values(NUM_OF_MOTORS, 0);
+//    for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
+//        if (connectedMotors[dxlID])
+//            values[dxlID-1] = decimalToAxTorque(torque);
+//    setAllMotorsSyncValues(AX12_TORQUE_LIMIT_L, values);
+//}
+
+
+//void JointController::setAllMotorsTorqueEnabled(bool enabled)
+//{
+//    std::vector<int> values(NUM_OF_MOTORS, 0);
+//    for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
+//        if (connectedMotors[dxlID])
+//            values[dxlID-1] = enabled;
+//    setAllMotorsSyncValues(AX12_TORQUE_ENABLE, values);
+//}
+
+
+//bool JointController::setAllMotorsGoalSpeedInRadPerSec(
+//        usb2ax_controller::SetAllMotorsParam::Request &req,
+//        usb2ax_controller::SetAllMotorsParam::Response &res)
+//{
+//    setAllMotorsGoalSpeedInRadPerSec(req.param);
+//    res.txSuccess = true;
+//    return true;
+//}
+
+
+//bool JointController::setAllMotorsMaxTorqueInDecimal(
+//        usb2ax_controller::SetAllMotorsParam::Request &req,
+//        usb2ax_controller::SetAllMotorsParam::Response &res)
+//{
+//    setAllMotorsMaxTorqueInDecimal(req.param);
+//    res.txSuccess = true;
+//    return true;
+//}
+
+
+//bool JointController::setAllMotorsTorqueEnabled(
+//        usb2ax_controller::SetAllMotorsParam::Request &req,
+//        usb2ax_controller::SetAllMotorsParam::Response &res)
+//{
+//    setAllMotorsTorqueEnabled(req.param);
+//    res.txSuccess = true;
+//    return true;
+//}
+
+
+//void JointController::setAllMotorsSyncValues(int controlTableStartAddr, std::vector<int> values)
+//{
+//        std_msgs::UInt16MultiArray dxlIDs;
+//        dxlIDs.layout.dim.resize(1);
+//        dxlIDs.layout.dim[0].label = "ids";
+//        dxlIDs.layout.dim[0].size = numOfConnectedMotors;
+//        dxlIDs.layout.dim[0].stride = numOfConnectedMotors;
+//        dxlIDs.layout.data_offset = 0;
+//        dxlIDs.data.resize(numOfConnectedMotors);
+
+//        std_msgs::UInt16MultiArray vals;
+//        vals.layout.dim.resize(2);
+//        vals.layout.dim[0].label = "bytes";
+//        vals.layout.dim[0].size = 1;
+//        vals.layout.dim[0].stride = numOfConnectedMotors*1;
+//        vals.layout.dim[1].label = "motors";
+//        vals.layout.dim[1].size = numOfConnectedMotors;
+//        vals.layout.dim[1].stride = 1;
+//        vals.layout.data_offset = 0;
+//        vals.data.resize(numOfConnectedMotors*1);
+
+//        std_msgs::UInt16MultiArray isWord;
+//        isWord.layout.dim.resize(1);
+//        isWord.layout.dim[0].label = "isWord";
+//        isWord.layout.dim[0].size = 1;
+//        isWord.layout.dim[0].stride = 1;
+//        isWord.layout.data_offset = 0;
+//        isWord.data.resize(1);
+//        switch (controlTableStartAddr)
+//        {
+//        case AX12_MODEL_NUMBER_L:
+//        case AX12_CW_ANGLE_LIMIT_L:
+//        case AX12_CCW_ANGLE_LIMIT_L:
+//        case AX12_MAX_TORQUE_L:
+//        case AX12_GOAL_POSITION_L:
+//        case AX12_MOVING_SPEED_L:
+//        case AX12_TORQUE_LIMIT_L:
+//        case AX12_PRESENT_POSITION_L:
+//        case AX12_PRESENT_SPEED_L:
+//        case AX12_PRESENT_LOAD_L:
+//        case AX12_PUNCH_L:
+//        {
+//            // 2 bytes
+//            isWord.data[0] = true;
+//            break;
+//        }
+//        default:
+//        {
+//            // 1 byte
+//            isWord.data[0] = false;
+//            break;
+//        }
+//        }
+
+//        for (int i = 0; i < numOfConnectedMotors; ++i)
+//        {
+//            dxlIDs.data[i] = i + 1;
+//            vals.data[i] = values[i];
+//        }
+
+//        setSyncValues(dxlIDs, controlTableStartAddr, vals, isWord);
+//}
+

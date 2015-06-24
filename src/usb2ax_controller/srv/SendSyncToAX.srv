@@ -1,0 +1,6 @@
+std_msgs/UInt16MultiArray dxlIDs
+uint16 startAddress
+std_msgs/UInt16MultiArray values
+std_msgs/UInt16MultiArray isWord
+---
+bool txSuccess

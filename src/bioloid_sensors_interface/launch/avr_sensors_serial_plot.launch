@@ -1,0 +1,6 @@
+<launch>
+    <arg name="port" default="/dev/ttyACM0"/>
+	<!--Experimental code: <node pkg="rosserial_server" type="serial_node" name="serial_node" args="_port:=$(arg port)"/>-->
+	<node pkg="rosserial_python" type="serial_node.py" name="serial_node" args="_port:=$(arg port)"/>
+	<node pkg="rqt_plot" type="rqt_plot" name="rqt_plot"/>
+</launch>

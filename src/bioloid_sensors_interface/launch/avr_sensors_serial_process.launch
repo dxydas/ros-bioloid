@@ -1,0 +1,5 @@
+<launch>
+    <arg name="port" default="/dev/ttyACM1"/>
+	<node pkg="rosserial_python" type="serial_node.py" name="serial_node" args="_port:=$(arg port)"/>
+	<node pkg="bioloid_sensors_interface" type="imu_tf_broadcaster" name="imu_tf_broadcaster" output="screen"/>
+</launch>
