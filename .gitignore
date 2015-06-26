@@ -31,3 +31,6 @@
 build/
 devel/
 src/beginner_tutorials/
+
+# Qt Creator user files
+*.creator.user
