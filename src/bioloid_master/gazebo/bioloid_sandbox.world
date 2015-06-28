@@ -1,0 +1,2621 @@
+<sdf version='1.4'>
+  <world name='default'>
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+    </model>
+    <physics type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <gravity>0 0 -9.8</gravity>
+    </physics>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+    </scene>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>0</latitude_deg>
+      <longitude_deg>0</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <model name='BIOLOID'>
+      <link name='imu_link'>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0.005 0 0.027 0 -0 0</pose>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.003458</ixx>
+            <ixy>-5.73533e-26</ixy>
+            <ixz>-0.00027</ixz>
+            <iyy>0.003508</iyy>
+            <iyz>0</iyz>
+            <izz>0.00205</izz>
+          </inertia>
+        </inertial>
+        <collision name='imu_link_collision_torso_link'>
+          <pose>-0.0022 1.61869e-08 0.089 0 -0 1.57079</pose>
+          <geometry>
+            <box>
+              <size>0.033 0.054 0.044</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='imu_link_collision_torso_link_1'>
+          <pose>-0.009 2.52091e-08 0.039 0 -0 1.57079</pose>
+          <geometry>
+            <box>
+              <size>0.103 0.0905 0.0635</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='imu_link_collision_torso_link_2'>
+          <pose>0.00375 8.29247e-09 -0.0108 0 -0 1.57079</pose>
+          <geometry>
+            <box>
+              <size>0.099 0.065 0.043</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='imu_link_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.04 0.02 0.005</size>
+            </box>
+          </geometry>
+        </visual>
+        <visual name='imu_link_visual_torso_link'>
+          <pose>0.01 0 0.054 1.57079 -1.20861e-16 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-CHEST-F_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='imu_link_visual_torso_link_1'>
+          <pose>0.01 0 0.054 1.57079 -1.20861e-16 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-CHEST-B_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='imu_link_visual_torso_link_2'>
+          <pose>-0.022 4.24574e-08 0.039 -3.14159 2.65359e-06 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/CM-5_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='imu_link_visual_torso_link_3'>
+          <pose>0.01 0 0.079 -1.57079 -6.40763e-17 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-S1_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='imu_link_visual_torso_link_4'>
+          <pose>0.00999996 -0.032 0.054 1.57079 6.30183e-17 -3.91757e-17</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='imu_link_visual_torso_link_5'>
+          <pose>0.01 0.032 0.054 1.57079 -6.30414e-17 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='imu_link_visual_torso_link_6'>
+          <pose>-0.0155 3.38333e-08 0.0075 -1.57079 6.30414e-17 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F8_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='imu_link_visual_torso_link_7'>
+          <pose>-0.0155 3.38333e-08 -0.0303 1.57079 -6.30414e-17 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F8_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='imu_link_visual_torso_link_8'>
+          <pose>-0.00600004 -0.033 -0.0115 -3.14159 2.65359e-06 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='imu_link_visual_torso_link_9'>
+          <pose>-0.00599996 0.033 -0.0115 -3.14159 2.65359e-06 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <link name='left_hip_twist_link'>
+        <pose>-0.00599996 0.033 -0.0115 0 -0 -1.5708</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='left_hip_twist_link_collision'>
+          <pose>0 0.0008 -0.041 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.029 0.083 0.0405</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='left_hip_twist_link_visual'>
+          <pose>0 0 -0.05 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F5_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='left_hip_twist_joint' type='revolute'>
+        <child>left_hip_twist_link</child>
+        <parent>imu_link</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-0.785397</lower>
+            <upper>0.785397</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='left_hip_lateral_link'>
+        <pose>-0.0213 0.0330001 -0.0615 -1.57079 -6.40763e-17 -1.5708</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='left_hip_lateral_link_collision'>
+          <pose>0 0.0135 0.0153 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.04 0.051 0.0721</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='left_hip_lateral_link_visual'>
+          <pose>0 0 0 3.14159 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_hip_lateral_link_visual_left_hip_lateral_link_1'>
+          <pose>-0.019 0.0145 -0.016 3.14159 1.57079 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_hip_lateral_link_visual_left_hip_lateral_link_2'>
+          <pose>0.019 0.0145 -0.016 -3.14159 1.57079 -1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_hip_lateral_link_visual_left_hip_lateral_link_3'>
+          <pose>0 0 0.032 -2.65359e-06 -1.57079 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_hip_lateral_link_visual_left_hip_lateral_link_4'>
+          <pose>0 0 0.05 1.57079 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_hip_lateral_link_visual_left_hip_lateral_link_5'>
+          <pose>0 0.0145 0.051 -1.57079 -1.20861e-16 -1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F7_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='left_hip_lateral_joint' type='revolute'>
+        <child>left_hip_lateral_link</child>
+        <parent>left_hip_twist_link</parent>
+        <axis>
+          <xyz>1 -4e-06 1e-06</xyz>
+          <limit>
+            <lower>-0.3</lower>
+            <upper>0.3</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='left_upper_leg_link'>
+        <pose>0.0107 0.033 -0.0615 1.57079 -1.32679e-06 -5.30718e-06</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='left_upper_leg_link_collision'>
+          <pose>0 -0.0214 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.03 0.065 0.049</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='left_upper_leg_link_collision_left_upper_leg_link_1'>
+          <pose>-0.0065 -0.0675 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.04 0.0371 0.049</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='left_upper_leg_link_visual'>
+          <pose>0 0 0 -1.57079 1.57079 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F4_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_upper_leg_link_visual_left_upper_leg_link_1'>
+          <pose>-0.0145 -0.075 0 1.57079 -1.57079 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F1_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='left_hip_swing_joint' type='revolute'>
+        <child>left_upper_leg_link</child>
+        <parent>left_hip_lateral_link</parent>
+        <axis>
+          <xyz>-5e-06 -1 3e-06</xyz>
+          <limit>
+            <lower>-1.57079</lower>
+            <upper>1.57079</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='left_lower_leg_link'>
+        <pose>-0.00379986 0.0329998 -0.1365 1.57079 -1.32679e-06 -5.30718e-06</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='left_lower_leg_link_collision'>
+          <pose>0.0135 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.051 0.033 0.044</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='left_lower_leg_link_collision_left_lower_leg_link_1'>
+          <pose>0.0145 -0.0492 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.03 0.067 0.049</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='left_lower_leg_link_visual'>
+          <pose>0 0 0 0 -0 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_lower_leg_link_visual_left_lower_leg_link_1'>
+          <pose>0.0145 -0.019 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_lower_leg_link_visual_left_lower_leg_link_2'>
+          <pose>0.0145 -0.071 0 1.57079 -1.57079 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F4_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='left_knee_joint' type='revolute'>
+        <child>left_lower_leg_link</child>
+        <parent>left_upper_leg_link</parent>
+        <axis>
+          <xyz>-5e-06 -1 3e-06</xyz>
+          <limit>
+            <lower>-3.14159</lower>
+            <upper>0</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='left_ankle_swing_link'>
+        <pose>0.0107002 0.0329996 -0.2075 1.57079 -1.32679e-06 -5.30718e-06</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='left_ankle_swing_link_collision'>
+          <pose>-0.0167 0.0135 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.0721 0.051 0.04</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='left_ankle_swing_link_visual'>
+          <pose>0 0 0 0 -0 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_ankle_swing_link_visual_left_ankle_swing_link_1'>
+          <pose>0.019 0.0145 0 3.14159 2.21271e-23 -1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F7_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_ankle_swing_link_visual_left_ankle_swing_link_2'>
+          <pose>-0.032 0 0 -2.65359e-06 1.57079 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_ankle_swing_link_visual_left_ankle_swing_link_3'>
+          <pose>-0.048 0.0145 -0.019 1.57079 -2.21271e-23 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_ankle_swing_link_visual_left_ankle_swing_link_4'>
+          <pose>-0.048 0.0145 0.019 -1.57079 2.21271e-23 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='left_ankle_swing_joint' type='revolute'>
+        <child>left_ankle_swing_link</child>
+        <parent>left_lower_leg_link</parent>
+        <axis>
+          <xyz>-5e-06 -1 3e-06</xyz>
+          <limit>
+            <lower>-0.45</lower>
+            <upper>1.57079</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='left_ankle_lateral_link'>
+        <pose>-0.0212998 0.0329997 -0.2075 1.57079 2.65359e-06 1.57079</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.002</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.002</iyy>
+            <iyz>0</iyz>
+            <izz>0.002</izz>
+          </inertia>
+        </inertial>
+        <collision name='left_ankle_lateral_link_collision'>
+          <pose>0 -0.009 0.016 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.029 0.0405 0.083</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='left_ankle_lateral_link_collision_left_foot_link'>
+          <pose>0.008 -0.0277 0.016 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.061 0.009 0.101</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='left_ankle_lateral_link_visual'>
+          <pose>0 0 0.05 1.57079 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_ankle_lateral_link_visual_left_ankle_lateral_link_1'>
+          <pose>0 0 0.0153 -1.5708 2.65359e-06 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F5_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_ankle_lateral_link_visual_left_foot_link'>
+          <pose>0.008 -0.0235 0.016 -2.65359e-06 1.57079 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='left_ankle_lateral_joint' type='revolute'>
+        <child>left_ankle_lateral_link</child>
+        <parent>left_ankle_swing_link</parent>
+        <axis>
+          <xyz>1 -7e-06 1e-06</xyz>
+          <limit>
+            <lower>-0.7</lower>
+            <upper>0.7</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='left_shoulder_swing_link'>
+        <pose>0.01 0.032 0.054 3.14159 1.57079 1.57079</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='left_shoulder_swing_link_collision'>
+          <pose>0.006 0 -0.0375 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.039 0.052 0.036</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='left_shoulder_swing_link_visual'>
+          <pose>0.014 0 -0.044 0 -0 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F1_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='left_shoulder_swing_joint' type='revolute'>
+        <child>left_shoulder_swing_link</child>
+        <parent>imu_link</parent>
+        <axis>
+          <xyz>-4e-06 -1 1e-06</xyz>
+          <limit>
+            <lower>-3.14159</lower>
+            <upper>3.14159</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='left_upper_arm_link'>
+        <pose>0.0100002 0.076 0.0399999 1.57079 1.57079 1.57079</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='left_upper_arm_link_collision'>
+          <pose>0.0148 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.054 0.033 0.044</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='left_upper_arm_link_collision_left_upper_arm_link_1'>
+          <pose>0.0555 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.047 0.033 0.052</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='left_upper_arm_link_visual'>
+          <pose>0 0 0 0 -0 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_upper_arm_link_visual_left_upper_arm_link_1'>
+          <pose>0 0 -0.0185 -1.57079 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_upper_arm_link_visual_left_upper_arm_link_2'>
+          <pose>0 0 -0.019 -1.57079 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-WA_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_upper_arm_link_visual_left_upper_arm_link_3'>
+          <pose>0.0415 0 0 0 -0 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_upper_arm_link_visual_left_upper_arm_link_4'>
+          <pose>0.0675 0 0 3.14159 -1.57079 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F2_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='left_shoulder_lateral_joint' type='revolute'>
+        <child>left_upper_arm_link</child>
+        <parent>left_shoulder_swing_link</parent>
+        <axis>
+          <xyz>1 -5e-06 0</xyz>
+          <limit>
+            <lower>-0.2</lower>
+            <upper>3.14159</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='left_lower_arm_link'>
+        <pose>0.0100002 0.0759999 -0.0275001 1.57079 1.57079 1.57079</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.002</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.002</iyy>
+            <iyz>0</iyz>
+            <izz>0.002</izz>
+          </inertia>
+        </inertial>
+        <collision name='left_lower_arm_link_collision'>
+          <pose>0.017 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.058 0.033 0.044</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='left_lower_arm_link_collision_left_hand_link'>
+          <pose>0.039 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.0131 0.0265 0.044</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='left_lower_arm_link_collision_left_hand_link_1'>
+          <pose>0.0701 0.0077 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.0575 0.0175 0.035</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='left_lower_arm_link_visual'>
+          <pose>0 0 0 0 -0 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_lower_arm_link_visual_left_lower_arm_link_1'>
+          <pose>0 0 -0.0185 -1.57079 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_lower_arm_link_visual_left_lower_arm_link_2'>
+          <pose>0 0 -0.019 -1.57079 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-WA_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_lower_arm_link_visual_left_lower_arm_link_3'>
+          <pose>0.0415 0 0 0 -0 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='left_lower_arm_link_visual_left_hand_link'>
+          <pose>0.0415 0 0 3.14159 1.57079 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F11_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='left_elbow_joint' type='revolute'>
+        <child>left_lower_arm_link</child>
+        <parent>left_upper_arm_link</parent>
+        <axis>
+          <xyz>1 -5e-06 0</xyz>
+          <limit>
+            <lower>-1.77</lower>
+            <upper>1.77</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='right_hip_twist_link'>
+        <pose>-0.00600004 -0.033 -0.0115 3.14159 -2.21271e-23 1.57079</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='right_hip_twist_link_collision'>
+          <pose>0 0.0008 0.041 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.029 0.083 0.0405</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='right_hip_twist_link_visual'>
+          <pose>0 0 0.05 3.14159 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F5_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='right_hip_twist_joint' type='revolute'>
+        <child>right_hip_twist_link</child>
+        <parent>imu_link</parent>
+        <axis>
+          <xyz>3e-06 0 -1</xyz>
+          <limit>
+            <lower>-0.785397</lower>
+            <upper>0.785397</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='right_hip_lateral_link'>
+        <pose>-0.0212999 -0.033 -0.0615 -1.5708 6.40763e-17 1.57079</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='right_hip_lateral_link_collision'>
+          <pose>0 0.0135 -0.0153 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.04 0.051 0.0721</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='right_hip_lateral_link_visual'>
+          <pose>0 0 0 0 -0 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_hip_lateral_link_visual_right_hip_lateral_link_1'>
+          <pose>-0.019 0.0145 0.016 -3.14159 -1.57079 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_hip_lateral_link_visual_right_hip_lateral_link_2'>
+          <pose>0.019 0.0145 0.016 3.14159 -1.57079 -1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_hip_lateral_link_visual_right_hip_lateral_link_3'>
+          <pose>0 0 -0.032 -2.65359e-06 -1.57079 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_hip_lateral_link_visual_right_hip_lateral_link_4'>
+          <pose>0 0 -0.05 -1.57079 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_hip_lateral_link_visual_right_hip_lateral_link_5'>
+          <pose>0 0.0145 -0.051 1.57079 1.20861e-16 -1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F7_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='right_hip_lateral_joint' type='revolute'>
+        <child>right_hip_lateral_link</child>
+        <parent>right_hip_twist_link</parent>
+        <axis>
+          <xyz>-1 1e-06 -4e-06</xyz>
+          <limit>
+            <lower>-0.3</lower>
+            <upper>0.3</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='right_upper_leg_link'>
+        <pose>0.0107001 -0.033 -0.0614999 -1.5708 3.98038e-06 3.14159</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='right_upper_leg_link_collision'>
+          <pose>0 0.0214 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.03 0.065 0.049</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='right_upper_leg_link_collision_right_upper_leg_link_1'>
+          <pose>0.0065 0.0675 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.04 0.0371 0.049</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='right_upper_leg_link_visual'>
+          <pose>0 0 0 1.57079 1.57079 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F4_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_upper_leg_link_visual_right_upper_leg_link_1'>
+          <pose>0.0145 0.075 0 -1.57079 -1.57079 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F1_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='right_hip_swing_joint' type='revolute'>
+        <child>right_upper_leg_link</child>
+        <parent>right_hip_lateral_link</parent>
+        <axis>
+          <xyz>-3e-06 -1 0</xyz>
+          <limit>
+            <lower>-1.57079</lower>
+            <upper>1.57079</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='right_lower_leg_link'>
+        <pose>-0.00379961 -0.033 -0.1365 -1.5708 3.98038e-06 3.14159</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='right_lower_leg_link_collision'>
+          <pose>-0.0135 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.051 0.033 0.044</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='right_lower_leg_link_collision_right_lower_leg_link_1'>
+          <pose>-0.0145 0.0492 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.03 0.067 0.049</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='right_lower_leg_link_visual'>
+          <pose>0 0 0 3.14159 2.65359e-06 1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_lower_leg_link_visual_right_lower_leg_link_1'>
+          <pose>-0.0145 0.019 0 0 -0 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_lower_leg_link_visual_right_lower_leg_link_2'>
+          <pose>-0.0145 0.071 0 -1.57079 -1.57079 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F4_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='right_knee_joint' type='revolute'>
+        <child>right_lower_leg_link</child>
+        <parent>right_upper_leg_link</parent>
+        <axis>
+          <xyz>-3e-06 -1 0</xyz>
+          <limit>
+            <lower>-3.14159</lower>
+            <upper>0</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='right_ankle_swing_link'>
+        <pose>0.0107007 -0.033 -0.2075 -1.5708 3.98038e-06 3.14159</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='right_ankle_swing_link_collision'>
+          <pose>0.0167 -0.0135 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.0721 0.051 0.04</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='right_ankle_swing_link_visual'>
+          <pose>0 0 0 3.14159 2.65359e-06 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_ankle_swing_link_visual_right_ankle_swing_link_1'>
+          <pose>-0.019 -0.0145 0 3.14159 -2.21271e-23 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F7_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_ankle_swing_link_visual_right_ankle_swing_link_2'>
+          <pose>0.032 0 0 3.14159 1.57079 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_ankle_swing_link_visual_right_ankle_swing_link_3'>
+          <pose>0.048 -0.0145 0.019 -1.57079 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_ankle_swing_link_visual_right_ankle_swing_link_4'>
+          <pose>0.048 -0.0145 -0.019 1.57079 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='right_ankle_swing_joint' type='revolute'>
+        <child>right_ankle_swing_link</child>
+        <parent>right_lower_leg_link</parent>
+        <axis>
+          <xyz>-3e-06 -1 0</xyz>
+          <limit>
+            <lower>-0.45</lower>
+            <upper>1.57079</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='right_ankle_lateral_link'>
+        <pose>-0.0212993 -0.0329999 -0.2075 -1.5708 6.40763e-17 1.57079</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.002</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.002</iyy>
+            <iyz>0</iyz>
+            <izz>0.002</izz>
+          </inertia>
+        </inertial>
+        <collision name='right_ankle_lateral_link_collision'>
+          <pose>0 0.009 -0.016 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.029 0.0405 0.083</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='right_ankle_lateral_link_collision_right_foot_link'>
+          <pose>-0.008 0.0277 -0.016 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.061 0.009 0.101</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='right_ankle_lateral_link_visual'>
+          <pose>0 0 -0.05 -1.57079 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_ankle_lateral_link_visual_right_ankle_lateral_link_1'>
+          <pose>0 0 -0.0153 1.5708 2.65359e-06 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F5_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_ankle_lateral_link_visual_right_foot_link'>
+          <pose>-0.008 0.0235 -0.016 3.14159 -1.57079 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='right_ankle_lateral_joint' type='revolute'>
+        <child>right_ankle_lateral_link</child>
+        <parent>right_ankle_swing_link</parent>
+        <axis>
+          <xyz>-1 1e-06 -4e-06</xyz>
+          <limit>
+            <lower>-0.7</lower>
+            <upper>0.7</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='right_shoulder_swing_link'>
+        <pose>0.00999996 -0.032 0.054 3.14159 -1.57079 -1.57079</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='right_shoulder_swing_link_collision'>
+          <pose>-0.006 0 0.0375 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.039 0.052 0.036</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='right_shoulder_swing_link_visual'>
+          <pose>-0.014 0 0.044 3.14159 2.65359e-06 1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F1_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='right_shoulder_swing_joint' type='revolute'>
+        <child>right_shoulder_swing_link</child>
+        <parent>imu_link</parent>
+        <axis>
+          <xyz>-1e-06 -1 1e-06</xyz>
+          <limit>
+            <lower>-3.14159</lower>
+            <upper>3.14159</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='right_upper_arm_link'>
+        <pose>0.0099999 -0.076 0.0400001 1.5708 -1.57079 -1.57079</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.001</iyy>
+            <iyz>0</iyz>
+            <izz>0.001</izz>
+          </inertia>
+        </inertial>
+        <collision name='right_upper_arm_link_collision'>
+          <pose>-0.0148 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.054 0.033 0.044</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='right_upper_arm_link_collision_right_upper_arm_link_1'>
+          <pose>-0.0555 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.047 0.033 0.052</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='right_upper_arm_link_visual'>
+          <pose>0 0 0 3.14159 -2.21271e-23 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_upper_arm_link_visual_right_upper_arm_link_1'>
+          <pose>0 0 0.0185 1.57079 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_upper_arm_link_visual_right_upper_arm_link_2'>
+          <pose>0 0 0.019 1.57079 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-WA_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_upper_arm_link_visual_right_upper_arm_link_3'>
+          <pose>-0.0415 0 0 0 0 -1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_upper_arm_link_visual_right_upper_arm_link_4'>
+          <pose>-0.0675 0 0 3.14159 1.57079 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F2_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='right_shoulder_lateral_joint' type='revolute'>
+        <child>right_upper_arm_link</child>
+        <parent>right_shoulder_swing_link</parent>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <limit>
+            <lower>-0.2</lower>
+            <upper>3.14159</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <link name='right_lower_arm_link'>
+        <pose>0.0099999 -0.0760001 -0.0274999 1.5708 -1.57079 -1.57079</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.002</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.002</iyy>
+            <iyz>0</iyz>
+            <izz>0.002</izz>
+          </inertia>
+        </inertial>
+        <collision name='right_lower_arm_link_collision'>
+          <pose>-0.0135 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.051 0.033 0.044</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='right_lower_arm_link_collision_right_hand_link'>
+          <pose>-0.039 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.0131 0.0265 0.044</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='right_lower_arm_link_collision_right_hand_link_1'>
+          <pose>-0.0701 -0.0077 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.0575 0.0175 0.035</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='right_lower_arm_link_visual'>
+          <pose>0 0 0 3.14159 -2.21271e-23 1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_lower_arm_link_visual_right_lower_arm_link_1'>
+          <pose>0 0 0.0185 1.57079 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_lower_arm_link_visual_right_lower_arm_link_2'>
+          <pose>0 0 0.019 1.57079 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-WA_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_lower_arm_link_visual_right_lower_arm_link_3'>
+          <pose>-0.0415 0 0 0 0 -1.57079</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='right_lower_arm_link_visual_right_hand_link'>
+          <pose>-0.0415 0 0 2.65359e-06 1.57079 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>0.1 0.1 0.1</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F11_FCD-Conv_BDR-Col.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='right_elbow_joint' type='revolute'>
+        <child>right_lower_arm_link</child>
+        <parent>right_upper_arm_link</parent>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <limit>
+            <lower>-1.77</lower>
+            <upper>1.77</upper>
+            <effort>10</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics/>
+        </axis>
+      </joint>
+      <pose>0 0 2 0 -0 0</pose>
+      <static>0</static>
+    </model>
+    <state world_name='default'>
+      <sim_time>15 601000000</sim_time>
+      <real_time>15 682513328</real_time>
+      <wall_time>1435438366 289325766</wall_time>
+      <model name='BIOLOID'>
+        <pose>0 0 2 0 -0 0</pose>
+        <link name='imu_link'>
+          <pose>0 0 2 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='left_ankle_lateral_link'>
+          <pose>-0.0213 0.033 1.7925 1.57079 3e-06 1.57079</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='left_ankle_swing_link'>
+          <pose>0.0107 0.033 1.7925 1.57079 -1e-06 -5e-06</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='left_hip_lateral_link'>
+          <pose>-0.0213 0.033 1.9385 -1.57079 -6.40763e-17 -1.5708</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='left_hip_twist_link'>
+          <pose>-0.006 0.033 1.9885 0 0 -1.5708</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='left_lower_arm_link'>
+          <pose>0.01 0.076 1.9725 1.57079 1.57079 1.57079</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='left_lower_leg_link'>
+          <pose>-0.0038 0.033 1.8635 1.57079 -1e-06 -5e-06</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='left_shoulder_swing_link'>
+          <pose>0.01 0.032 2.054 3.14159 1.57079 1.57079</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='left_upper_arm_link'>
+          <pose>0.01 0.076 2.04 1.57079 1.57079 1.57079</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='left_upper_leg_link'>
+          <pose>0.0107 0.033 1.9385 1.57079 -1e-06 -5e-06</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='right_ankle_lateral_link'>
+          <pose>-0.021299 -0.033 1.7925 -1.5708 6.40763e-17 1.57079</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='right_ankle_swing_link'>
+          <pose>0.010701 -0.033 1.7925 -1.5708 4e-06 3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='right_hip_lateral_link'>
+          <pose>-0.0213 -0.033 1.9385 -1.5708 6.40763e-17 1.57079</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='right_hip_twist_link'>
+          <pose>-0.006 -0.033 1.9885 3.14159 -2.21271e-23 1.57079</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='right_lower_arm_link'>
+          <pose>0.01 -0.076 1.9725 1.5708 -1.57079 -1.57079</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='right_lower_leg_link'>
+          <pose>-0.0038 -0.033 1.8635 -1.5708 4e-06 3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='right_shoulder_swing_link'>
+          <pose>0.01 -0.032 2.054 3.14159 -1.57079 -1.57079</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='right_upper_arm_link'>
+          <pose>0.01 -0.076 2.04 1.5708 -1.57079 -1.57079</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='right_upper_leg_link'>
+          <pose>0.0107 -0.033 1.9385 -1.5708 4e-06 3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='beer'>
+        <pose>0.1 0 0.885 0 -0 0</pose>
+        <link name='link'>
+          <pose>0.1 0 1 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='beer_0'>
+        <pose>0.1 0.2 0.885 0 -0 0</pose>
+        <link name='link'>
+          <pose>0.1 0.2 1 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='beer_1'>
+        <pose>0.1 -0.2 0.885 0 -0 0</pose>
+        <link name='link'>
+          <pose>0.1 -0.2 1 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='cafe_table'>
+        <pose>0.45 0 0 0 -0 0</pose>
+        <link name='link'>
+          <pose>0.45 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='ground_plane'>
+        <pose>0 0 0 0 -0 0</pose>
+        <link name='link'>
+          <pose>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='table_0'>
+        <pose>-0.75 0 0 0 -0 0</pose>
+        <link name='link'>
+          <pose>-0.75 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+    </state>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>2.50458 -2.9695 1.94368 1.98512e-17 0.243643 2.10419</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+    <model name='table_0'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='surface'>
+          <pose>0 0 1 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>1.5 0.8 0.03</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.6</mu>
+                <mu2>0.6</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual1'>
+          <pose>0 0 1 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>1.5 0.8 0.03</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Wood</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='front_left_leg'>
+          <pose>0.68 0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='front_left_leg'>
+          <pose>0.68 0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='front_right_leg'>
+          <pose>0.68 -0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='front_right_leg'>
+          <pose>0.68 -0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='back_right_leg'>
+          <pose>-0.68 -0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='back_right_leg'>
+          <pose>-0.68 -0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='back_left_leg'>
+          <pose>-0.68 0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='back_left_leg'>
+          <pose>-0.68 0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose>-0.501705 0 0 0 -0 0</pose>
+    </model>
+    <model name='cafe_table'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='surface'>
+          <pose>0 0 0.755 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.913 0.913 0.04</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='column'>
+          <pose>0 0 0.37 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.042 0.042 0.74</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <collision name='base'>
+          <pose>0 0 0.02 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.56 0.56 0.04</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://cafe_table/meshes/cafe_table.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose>1 0 0 0 -0 0</pose>
+    </model>
+    <model name='beer'>
+      <link name='link'>
+        <pose>0 0 0.115 0 -0 0</pose>
+        <inertial>
+          <mass>0.39</mass>
+          <inertia>
+            <ixx>0.00058</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00058</iyy>
+            <iyz>0</iyz>
+            <izz>0.00019</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <cylinder>
+              <radius>0.055</radius>
+              <length>0.23</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <cylinder>
+              <radius>0.055</radius>
+              <length>0.23</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://beer/materials/scripts</uri>
+              <uri>model://beer/materials/textures</uri>
+              <name>Beer/Diffuse</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose>0.404868 0 0 0 -0 0</pose>
+      <static>0</static>
+    </model>
+    <model name='beer_0'>
+      <link name='link'>
+        <pose>0 0 0.115 0 -0 0</pose>
+        <inertial>
+          <mass>0.39</mass>
+          <inertia>
+            <ixx>0.00058</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00058</iyy>
+            <iyz>0</iyz>
+            <izz>0.00019</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <cylinder>
+              <radius>0.055</radius>
+              <length>0.23</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <cylinder>
+              <radius>0.055</radius>
+              <length>0.23</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://beer/materials/scripts</uri>
+              <uri>model://beer/materials/textures</uri>
+              <name>Beer/Diffuse</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose>0.570968 0 0 0 -0 0</pose>
+      <static>0</static>
+    </model>
+    <model name='beer_1'>
+      <link name='link'>
+        <pose>0 0 0.115 0 -0 0</pose>
+        <inertial>
+          <mass>0.39</mass>
+          <inertia>
+            <ixx>0.00058</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00058</iyy>
+            <iyz>0</iyz>
+            <izz>0.00019</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <cylinder>
+              <radius>0.055</radius>
+              <length>0.23</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <cylinder>
+              <radius>0.055</radius>
+              <length>0.23</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://beer/materials/scripts</uri>
+              <uri>model://beer/materials/textures</uri>
+              <name>Beer/Diffuse</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose>1.53253 0 0 0 -0 0</pose>
+      <static>0</static>
+    </model>
+  </world>
+</sdf>
