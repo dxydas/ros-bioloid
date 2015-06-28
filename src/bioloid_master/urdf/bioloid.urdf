@@ -19,6 +19,11 @@
         <color rgba="0.0 1.0 0.0 1.0"/>
       </material>
     </visual>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Base -->
   <joint name="base_to_torso_joint" type="fixed">
@@ -42,7 +47,12 @@
         <material name="black">
             <color rgba="0.0 0.0 0.0 1.0"/>
         </material>
-    </visual>-->
+    </visual>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>-->
   </link>
   <!-- Torso -->
   <link name="torso_link">
@@ -129,6 +139,11 @@
         <box size="0.099 0.065 0.043"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Torso to right shoulder -->
   <joint name="right_shoulder_swing_joint" type="revolute">
@@ -151,6 +166,11 @@
         <box size="0.039 0.052 0.036"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Torso to left shoulder -->
   <joint name="left_shoulder_swing_joint" type="revolute">
@@ -173,6 +193,11 @@
         <box size="0.039 0.052 0.036"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Right shoulder to upper arm -->
   <joint name="right_shoulder_lateral_joint" type="revolute">
@@ -225,6 +250,11 @@
         <box size="0.047 0.033 0.052"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Left shoulder to upper arm -->
   <joint name="left_shoulder_lateral_joint" type="revolute">
@@ -277,6 +307,11 @@
         <box size="0.047 0.033 0.052"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Right upper arm to lower arm -->
   <joint name="right_elbow_joint" type="revolute">
@@ -318,6 +353,11 @@
         <box size="0.051 0.033 0.044"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Right lower arm to hand -->
   <joint name="right_hand_joint" type="fixed">
@@ -344,6 +384,11 @@
         <box size="0.0575 0.0175 0.035"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Left upper arm to lower arm -->
   <joint name="left_elbow_joint" type="revolute">
@@ -385,6 +430,11 @@
         <box size="0.058 0.033 0.044"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Left lower arm to hand -->
   <joint name="left_hand_joint" type="fixed">
@@ -411,6 +461,11 @@
         <box size="0.0575 0.0175 0.035"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Torso to right hip twist -->
   <joint name="right_hip_twist_joint" type="revolute">
@@ -433,6 +488,11 @@
         <box size="0.029 0.083 0.0405"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Torso to left hip twist -->
   <joint name="left_hip_twist_joint" type="revolute">
@@ -455,6 +515,11 @@
         <box size="0.029 0.083 0.0405"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Right hip twist to hip lateral -->
   <joint name="right_hip_lateral_joint" type="revolute">
@@ -509,6 +574,11 @@
         <box size="0.04 0.051 0.0721"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Left hip twist to hip lateral -->
   <joint name="left_hip_lateral_joint" type="revolute">
@@ -563,6 +633,11 @@
         <box size="0.04 0.051 0.0721"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Right hip lateral to upper leg -->
   <joint name="right_hip_swing_joint" type="revolute">
@@ -597,6 +672,11 @@
         <box size="0.04 0.0371 0.049"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Left hip lateral to upper leg -->
   <joint name="left_hip_swing_joint" type="revolute">
@@ -631,6 +711,11 @@
         <box size="0.04 0.0371 0.049"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Right upper leg to lower leg -->
   <joint name="right_knee_joint" type="revolute">
@@ -638,7 +723,7 @@
     <origin rpy="0 0 0" xyz="0.0145 0.075 0"/>
     <axis xyz="0 0 1"/>
     <child link="right_lower_leg_link"/>
-    <limit effort="10" lower="-3.14159" upper="0" velocity="1.0"/>
+    <limit effort="10" lower="-3.14159" upper="0.0" velocity="1.0"/>
   </joint>
   <link name="right_lower_leg_link">
     <!-- Motor 13 -->
@@ -672,6 +757,11 @@
         <box size="0.03 0.067 0.049"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Left upper leg to lower leg -->
   <joint name="left_knee_joint" type="revolute">
@@ -679,7 +769,7 @@
     <origin rpy="0 0 0" xyz="-0.0145 -0.075 0"/>
     <axis xyz="0 0 1"/>
     <child link="left_lower_leg_link"/>
-    <limit effort="10" lower="-3.14159" upper="0" velocity="1.0"/>
+    <limit effort="10" lower="-3.14159" upper="0.0" velocity="1.0"/>
   </joint>
   <link name="left_lower_leg_link">
     <!-- Motor 14 -->
@@ -713,6 +803,11 @@
         <box size="0.03 0.067 0.049"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Right lower leg to ankle swing -->
   <joint name="right_ankle_swing_joint" type="revolute">
@@ -761,6 +856,11 @@
         <box size="0.0721 0.051 0.04"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Left lower leg to ankle swing -->
   <joint name="left_ankle_swing_joint" type="revolute">
@@ -809,6 +909,11 @@
         <box size="0.0721 0.051 0.04"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Right ankle swing to ankle lateral -->
   <joint name="right_ankle_lateral_joint" type="revolute">
@@ -837,6 +942,11 @@
         <box size="0.029 0.0405 0.083"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Right ankle lateral to foot -->
   <joint name="right_foot_joint" type="fixed">
@@ -857,6 +967,11 @@
         <box size="0.061 0.009 0.101"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Left ankle swing to ankle lateral -->
   <joint name="left_ankle_lateral_joint" type="revolute">
@@ -885,6 +1000,11 @@
         <box size="0.029 0.0405 0.083"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
   <!-- Left ankle lateral to foot -->
   <joint name="left_foot_joint" type="fixed">
@@ -905,5 +1025,10 @@
         <box size="0.061 0.009 0.101"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
   </link>
 </robot>

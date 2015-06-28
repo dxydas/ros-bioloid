@@ -122,6 +122,11 @@
             <color rgba="0.0 1.0 0.0 1.0"/>
         </material>
     </visual>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Base -->
@@ -147,7 +152,12 @@
         <material name="black">
             <color rgba="0.0 0.0 0.0 1.0"/>
         </material>
-    </visual>-->
+    </visual>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>-->
 </link>
 
 <!-- Torso -->
@@ -215,6 +225,11 @@
 		    <box size="0.099 0.065 0.043"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Torso to right shoulder -->
@@ -230,6 +245,11 @@
 		    <box size="0.039 0.052 0.036"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Torso to left shoulder -->
@@ -245,6 +265,11 @@
 		    <box size="0.039 0.052 0.036"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Right shoulder to upper arm -->
@@ -282,6 +307,11 @@
 		    <box size="0.047 0.033 0.052"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Left shoulder to upper arm -->
@@ -319,6 +349,11 @@
 		    <box size="0.047 0.033 0.052"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Right upper arm to lower arm -->
@@ -347,6 +382,11 @@
 		    <box size="0.051 0.033 0.044"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Right lower arm to hand -->
@@ -368,6 +408,11 @@
 		    <box size="0.0575 0.0175 0.035"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Left upper arm to lower arm -->
@@ -396,6 +441,11 @@
 		    <box size="0.058 0.033 0.044"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Left lower arm to hand -->
@@ -417,6 +467,11 @@
 		    <box size="0.0575 0.0175 0.035"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Torso to right hip twist -->
@@ -432,6 +487,11 @@
 		    <box size="0.029 0.083 0.0405"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Torso to left hip twist -->
@@ -447,6 +507,11 @@
 		    <box size="0.029 0.083 0.0405"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Right hip twist to hip lateral -->
@@ -484,6 +549,11 @@
 		    <box size="0.04 0.051 0.0721"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Left hip twist to hip lateral -->
@@ -521,6 +591,11 @@
 		    <box size="0.04 0.051 0.0721"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Right hip lateral to upper leg -->
@@ -546,6 +621,11 @@
 		    <box size="0.04 0.0371 0.049"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Left hip lateral to upper leg -->
@@ -571,6 +651,11 @@
 		    <box size="0.04 0.0371 0.049"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Right upper leg to lower leg -->
@@ -601,6 +686,11 @@
 		    <box size="0.03 0.067 0.049"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Left upper leg to lower leg -->
@@ -631,6 +721,11 @@
 		    <box size="0.03 0.067 0.049"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Right lower leg to ankle swing -->
@@ -664,6 +759,11 @@
 		    <box size="0.0721 0.051 0.04"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Left lower leg to ankle swing -->
@@ -697,6 +797,11 @@
 		    <box size="0.0721 0.051 0.04"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Right ankle swing to ankle lateral -->
@@ -716,6 +821,11 @@
 		    <box size="0.029 0.0405 0.083"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Right ankle lateral to foot -->
@@ -731,6 +841,11 @@
 		    <box size="0.061 0.009 0.101"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Left ankle swing to ankle lateral -->
@@ -750,6 +865,11 @@
 		    <box size="0.029 0.0405 0.083"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 <!-- Left ankle lateral to foot -->
@@ -765,7 +885,11 @@
 		    <box size="0.061 0.009 0.101"/>
         </geometry>
     </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
 </link>
 
 </robot>
-
