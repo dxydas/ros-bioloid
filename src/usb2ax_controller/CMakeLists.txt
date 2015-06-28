@@ -56,6 +56,7 @@ add_message_files(
 add_service_files(
   FILES
   GetFromAX.srv
+  GetSyncFromAX.srv
   SendToAX.srv
   SendSyncToAX.srv
   GetMotorParam.srv
@@ -112,7 +113,7 @@ include_directories(
 
 ## Declare a cpp executable
 # add_executable(usb2ax_controller_node src/usb2ax_controller_node.cpp)
-add_executable(ax_joint_controller src/ax_joint_controller.cpp src/usb2ax/dynamixel.c src/usb2ax/dxl_hal.c)
+add_executable(ax_joint_controller src/ax_joint_controller.cpp src/usb2ax/dynamixel_syncread.c src/usb2ax/dxl_hal.c)
 add_executable(test_interface src/test_interface.cpp)
 add_executable(test_balancer src/test_balancer.cpp src/simplePID.cpp)
 

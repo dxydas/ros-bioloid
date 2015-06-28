@@ -1,5 +1,6 @@
 #include "ax_joint_controller.h"
-#include "usb2ax/dynamixel.h"
+//#include "usb2ax/dynamixel.h"
+#include "usb2ax/dynamixel_syncread.h"
 #include "ax12ControlTableMacros.h"
 #include "axs1ControlTableMacros.h"
 #include <sstream>
@@ -118,6 +119,14 @@ int main(int argc, char **argv)
 //    // Turn off all torques
 //    jointController.setAllMotorsTorqueEnabled(false);
 //    ros::Duration(0.5).sleep();
+
+
+//    // USB2AX sync_read test
+//    int ids[18];
+//    for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
+//        ids[dxlID-1] = dxlID;
+//    jointController.sync_read(ids);
+    jointController.getAllMotorPositions();
 
 
     while (ros::ok())
@@ -498,6 +507,46 @@ void JointController::setMotorMaxTorqueInDecimal(int dxlID, float pos)
 }
 
 
+void JointController::getAllMotorPositions()
+{
+    std_msgs::UInt16MultiArray dxlIDs;
+    dxlIDs.layout.dim.resize(1);
+    dxlIDs.layout.dim[0].label = "ids";
+    dxlIDs.layout.dim[0].size = numOfConnectedMotors;
+    dxlIDs.layout.dim[0].stride = numOfConnectedMotors;
+    dxlIDs.layout.data_offset = 0;
+    dxlIDs.data.resize(numOfConnectedMotors);
+
+    std_msgs::UInt16MultiArray vals;
+    vals.layout.dim.resize(2);
+    vals.layout.dim[0].label = "bytes";
+    vals.layout.dim[0].size = 1;
+    vals.layout.dim[0].stride = numOfConnectedMotors*1;
+    vals.layout.dim[1].label = "motors";
+    vals.layout.dim[1].size = numOfConnectedMotors;
+    vals.layout.dim[1].stride = 1;
+    vals.layout.data_offset = 0;
+    vals.data.resize(numOfConnectedMotors*1);
+
+    std_msgs::UInt16MultiArray isWord;
+    isWord.layout.dim.resize(1);
+    isWord.layout.dim[0].label = "isWord";
+    isWord.layout.dim[0].size = 1;
+    isWord.layout.dim[0].stride = 1;
+    isWord.layout.data_offset = 0;
+    isWord.data.resize(1);
+    isWord.data[0] = true;
+
+    for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
+    {
+        if (connectedMotors[dxlID])
+            dxlIDs.data[dxlID-1] = dxlID;
+    }
+
+    getSyncValues(dxlIDs, AX12_GOAL_POSITION_L, vals, isWord);
+}
+
+
 void JointController::homeAllMotors()
 {
     std_msgs::UInt16MultiArray dxlIDs;
@@ -555,6 +604,22 @@ bool JointController::getFromAX(
     {
         res.value = 0;
         res.rxSuccess = false;
+        return false;
+    }
+}
+
+
+bool JointController::getSyncFromAX(
+        usb2ax_controller::GetSyncFromAX::Request &req, usb2ax_controller::GetSyncFromAX::Response &res)
+{
+    if (!getSyncValues(req.dxlIDs, req.startAddress, res.values, req.isWord))
+    {
+        res.txSuccess = true;
+        return true;
+    }
+    else
+    {
+        res.txSuccess = false;
         return false;
     }
 }
@@ -828,6 +893,82 @@ bool JointController::setValue(int dxlID, int controlTableAddr, int val)
 }
 
 
+void JointController::sync_read(int ids[18])
+{
+    dxl_sync_read_start( AX12_PRESENT_POSITION_L, 2 );
+    for (int i = 0; i < NUM_OF_MOTORS; i++ )
+        dxl_sync_read_push_id( ids[i] );
+    dxl_sync_read_send();
+    int CommStatus = dxl_get_result();
+    if( CommStatus == COMM_RXSUCCESS )
+    {
+        for (int i = 0; i < NUM_OF_MOTORS; i++ )
+            printf( "%i=%i, ", ids[i] , dxl_sync_read_pop_word());
+    }
+    else
+        printCommStatus(CommStatus);
+    printf("\n");
+}
+
+
+int JointController::getSyncValues(
+        std_msgs::UInt16MultiArray dxlIDs, int controlTableStartAddr,
+        std_msgs::UInt16MultiArray &vals, std_msgs::UInt16MultiArray isWord)
+{
+    int numOfMotors = dxlIDs.data.size();
+
+    if ( numOfMotors == 0 )
+    {
+        ROS_ERROR("No motors specified.");
+        return -1;
+    }
+
+    if ( isWord.data.size() != (vals.data.size()/numOfMotors) )
+    {
+        ROS_ERROR("Input data size mismatch.");
+        return -1;
+    }
+
+    // Length of data for each servo
+    int dataLength = 0;
+
+    for (std::vector<u_int16_t>::const_iterator it = isWord.data.begin(); it != isWord.data.end(); ++it)
+    {
+        if (*it == false)
+            ++dataLength;
+        else
+            dataLength = dataLength + 2;
+    }
+
+    // Generate sync_read command
+    dxl_sync_read_start(controlTableStartAddr, dataLength);
+    for (int i = 0; i < numOfMotors; i++ )
+        dxl_sync_read_push_id(dxlIDs.data[i]);
+    dxl_sync_read_send();
+
+    int CommStatus = dxl_get_result();
+    if (CommStatus == COMM_RXSUCCESS)
+    {
+        for (int i = 0; i < numOfMotors; ++i)
+        {
+            for (int j = 0; j < isWord.data.size(); ++j)
+            {
+                int res = dxl_sync_read_pop_word();
+                ROS_INFO( "%d=%d, ", dxlIDs.data[i], res);
+                vals.data[vals.layout.dim[1].stride*i + j] = res;
+            }
+        }
+        printErrorCode();
+        return 0;
+    }
+    else
+    {
+        printCommStatus(CommStatus);
+        return -1;
+    }
+}
+
+
 int JointController::setSyncValues(
         std_msgs::UInt16MultiArray dxlIDs, int controlTableStartAddr,
         std_msgs::UInt16MultiArray vals, std_msgs::UInt16MultiArray isWord)
@@ -857,7 +998,7 @@ int JointController::setSyncValues(
             dataLength = dataLength + 2;
     }
 
-    // Make syncwrite packet
+    // Make sync_write packet
     ROS_DEBUG( "Packet" );
     ROS_DEBUG( "ID:\t\t\t %d", BROADCAST_ID );
     ROS_DEBUG( "Instr:\t\t\t %d", INST_SYNC_WRITE );
