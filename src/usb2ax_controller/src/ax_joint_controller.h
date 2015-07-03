@@ -2,12 +2,11 @@
 #define AX_JOINT_CONTROLLER_H
 
 #include "ros/ros.h"
-#include "std_msgs/UInt16MultiArray.h"
 #include "sensor_msgs/JointState.h"
 #include "std_srvs/Empty.h"
 #include "usb2ax_controller/GetFromAX.h"
-#include "usb2ax_controller/GetSyncFromAX.h"
 #include "usb2ax_controller/SendToAX.h"
+#include "usb2ax_controller/GetSyncFromAX.h"
 #include "usb2ax_controller/SendSyncToAX.h"
 #include "usb2ax_controller/GetMotorParam.h"
 #include "usb2ax_controller/SetMotorParam.h"
@@ -18,38 +17,19 @@ class JointController
 public:
     JointController();
     virtual ~JointController();
-    int init();
+    bool init();
     void run();
     int getDeviceIndex() const {return deviceIndex;}
     void setDeviceIndex(int value) {deviceIndex = value;}
     int getBaudNum() const {return baudNum;}
     void setBaudNum(int value) {baudNum = value;}
-    bool getValue(int dxlID, int controlTableAddr, int& val);
-    bool setValue(int dxlID, int controlTableAddr, int val);
-    void sync_read(int ids[18]);
-    int getSyncValues(std_msgs::UInt16MultiArray dxlIDs, int controlTableStartAddr,
-                      std_msgs::UInt16MultiArray &vals, std_msgs::UInt16MultiArray isWord);
-    int setSyncValues(std_msgs::UInt16MultiArray dxlIDs, int controlTableStartAddr,
-                      std_msgs::UInt16MultiArray vals, std_msgs::UInt16MultiArray isWord);
-    bool testSending();
-    bool testSendingSync();
-    bool testValueConversions();
-    void testArmWave();
-    float getMotorCurrentPositionInRad(int dxlID);
-    void setMotorGoalPositionInRad(int dxlID, float pos);
-    float getMotorCurrentSpeedInRadPerSec(int dxlID);
-    void setMotorGoalSpeedInRadPerSec(int dxlID, float pos);
-    float getMotorCurrentTorqueInDecimal(int dxlID);
-    void setMotorMaxTorqueInDecimal(int dxlID, float pos);
-    void getAllMotorPositions();
-    void homeAllMotors();
     ros::Publisher pub;
     bool getFromAX(usb2ax_controller::GetFromAX::Request &req,
                    usb2ax_controller::GetFromAX::Response &res);
-    bool getSyncFromAX(usb2ax_controller::GetSyncFromAX::Request &req,
-                       usb2ax_controller::GetSyncFromAX::Response &res);
     bool sendToAX(usb2ax_controller::SendToAX::Request &req,
                   usb2ax_controller::SendToAX::Response &res);
+    bool getSyncFromAX(usb2ax_controller::GetSyncFromAX::Request &req,
+                       usb2ax_controller::GetSyncFromAX::Response &res);
     bool sendSyncToAX(usb2ax_controller::SendSyncToAX::Request &req,
                       usb2ax_controller::SendSyncToAX::Response &res);
     bool getMotorCurrentPositionInRad(usb2ax_controller::GetMotorParam::Request &req,
@@ -64,7 +44,14 @@ public:
                                         usb2ax_controller::GetMotorParam::Response &res);
     bool setMotorMaxTorqueInDecimal(usb2ax_controller::SetMotorParam::Request &req,
                                     usb2ax_controller::SetMotorParam::Response &res);
+    bool getAllMotorPositions(usb2ax_controller::GetSyncFromAX::Request &req,
+                              usb2ax_controller::GetSyncFromAX::Response &res);
     bool homeAllMotors(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
+    // Tests
+    bool testSending();
+    bool testSendingSync();
+    bool testValueConversions();
+    void testArmWave();
 
 private:
     void printCommStatus(int CommStatus);

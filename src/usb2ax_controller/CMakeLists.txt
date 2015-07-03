@@ -56,8 +56,8 @@ add_message_files(
 add_service_files(
   FILES
   GetFromAX.srv
-  GetSyncFromAX.srv
   SendToAX.srv
+  GetSyncFromAX.srv
   SendSyncToAX.srv
   GetMotorParam.srv
   SetMotorParam.srv

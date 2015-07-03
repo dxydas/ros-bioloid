@@ -1,17 +1,8 @@
 #include "ax_joint_controller.h"
-//#include "usb2ax/dynamixel.h"
 #include "usb2ax/dynamixel_syncread.h"
 #include "ax12ControlTableMacros.h"
 #include "axs1ControlTableMacros.h"
 #include <sstream>
-
-// Note: USB2AX uses a different dxl_hal.c file than the Robotis' Dynamixel SDK for Linux.
-// The Dynamixel SDK assumes the interface is FTDI-based, and thus searches a device named ttyUSBx,
-// while the USB2AX uses the integrated CDC/ACM driver - which names the device ttyACMx.
-// The second problem is that after opening the device, the Dynamixel SDK tries to set parameters which do
-// not exist in the CDC/ACM driver.
-// For more information see:
-// http://www.xevelabs.com/doku.php?id=product:usb2ax:faq#qdynamixel_sdkhow_do_i_use_it_with_the_usb2ax
 
 #define NUM_OF_MOTORS 18
 #define FLOAT_PRECISION_THRESH 0.00001
@@ -53,85 +44,89 @@ int main(int argc, char **argv)
     jointController.pub = n.advertise<sensor_msgs::JointState>("ax_joint_states", 1000);
 
     // Services
-    ros::ServiceServer getFromAXService =
-            n.advertiseService("GetFromAX",
-                               &JointController::getFromAX, &jointController);
-    ros::ServiceServer sendtoAXService =
-            n.advertiseService("SendToAX",
-                               &JointController::sendToAX, &jointController);
-    ros::ServiceServer sendSynctoAXService =
-            n.advertiseService("SendSyncToAX",
-                               &JointController::sendSyncToAX, &jointController);
-    ros::ServiceServer getMotorCurrentPositionInRadService =
-            n.advertiseService("GetMotorCurrentPositionInRad",
-                               &JointController::getMotorCurrentPositionInRad, &jointController);
-    ros::ServiceServer setMotorGoalPositionInRadService =
-            n.advertiseService("SetMotorGoalPositionInRad",
-                               &JointController::setMotorGoalPositionInRad, &jointController);
-    ros::ServiceServer getMotorCurrentSpeedInRadPerSecService =
-            n.advertiseService("GetMotorCurrentSpeedInRadPerSec",
-                               &JointController::getMotorCurrentSpeedInRadPerSec, &jointController);
-    ros::ServiceServer setMotorGoalSpeedInRadPerSecService =
-            n.advertiseService("SetMotorGoalSpeedInRadPerSec",
-                               &JointController::setMotorGoalSpeedInRadPerSec, &jointController);
-    ros::ServiceServer getMotorCurrentTorqueInDecimalService =
-            n.advertiseService("GetMotorCurrentTorqueInDecimal",
-                               &JointController::getMotorCurrentTorqueInDecimal, &jointController);
-    ros::ServiceServer setMotorMaxTorqueInDecimalService =
-            n.advertiseService("SetMotorMaxTorqueInDecimal",
-                               &JointController::setMotorMaxTorqueInDecimal, &jointController);
-    ros::ServiceServer homeAllMotorsService =
-            n.advertiseService("HomeAllMotors",
-                               &JointController::homeAllMotors, &jointController);
+    ros::ServiceServer getFromAXService = n.advertiseService("GetFromAX",
+        &JointController::getFromAX, &jointController);
+    ros::ServiceServer sendtoAXService = n.advertiseService("SendToAX",
+        &JointController::sendToAX, &jointController);
+    ros::ServiceServer getSyncFromAXService = n.advertiseService("GetSyncFromAX",
+        &JointController::getSyncFromAX, &jointController);
+    ros::ServiceServer sendSyncToAXService = n.advertiseService("SendSyncToAX",
+        &JointController::sendSyncToAX, &jointController);
+    ros::ServiceServer getMotorCurrentPositionInRadService = n.advertiseService("GetMotorCurrentPositionInRad",
+        &JointController::getMotorCurrentPositionInRad, &jointController);
+    ros::ServiceServer setMotorGoalPositionInRadService = n.advertiseService("SetMotorGoalPositionInRad",
+        &JointController::setMotorGoalPositionInRad, &jointController);
+    ros::ServiceServer getMotorCurrentSpeedInRadPerSecService = n.advertiseService("GetMotorCurrentSpeedInRadPerSec",
+        &JointController::getMotorCurrentSpeedInRadPerSec, &jointController);
+    ros::ServiceServer setMotorGoalSpeedInRadPerSecService = n.advertiseService("SetMotorGoalSpeedInRadPerSec",
+        &JointController::setMotorGoalSpeedInRadPerSec, &jointController);
+    ros::ServiceServer getMotorCurrentTorqueInDecimalService = n.advertiseService("GetMotorCurrentTorqueInDecimal",
+        &JointController::getMotorCurrentTorqueInDecimal, &jointController);
+    ros::ServiceServer setMotorMaxTorqueInDecimalService = n.advertiseService("SetMotorMaxTorqueInDecimal",
+        &JointController::setMotorMaxTorqueInDecimal, &jointController);
+    ros::ServiceServer getAllMotorPositionsService = n.advertiseService("GetAllMotorPositions",
+        &JointController::getAllMotorPositions, &jointController);
+    ros::ServiceServer homeAllMotorsService = n.advertiseService("HomeAllMotors",
+        &JointController::homeAllMotors, &jointController);
 
 
-//    // Tests
-//    jointController.testSending();
-//    ros::Duration(0.5).sleep();
-
-//    jointController.testSendingSync();
-//    ros::Duration(0.5).sleep();
+    // Tests
+    usb2ax_controller::SendToAX::Request set_req;
+    usb2ax_controller::SendToAX::Response set_res;
+    usb2ax_controller::GetSyncFromAX::Request syncGet_req;
+    usb2ax_controller::GetSyncFromAX::Response syncGet_res;
+    usb2ax_controller::SetMotorParam::Request paramSet_req;
+    usb2ax_controller::SetMotorParam::Response paramSet_res;
+    std_srvs::Empty::Request empty_req;
+    std_srvs::Empty::Response empty_res;
 
 //    jointController.testValueConversions();
 //    ros::Duration(0.5).sleep();
 
+    // Set low torque
+    paramSet_req.dxlID = 254;
+    paramSet_req.value = 0.8;
+    jointController.setMotorMaxTorqueInDecimal(paramSet_req, paramSet_res);
+    ros::Duration(0.5).sleep();
 
-//    // Set low torque
-//    jointController.setAllMotorsMaxTorqueInDecimal(0.8);
-//    ros::Duration(0.5).sleep();
+    // Set slow speed
+    paramSet_req.dxlID = 254;
+    paramSet_req.value = 1.0;
+    jointController.setMotorGoalSpeedInRadPerSec(paramSet_req, paramSet_res);
+    ros::Duration(0.5).sleep();
 
-//    // Set slow speed
-//    jointController.setAllMotorsGoalSpeedInRadPerSec(1.0);
-//    ros::Duration(0.5).sleep();
+//    jointController.testSending();
+//    ros::Duration(2.0).sleep();
+
+//    jointController.testSendingSync();
+//    ros::Duration(2.0).sleep();
+
+//    jointController.getAllMotorPositions(syncGet_req, syncGet_res);
+//    ros::Duration(1.0).sleep();
 
 //    // Home all motors
-//    jointController.homeAllMotors(0.0);
-//    ros::Duration(3).sleep();
+//    jointController.homeAllMotors(empty_req, empty_res);
+//    ros::Duration(3.0).sleep();
 
 //    // Test arm wave
 //    jointController.testArmWave();
 //    ros::Duration(1.0).sleep();
 
 //    // Home all motors
-//    jointController.homeAllMotors(0.0);
-//    ros::Duration(3).sleep();
+//    jointController.homeAllMotors(empty_req, empty_res);
+//    ros::Duration(3.0).sleep();
 
-//    // Turn off all torques
-//    jointController.setAllMotorsTorqueEnabled(false);
-//    ros::Duration(0.5).sleep();
-
-
-//    // USB2AX sync_read test
-//    int ids[18];
-//    for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
-//        ids[dxlID-1] = dxlID;
-//    jointController.sync_read(ids);
-    jointController.getAllMotorPositions();
+    // Turn off all torques
+    set_req.dxlID = 254;
+    set_req.address = AX12_TORQUE_ENABLE;
+    set_req.value = 0;
+    jointController.sendToAX(set_req, set_res);
+    ros::Duration(0.5).sleep();
 
 
     while (ros::ok())
     {
-        //jointController.run();
+        jointController.run();
 
         ros::spinOnce();
         loop_rate.sleep();
@@ -167,13 +162,21 @@ JointController::~JointController()
 }
 
 
-int JointController::init()
+bool JointController::init()
 {
+    // Note: USB2AX uses a different dxl_hal.c file than the Robotis' Dynamixel SDK for Linux.
+    // The Dynamixel SDK assumes the interface is FTDI-based, and thus searches a device named ttyUSBx,
+    // while the USB2AX uses the integrated CDC/ACM driver - which names the device ttyACMx.
+    // The second problem is that after opening the device, the Dynamixel SDK tries to set parameters which do
+    // not exist in the CDC/ACM driver.
+    // For more information see:
+    // http://www.xevelabs.com/doku.php?id=product:usb2ax:faq#qdynamixel_sdkhow_do_i_use_it_with_the_usb2ax
+
     // Initialise comms
     if( dxl_initialize(deviceIndex, baudNum) == 0 )
     {
         ROS_ERROR("Failed to open USB2AX.");
-        return -1;
+        return false;
     }
     else
     {
@@ -266,9 +269,14 @@ int JointController::init()
         directionSign[18] = -1;
 
         // Reduce Return Delay Time to speed up comms
-        setValue(254, AX12_RETURN_DELAY_TIME, 0);
+        usb2ax_controller::SendToAX::Request req;
+        usb2ax_controller::SendToAX::Response res;
+        req.dxlID = 254;
+        req.address = AX12_RETURN_DELAY_TIME;
+        req.value = 0;
+        sendToAX(req, res);
     }
-    return 0;
+    return true;
 }
 
 
@@ -276,13 +284,41 @@ void JointController::run()
 {
     joint_state.header.stamp = ros::Time::now();
 
-    for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
+//    for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
+//    {
+//        if (connectedMotors[dxlID])
+//        {
+//            usb2ax_controller::GetMotorParam::Request req;
+//            usb2ax_controller::GetMotorParam::Response res;
+//            req.dxlID = dxlID;
+//            joint_state.position[dxlID] = getMotorCurrentPositionInRad(req, res);
+//            joint_state.velocity[dxlID] = getMotorCurrentSpeedInRadPerSec(req, res);
+//            joint_state.effort[dxlID] = getMotorCurrentTorqueInDecimal(req, res);
+//        }
+//    }
+
+    // Get position, speed and torque with a sync_read command
+    usb2ax_controller::GetSyncFromAX::Request req;
+    usb2ax_controller::GetSyncFromAX::Response res;
+    req.dxlIDs.resize(numOfConnectedMotors);
+    req.startAddress = AX12_PRESENT_POSITION_L;
+    req.isWord.resize(3);
+    req.isWord[0] = true;
+    req.isWord[1] = true;
+    req.isWord[2] = true;
+    for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
     {
         if (connectedMotors[dxlID])
+            req.dxlIDs[dxlID-1] = dxlID;
+    }
+    if ( getSyncFromAX(req, res) )
+    {
+        int i = 0;
+        for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
         {
-                joint_state.position[dxlID] = getMotorCurrentPositionInRad(dxlID);
-                joint_state.velocity[dxlID] = getMotorCurrentSpeedInRadPerSec(dxlID);
-                joint_state.effort[dxlID] = getMotorCurrentTorqueInDecimal(dxlID);
+            joint_state.position[dxlID] = directionSign[dxlID]*(axPositionToRad(res.values[i++])) + positionOffsets[dxlID];
+            joint_state.velocity[dxlID] = axSpeedToRadPerSec(res.values[i++]);
+            joint_state.effort[dxlID] = axTorqueToDecimal(res.values[i++]);
         }
     }
 
@@ -290,63 +326,527 @@ void JointController::run()
 }
 
 
+bool JointController::getFromAX(usb2ax_controller::GetFromAX::Request &req,
+                                usb2ax_controller::GetFromAX::Response &res)
+{
+    // Motor
+    if ( (1 <= req.dxlID) && (req.dxlID < 100) )
+    {
+        // Read word
+        switch (req.address)
+        {
+        case AX12_MODEL_NUMBER_L:
+        case AX12_CW_ANGLE_LIMIT_L:
+        case AX12_CCW_ANGLE_LIMIT_L:
+        case AX12_MAX_TORQUE_L:
+        case AX12_GOAL_POSITION_L:
+        case AX12_MOVING_SPEED_L:
+        case AX12_TORQUE_LIMIT_L:
+        case AX12_PRESENT_POSITION_L:
+        case AX12_PRESENT_SPEED_L:
+        case AX12_PRESENT_LOAD_L:
+        case AX12_PUNCH_L:
+        {
+            res.value = dxl_read_word(req.dxlID, req.address);
+            break;
+        }
+        // Read byte
+        default:
+        {
+            res.value = dxl_read_byte(req.dxlID, req.address);
+            break;
+        }
+        }
+    }
+    // Sensor
+    else if (req.dxlID >= 100)
+    {
+        // Read word
+        switch (req.address)
+        {
+        case AXS1_MODEL_NUMBER_L:
+        case AXS1_SOUND_DETECTED_TIME_L:
+        case AXS1_REMOCON_RX_DATA_L:
+        case AXS1_REMOCON_TX_DATA_L:
+        {
+            res.value = dxl_read_word(req.dxlID, req.address);
+            break;
+        }
+        // Read byte
+        default:
+        {
+            res.value = dxl_read_byte(req.dxlID, req.address);
+            break;
+        }
+        }
+    }
+    else
+    {
+        res.rxSuccess = false;
+        return false;
+    }
+
+    int CommStatus = dxl_get_result();
+    if (CommStatus == COMM_RXSUCCESS)
+    {
+        //ROS_DEBUG("Value received: %d", res.value);
+        printErrorCode();
+        res.rxSuccess = true;
+        return true;
+    }
+    else
+    {
+        printCommStatus(CommStatus);
+        res.rxSuccess = false;
+        return false;
+    }
+}
+
+
+bool JointController::sendToAX(usb2ax_controller::SendToAX::Request &req,
+                               usb2ax_controller::SendToAX::Response &res)
+{
+    // Motor
+    if ( ((1 <= req.dxlID) && (req.dxlID < 100)) || (req.dxlID == 254) )
+    {
+        switch (req.address)
+        {
+        case AX12_MODEL_NUMBER_L:
+        case AX12_CW_ANGLE_LIMIT_L:
+        case AX12_CCW_ANGLE_LIMIT_L:
+        case AX12_MAX_TORQUE_L:
+        case AX12_GOAL_POSITION_L:
+        case AX12_MOVING_SPEED_L:
+        case AX12_TORQUE_LIMIT_L:
+        case AX12_PRESENT_POSITION_L:
+        case AX12_PRESENT_SPEED_L:
+        case AX12_PRESENT_LOAD_L:
+        case AX12_PUNCH_L:
+        {
+            // 2 bytes
+            dxl_write_word(req.dxlID, req.address, req.value);
+            break;
+        }
+        default:
+        {
+            // 1 byte
+            dxl_write_byte(req.dxlID, req.address, req.value);
+            break;
+        }
+        }
+    }
+    // Sensor
+    else if (req.dxlID >= 100)
+    {
+        switch (req.address)
+        {
+        case AXS1_MODEL_NUMBER_L:
+        case AXS1_SOUND_DETECTED_TIME_L:
+        case AXS1_REMOCON_RX_DATA_L:
+        case AXS1_REMOCON_TX_DATA_L:
+        {
+            // 2 bytes
+            dxl_write_word(req.dxlID, req.address, req.value);
+            break;
+        }
+        default:
+        {
+            // 1 byte
+            dxl_write_byte(req.dxlID, req.address, req.value);
+            break;
+        }
+        }
+    }
+    else
+    {
+        res.txSuccess = false;
+        return false;
+    }
+
+    // No return Status Packet from a broadcast command
+    if (req.dxlID == 254)
+    {
+        res.txSuccess = true;
+         return true;
+    }
+    else
+    {
+        int CommStatus = dxl_get_result();
+        if (CommStatus == COMM_RXSUCCESS)
+        {
+            //ROS_DEBUG("Value sent: %d", val);
+            printErrorCode();
+            res.txSuccess = true;
+             return true;
+        }
+        else
+        {
+            printCommStatus(CommStatus);
+            res.txSuccess = false;
+            return false;
+        }
+    }
+}
+
+
+bool JointController::getSyncFromAX(usb2ax_controller::GetSyncFromAX::Request &req,
+                                    usb2ax_controller::GetSyncFromAX::Response &res)
+{
+    // Example: IDs 1, 2, 3: Get position, speed, load
+    // controlTableStartAddr = 36 (Present Position L)
+    // dxlIDs:    1           |   3           |   5
+    // vals:     P1,  S1,  T1 |  P2,  S2,  T2 |  P3,  S3,  T3
+    // isWord:    1,   1,   1
+    //
+    // rosservice command line example:
+    //rosservice call /GetSyncFromAX '[1, 3, 5]' 36 '[1, 1, 1]'
+
+    int numOfMotors = req.dxlIDs.size();
+
+    if ( numOfMotors == 0 )
+    {
+        ROS_ERROR("No motors specified.");
+        res.txSuccess = false;
+        return false;
+    }
+
+    res.values.resize(req.isWord.size()*numOfMotors);
+
+    // Length of data for each servo
+    int dataLength = 0;
+
+    for (std::vector<u_int8_t>::const_iterator it = req.isWord.begin(); it != req.isWord.end(); ++it)
+    {
+        if (*it == 0)
+            ++dataLength;
+        else
+            dataLength = dataLength + 2;
+    }
+
+    // Generate sync_read command
+    dxl_sync_read_start(req.startAddress, dataLength);
+    for (int i = 0; i < numOfMotors; i++ )
+        dxl_sync_read_push_id(req.dxlIDs[i]);
+    dxl_sync_read_send();
+
+    int CommStatus = dxl_get_result();
+    if (CommStatus == COMM_RXSUCCESS)
+    {
+        for (int i = 0; i < numOfMotors; ++i)
+        {
+            for (int j = 0; j < req.isWord.size(); ++j)
+            {
+                int r = dxl_sync_read_pop_word();
+//                ROS_DEBUG( "i = %d", i );
+//                ROS_DEBUG( "j = %d", j );
+//                ROS_DEBUG( "index = %d", i*req.isWord.size() + j );
+//                ROS_DEBUG( "ID %d = %d", req.dxlIDs[i], r );
+                res.values[i*req.isWord.size() + j] = r;
+            }
+        }
+        printErrorCode();
+        res.txSuccess = true;
+        return true;
+    }
+    else
+    {
+        printCommStatus(CommStatus);
+        res.txSuccess = false;
+        return false;
+    }
+}
+
+
+bool JointController::sendSyncToAX(usb2ax_controller::SendSyncToAX::Request &req,
+                                   usb2ax_controller::SendSyncToAX::Response &res)
+{
+    // Example: IDs 1, 2, 3: Set position 100, speed 300, torque limit 512
+    // controlTableStartAddr = 30 (Goal Position L)
+    // dxlIDs:    1           |   2           |   3
+    // vals:    100, 300, 512 | 100, 300, 512 | 100, 300, 512
+    // isWord:    1,   1,   1
+    //
+    // rosservice command line example:
+    //rosservice call /SendSyncToAX '[1, 2, 3]' 30 '[100, 300, 512, 100, 300, 512, 100, 300, 512]' '[1, 1, 1]'
+
+    int numOfMotors = req.dxlIDs.size();
+
+    if ( numOfMotors == 0 )
+    {
+        ROS_ERROR("No motors specified.");
+        return false;
+    }
+
+    if ( req.isWord.size() != (int)(req.values.size()/numOfMotors) )
+    {
+        ROS_ERROR("Input data size mismatch.");
+        return false;
+    }
+
+    // Length of data for each servo
+    int dataLength = 0;
+
+    for (std::vector<u_int8_t>::const_iterator it = req.isWord.begin(); it != req.isWord.end(); ++it)
+    {
+        if (*it == false)
+            ++dataLength;
+        else
+            dataLength = dataLength + 2;
+    }
+
+    // Make sync_write packet
+//    ROS_DEBUG( "Packet" );
+//    ROS_DEBUG( "ID:\t\t\t %d", BROADCAST_ID );
+//    ROS_DEBUG( "Instr:\t\t\t %d", INST_SYNC_WRITE );
+//    ROS_DEBUG( "Param 0 (start addr):\t %d", req.startAddress );
+//    ROS_DEBUG( "Param 1 (data length):\t %d", dataLength );
+    dxl_set_txpacket_id(BROADCAST_ID);
+    dxl_set_txpacket_instruction(INST_SYNC_WRITE);
+    dxl_set_txpacket_parameter(0, req.startAddress);
+    dxl_set_txpacket_parameter(1, dataLength);
+
+    int paramIndex = 2;
+    for (int i = 0; i < numOfMotors; ++i)
+    {
+//        ROS_DEBUG( "Param %d (dxl %d):\t %d", paramIndex, i, req.dxlIDs[i] );
+        dxl_set_txpacket_parameter( paramIndex++, req.dxlIDs[i] );
+        for (int j = 0; j < req.isWord.size(); ++j)
+        {
+//            ROS_DEBUG( "Value: %d", req.values[i*req.isWord.size() + j] );
+            if (req.isWord[j])
+            {
+                // 2 bytes
+//                ROS_DEBUG( "Param %d (data %dL):\t %d", paramIndex, j,
+//                           dxl_get_lowbyte((int)(req.values[i*req.isWord.size() + j])) );
+//                ROS_DEBUG( "Param %d (data %dH):\t %d", paramIndex + 1, j,
+//                           dxl_get_highbyte((int)(req.values[i*req.isWord.size() + j])) );
+                dxl_set_txpacket_parameter( paramIndex++,
+                                            dxl_get_lowbyte((int)(req.values[i*req.isWord.size() + j])) );
+                dxl_set_txpacket_parameter( paramIndex++,
+                                            dxl_get_highbyte((int)(req.values[i*req.isWord.size() + j])) );
+            }
+            else
+            {
+                // 1 byte
+//                ROS_DEBUG( "Param %d (data %d):\t %d", paramIndex, j,
+//                           dxl_get_highbyte((int)(req.values[i*req.isWord.size() + j])) );
+                dxl_set_txpacket_parameter(paramIndex++, (int)(req.values[i*req.isWord.size() + j]) );
+            }
+//            ROS_DEBUG("--");
+        }
+    }
+
+//    ROS_DEBUG( "Length:\t\t\t %d", (dataLength + 1)*numOfMotors + 4 );
+    dxl_set_txpacket_length( (dataLength + 1)*numOfMotors + 4 );
+
+    dxl_txrx_packet();
+
+    int CommStatus = dxl_get_result();
+    if (CommStatus == COMM_RXSUCCESS)
+    {
+        printErrorCode();
+        res.txSuccess = true;
+        return true;
+    }
+    else
+    {
+        printCommStatus(CommStatus);
+        res.txSuccess = false;
+        return false;
+    }
+}
+
+
+bool JointController::getMotorCurrentPositionInRad(usb2ax_controller::GetMotorParam::Request &req,
+                                                   usb2ax_controller::GetMotorParam::Response &res)
+{
+    usb2ax_controller::GetFromAX::Request req2;
+    usb2ax_controller::GetFromAX::Response res2;
+    req2.dxlID = req.dxlID;
+    req2.address = AX12_PRESENT_POSITION_L;
+    if ( getFromAX(req2, res2) )
+    {
+        res.value = directionSign[req.dxlID]*(axPositionToRad(res2.value)) + positionOffsets[req.dxlID];
+        return true;
+    }
+    else
+        return false;
+}
+
+
+bool JointController::setMotorGoalPositionInRad(usb2ax_controller::SetMotorParam::Request &req,
+                                                usb2ax_controller::SetMotorParam::Response &res)
+{
+    ROS_DEBUG("Offset: %g", positionOffsets[req.dxlID]);
+    ROS_DEBUG("Direction sign: %d", directionSign[req.dxlID]);
+    ROS_DEBUG("Value: %d", radToAxPosition(directionSign[req.dxlID]*(req.value - positionOffsets[req.dxlID])));
+    ROS_DEBUG("----");
+    usb2ax_controller::SendToAX::Request req2;
+    usb2ax_controller::SendToAX::Response res2;
+    req2.dxlID = req.dxlID;
+    req2.address = AX12_GOAL_POSITION_L;
+    req2.value = radToAxPosition(directionSign[req.dxlID]*(req.value - positionOffsets[req.dxlID]));
+    if ( sendToAX(req2, res2) )
+        return true;
+    else
+        return false;
+}
+
+
+bool JointController::getMotorCurrentSpeedInRadPerSec(usb2ax_controller::GetMotorParam::Request &req,
+                                                      usb2ax_controller::GetMotorParam::Response &res)
+{    
+    usb2ax_controller::GetFromAX::Request req2;
+    usb2ax_controller::GetFromAX::Response res2;
+    req2.dxlID = req.dxlID;
+    req2.address = AX12_PRESENT_SPEED_L;
+    if ( getFromAX(req2, res2) )
+    {
+        res.value = axSpeedToRadPerSec(res2.value);
+        return true;
+    }
+    else
+        return false;
+}
+
+
+bool JointController::setMotorGoalSpeedInRadPerSec(usb2ax_controller::SetMotorParam::Request &req,
+                                                   usb2ax_controller::SetMotorParam::Response &res)
+{
+    usb2ax_controller::SendToAX::Request req2;
+    usb2ax_controller::SendToAX::Response res2;
+    req2.dxlID = req.dxlID;
+    req2.address = AX12_MOVING_SPEED_L;
+    req2.value = radPerSecToAxSpeed(req.value);
+    if ( sendToAX(req2, res2) )
+        return true;
+    else
+        return false;
+}
+
+
+bool JointController::getMotorCurrentTorqueInDecimal(usb2ax_controller::GetMotorParam::Request &req,
+                                                     usb2ax_controller::GetMotorParam::Response &res)
+{
+    usb2ax_controller::GetFromAX::Request req2;
+    usb2ax_controller::GetFromAX::Response res2;
+    req2.dxlID = req.dxlID;
+    req2.address = AX12_PRESENT_LOAD_L;
+    if ( getFromAX(req2, res2) )
+    {
+        res.value = axTorqueToDecimal(res2.value);
+        return true;
+    }
+    else
+        return false;
+}
+
+
+bool JointController::setMotorMaxTorqueInDecimal(usb2ax_controller::SetMotorParam::Request &req,
+                                                 usb2ax_controller::SetMotorParam::Response &res)
+{
+    usb2ax_controller::SendToAX::Request req2;
+    usb2ax_controller::SendToAX::Response res2;
+    req2.dxlID = req.dxlID;
+    req2.address = AX12_TORQUE_LIMIT_L;
+    req2.value = decimalToAxTorque(req.value);
+    if ( sendToAX(req2, res2) )
+        return true;
+    else
+        return false;
+}
+
+
+bool JointController::getAllMotorPositions(usb2ax_controller::GetSyncFromAX::Request &req,
+                                           usb2ax_controller::GetSyncFromAX::Response &res)
+{
+    req.dxlIDs.resize(numOfConnectedMotors);
+    req.startAddress = AX12_PRESENT_POSITION_L;
+    req.isWord.resize(1);
+    req.isWord[0] = true;
+    for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
+    {
+        if (connectedMotors[dxlID])
+            req.dxlIDs[dxlID-1] = dxlID;
+    }
+    if ( getSyncFromAX(req, res) )
+        return true;
+    else
+        return false;
+}
+
+
+bool JointController::homeAllMotors(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+{
+    usb2ax_controller::SendSyncToAX::Request req2;
+    usb2ax_controller::SendSyncToAX::Response res2;
+
+    req2.dxlIDs.resize(numOfConnectedMotors);
+    req2.startAddress = AX12_GOAL_POSITION_L;
+    req2.values.resize(numOfConnectedMotors*1);
+    req2.isWord.resize(1);
+    req2.isWord[0] = true;
+
+    for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
+    {
+        if (connectedMotors[dxlID])
+        {
+            req2.dxlIDs[dxlID-1] = dxlID;
+            req2.values[dxlID-1] = radToAxPosition(directionSign[dxlID]*(0.0 - positionOffsets[dxlID]));
+        }
+    }
+
+    if ( sendSyncToAX(req2, res2) )
+        return true;
+    else
+        return false;
+}
+
+
 bool JointController::testSending()
 {
-    int dxlID = 1;
-    int address = 30;
-    int value = 100;
-    ROS_INFO("Success: %d", setValue(dxlID, address, value));
+    usb2ax_controller::SendToAX::Request req;
+    usb2ax_controller::SendToAX::Response res;
+    req.dxlID = 1;
+    req.address = AX12_GOAL_POSITION_L;
+    req.value = 300;
+    ROS_INFO("Success: %d", sendToAX(req, res));
     return 0;
 }
 
 
+
+
+
 bool JointController::testSendingSync()
 {
-    std_msgs::UInt16MultiArray dxlIDs;
-    dxlIDs.layout.dim.resize(1);
-    dxlIDs.layout.dim[0].label = "ids";
-    dxlIDs.layout.dim[0].size = 3;          // Number of motors
-    dxlIDs.layout.dim[0].stride = 3;        // Size of array (motors)
-    dxlIDs.layout.data_offset = 0;
-    dxlIDs.data.resize(3);                  // Size of array (motors)
-    dxlIDs.data[0] = 1;
-    dxlIDs.data[1] = 2;
-    dxlIDs.data[2] = 3;
+    usb2ax_controller::SendSyncToAX::Request req;
+    usb2ax_controller::SendSyncToAX::Response res;
 
-    int controlTableStartAddr = 30;
+    req.dxlIDs.resize(3);
+    req.dxlIDs[0] = 1;
+    req.dxlIDs[1] = 3;
+    req.dxlIDs[2] = 5;
 
-    std_msgs::UInt16MultiArray vals;
-    vals.layout.dim.resize(2);
-    vals.layout.dim[0].label = "bytes";
-    vals.layout.dim[0].size = 3;            // Number of values
-    vals.layout.dim[0].stride = 9;          // Size of array (values*motors)
-    vals.layout.dim[1].label = "motors";
-    vals.layout.dim[1].size = 3;            // Number of motors
-    vals.layout.dim[1].stride = 3;          // Number of values
-    vals.layout.data_offset = 0;
-    vals.data.resize(9);                    // Size of array (values*motors)
-    vals.data[0] = 100;
-    vals.data[1] = 300;
-    vals.data[2] = 512;
-    vals.data[3] = 100;
-    vals.data[4] = 300;
-    vals.data[5] = 512;
-    vals.data[6] = 100;
-    vals.data[7] = 300;
-    vals.data[8] = 512;
+    req.startAddress = 30;
 
-    std_msgs::UInt16MultiArray isWord;
-    isWord.layout.dim.resize(1);
-    isWord.layout.dim[0].label = "isWord";
-    isWord.layout.dim[0].size = 3;          // Number of values
-    isWord.layout.dim[0].stride = 3;        // Size of array (motors)
-    isWord.layout.data_offset = 0;
-    isWord.data.resize(3);                  // Size of array (motors)
-    isWord.data[0] = true;
-    isWord.data[1] = true;
-    isWord.data[2] = true;
+    req.values.resize(9);
+    req.values[0] = 280;  // Position
+    req.values[1] = 100;  // Speed
+    req.values[2] = 512;  // Torque
+    req.values[3] = 350;  // Position
+    req.values[4] = 100;  // Speed
+    req.values[5] = 512;  // Torque
+    req.values[6] = 400;  // Position
+    req.values[7] = 100;  // Speed
+    req.values[8] = 512;  // Torque
 
-    ROS_INFO("Success: %d", setSyncValues(dxlIDs, controlTableStartAddr, vals, isWord));
+    req.isWord.resize(3);
+    req.isWord[0] = true;
+    req.isWord[1] = true;
+    req.isWord[2] = true;
+
+    ROS_INFO("Success: %d", sendSyncToAX(req, res));
     return 0;
 }
 
@@ -389,6 +889,9 @@ bool JointController::testValueConversions()
 
 void JointController::testArmWave()
 {
+    usb2ax_controller::SetMotorParam::Request req;
+    usb2ax_controller::SetMotorParam::Response res;
+
     // Right arm: IDs 3, 5
     // Left arm:  IDs 4, 6
 
@@ -407,13 +910,21 @@ void JointController::testArmWave()
     int samples = (int)ceil(runTime/samplingInterval);
     int i2 = (int)ceil(delayTime/samplingInterval);
 
-	// Initial position - Arms outstreched
-    setMotorGoalPositionInRad(3, p3);
-    setMotorGoalPositionInRad(5, p5);
-    setMotorGoalPositionInRad(4, p4 + fi);
-    setMotorGoalPositionInRad(6, p6 + fi);
+    // Initial position - Arms outstreched
+    req.dxlID = 3;
+    req.value = p3;
+    setMotorGoalPositionInRad(req, res);
+    req.dxlID = 5;
+    req.value = p5;
+    setMotorGoalPositionInRad(req, res);
+    req.dxlID = 4;
+    req.value = p4 + fi;
+    setMotorGoalPositionInRad(req, res);
+    req.dxlID = 6;
+    req.value = p6 + fi;
+    setMotorGoalPositionInRad(req, res);
     ros::Duration(2).sleep();
-	
+
     // Wave
     ROS_INFO("Amplitude: %g", A);
     ROS_INFO("Runtime: %g", runTime);
@@ -435,627 +946,30 @@ void JointController::testArmWave()
         // Right arm
         y1 = A*sin( 2.0*M_PI*f1*t );
         y2 = A*sin( 2.0*M_PI*f2*t );
-        setMotorGoalPositionInRad(3, p3 + y1);
-        setMotorGoalPositionInRad(5, p5 + y2);
+        req.dxlID = 3;
+        req.value = p3 + y1;
+        setMotorGoalPositionInRad(req, res);
+        req.dxlID = 5;
+        req.value = p5 + y2;
+        setMotorGoalPositionInRad(req, res);
 
         if ( i > i2 )
         {
             // Left arm
             y3 = A*sin( 2.0*M_PI*f1*(t-delayTime) + fi );
             y4 = A*sin( 2.0*M_PI*f2*(t-delayTime) + fi );
-            setMotorGoalPositionInRad(4, p4 + y3);
-            setMotorGoalPositionInRad(6, p6 + y4);
+            req.dxlID = 4;
+            req.value = p4 + y3;
+            setMotorGoalPositionInRad(req, res);
+            req.dxlID = 6;
+            req.value = p6 + y4;
+            setMotorGoalPositionInRad(req, res);
             ROS_INFO("%g\t %g\t %g\t %g", y1, y2, y3, y4);
         }
         else
             ROS_INFO("%g\t %g\t", y1, y2);
 
         ros::Duration(samplingInterval).sleep();
-    }
-}
-
-
-float JointController::getMotorCurrentPositionInRad(int dxlID)
-{
-    int readVal;
-    if ( getValue( dxlID, AX12_PRESENT_POSITION_L, readVal ) == 0 )
-        return directionSign[dxlID]*(axPositionToRad(readVal)) + positionOffsets[dxlID];
-    else
-        return 0.0;
-}
-
-
-void JointController::setMotorGoalPositionInRad(int dxlID, float pos)
-{
-    ROS_DEBUG("Offset: %g", positionOffsets[dxlID]);
-    ROS_DEBUG("Direction sign: %d", directionSign[dxlID]);
-    ROS_DEBUG("Value: %d", radToAxPosition(directionSign[dxlID]*(pos - positionOffsets[dxlID])));
-    ROS_DEBUG("----");
-    setValue( dxlID, AX12_GOAL_POSITION_L, radToAxPosition(directionSign[dxlID]*(pos - positionOffsets[dxlID])) );
-}
-
-
-float JointController::getMotorCurrentSpeedInRadPerSec(int dxlID)
-{
-    int readVal;
-    if ( getValue( dxlID, AX12_PRESENT_SPEED_L, readVal ) == 0 )
-        return axSpeedToRadPerSec(readVal);
-    else
-        return 0.0;
-}
-
-
-void JointController::setMotorGoalSpeedInRadPerSec(int dxlID, float pos)
-{
-    setValue( dxlID, AX12_MOVING_SPEED_L, radPerSecToAxSpeed(pos) );
-}
-
-
-float JointController::getMotorCurrentTorqueInDecimal(int dxlID)
-{
-    int readVal;
-    if ( getValue( dxlID, AX12_PRESENT_LOAD_L, readVal ) == 0 )
-        return axTorqueToDecimal(readVal);
-    else
-        return 0.0;
-}
-
-
-void JointController::setMotorMaxTorqueInDecimal(int dxlID, float pos)
-{
-    setValue( dxlID, AX12_TORQUE_LIMIT_L, decimalToAxTorque(pos) );
-}
-
-
-void JointController::getAllMotorPositions()
-{
-    std_msgs::UInt16MultiArray dxlIDs;
-    dxlIDs.layout.dim.resize(1);
-    dxlIDs.layout.dim[0].label = "ids";
-    dxlIDs.layout.dim[0].size = numOfConnectedMotors;
-    dxlIDs.layout.dim[0].stride = numOfConnectedMotors;
-    dxlIDs.layout.data_offset = 0;
-    dxlIDs.data.resize(numOfConnectedMotors);
-
-    std_msgs::UInt16MultiArray vals;
-    vals.layout.dim.resize(2);
-    vals.layout.dim[0].label = "bytes";
-    vals.layout.dim[0].size = 1;
-    vals.layout.dim[0].stride = numOfConnectedMotors*1;
-    vals.layout.dim[1].label = "motors";
-    vals.layout.dim[1].size = numOfConnectedMotors;
-    vals.layout.dim[1].stride = 1;
-    vals.layout.data_offset = 0;
-    vals.data.resize(numOfConnectedMotors*1);
-
-    std_msgs::UInt16MultiArray isWord;
-    isWord.layout.dim.resize(1);
-    isWord.layout.dim[0].label = "isWord";
-    isWord.layout.dim[0].size = 1;
-    isWord.layout.dim[0].stride = 1;
-    isWord.layout.data_offset = 0;
-    isWord.data.resize(1);
-    isWord.data[0] = true;
-
-    for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
-    {
-        if (connectedMotors[dxlID])
-            dxlIDs.data[dxlID-1] = dxlID;
-    }
-
-    getSyncValues(dxlIDs, AX12_GOAL_POSITION_L, vals, isWord);
-}
-
-
-void JointController::homeAllMotors()
-{
-    std_msgs::UInt16MultiArray dxlIDs;
-    dxlIDs.layout.dim.resize(1);
-    dxlIDs.layout.dim[0].label = "ids";
-    dxlIDs.layout.dim[0].size = numOfConnectedMotors;
-    dxlIDs.layout.dim[0].stride = numOfConnectedMotors;
-    dxlIDs.layout.data_offset = 0;
-    dxlIDs.data.resize(numOfConnectedMotors);
-
-    std_msgs::UInt16MultiArray vals;
-    vals.layout.dim.resize(2);
-    vals.layout.dim[0].label = "bytes";
-    vals.layout.dim[0].size = 1;
-    vals.layout.dim[0].stride = numOfConnectedMotors*1;
-    vals.layout.dim[1].label = "motors";
-    vals.layout.dim[1].size = numOfConnectedMotors;
-    vals.layout.dim[1].stride = 1;
-    vals.layout.data_offset = 0;
-    vals.data.resize(numOfConnectedMotors*1);
-
-    std_msgs::UInt16MultiArray isWord;
-    isWord.layout.dim.resize(1);
-    isWord.layout.dim[0].label = "isWord";
-    isWord.layout.dim[0].size = 1;
-    isWord.layout.dim[0].stride = 1;
-    isWord.layout.data_offset = 0;
-    isWord.data.resize(1);
-    isWord.data[0] = true;
-
-    for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
-    {
-        if (connectedMotors[dxlID])
-        {
-            dxlIDs.data[dxlID-1] = dxlID;
-            vals.data[dxlID-1] = radToAxPosition(directionSign[dxlID]*(0.0 - positionOffsets[dxlID]));
-        }
-    }
-
-    setSyncValues(dxlIDs, AX12_GOAL_POSITION_L, vals, isWord);
-}
-
-
-bool JointController::getFromAX(
-        usb2ax_controller::GetFromAX::Request &req, usb2ax_controller::GetFromAX::Response &res)
-{
-    int readVal;
-    if ( getValue( req.dxlID, req.address, readVal ) == 0 )
-    {
-        res.value = readVal;
-        res.rxSuccess = true;
-        return true;
-    }
-    else
-    {
-        res.value = 0;
-        res.rxSuccess = false;
-        return false;
-    }
-}
-
-
-bool JointController::getSyncFromAX(
-        usb2ax_controller::GetSyncFromAX::Request &req, usb2ax_controller::GetSyncFromAX::Response &res)
-{
-    if (!getSyncValues(req.dxlIDs, req.startAddress, res.values, req.isWord))
-    {
-        res.txSuccess = true;
-        return true;
-    }
-    else
-    {
-        res.txSuccess = false;
-        return false;
-    }
-}
-
-
-bool JointController::sendToAX(
-        usb2ax_controller::SendToAX::Request &req, usb2ax_controller::SendToAX::Response &res)
-{
-    if (!setValue(req.dxlID, req.address, req.value))
-    {
-        res.txSuccess = true;
-        return true;
-    }
-    else
-    {
-        res.txSuccess = false;
-        return false;
-    }
-}
-
-
-bool JointController::sendSyncToAX(
-        usb2ax_controller::SendSyncToAX::Request &req, usb2ax_controller::SendSyncToAX::Response &res)
-{
-    // Example: IDs 1, 2, 3: Set position 100, speed 300, torque limit 512
-    // controlTableStartAddr = 30 (Goal Position L)
-    // dxlIDs:  1             | 2             | 3
-    // vals:    100, 300, 512 | 100, 300, 512 | 100, 300, 512
-    // isWord:    1,   1,   1
-    //
-    // rosservice command line example
-    // With strings:
-    //rosservice call /SendSyncToAX
-    //    '[[[["ids", 3, 3]], 0], [1, 2, 3]]' '30'
-    //    '[[[["bytes", 3, 9], ["motors", 3, 3]], 0], [100, 300, 512, 100, 300, 512, 100, 300, 512]]'
-    //    '[[[["isWord", 3, 3]], 0], [1, 1, 1]]'
-    //
-    // With YAML dictionaries:
-    //rosservice call /SendSyncToAX
-    //    '{ layout: {dim: [{label: "ids", size: 3, stride: 3}], data_offset: 0}, data: [1, 2, 3] }' '30'
-    //    '{ layout: {dim: [{label: "bytes", size: 3, stride: 9},
-    //                      {label: "motors", size: 3, stride: 3}], data_offset: 0},
-    //                data: [100, 300, 512, 100, 300, 512, 100, 300, 512] }'
-    //    '{ layout: {dim: [{label: "isWord", size: 3, stride: 3}], data_offset: 0}, data: [1, 1, 1] }'
-
-    if (!setSyncValues(req.dxlIDs, req.startAddress, req.values, req.isWord))
-    {
-        res.txSuccess = true;
-        return true;
-    }
-    else
-    {
-        res.txSuccess = false;
-        return false;
-    }
-}
-
-
-bool JointController::getMotorCurrentPositionInRad(
-        usb2ax_controller::GetMotorParam::Request &req,
-        usb2ax_controller::GetMotorParam::Response &res)
-{
-    res.value = getMotorCurrentPositionInRad(req.dxlID);
-    res.txSuccess = true;
-    return true;
-}
-
-
-bool JointController::setMotorGoalPositionInRad(
-        usb2ax_controller::SetMotorParam::Request &req,
-        usb2ax_controller::SetMotorParam::Response &res)
-{
-    setMotorGoalPositionInRad(req.dxlID, req.value);
-    res.txSuccess = true;
-    return true;
-}
-
-
-bool JointController::getMotorCurrentSpeedInRadPerSec(
-        usb2ax_controller::GetMotorParam::Request &req,
-        usb2ax_controller::GetMotorParam::Response &res)
-{
-    res.value = getMotorCurrentSpeedInRadPerSec(req.dxlID);
-    res.txSuccess = true;
-    return true;
-}
-
-
-bool JointController::setMotorGoalSpeedInRadPerSec(
-        usb2ax_controller::SetMotorParam::Request &req,
-        usb2ax_controller::SetMotorParam::Response &res)
-{
-    setMotorGoalSpeedInRadPerSec(req.dxlID, req.value);
-    res.txSuccess = true;
-    return true;
-}
-
-
-bool JointController::getMotorCurrentTorqueInDecimal(
-        usb2ax_controller::GetMotorParam::Request &req,
-        usb2ax_controller::GetMotorParam::Response &res)
-{
-    res.value = getMotorCurrentTorqueInDecimal(req.dxlID);
-    res.txSuccess = true;
-    return true;
-}
-
-
-bool JointController::setMotorMaxTorqueInDecimal(
-        usb2ax_controller::SetMotorParam::Request &req,
-        usb2ax_controller::SetMotorParam::Response &res)
-{
-    setMotorMaxTorqueInDecimal(req.dxlID, req.value);
-    res.txSuccess = true;
-    return true;
-}
-
-
-bool JointController::homeAllMotors(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
-{
-    homeAllMotors();
-    return true;
-}
-
-
-bool JointController::getValue(int dxlID, int controlTableAddr, int& val)
-{
-    // Motor
-    if ( (1 <= dxlID) and (dxlID < 100) )
-    {
-        // Read word
-        switch (controlTableAddr)
-        {
-        case AX12_MODEL_NUMBER_L:
-        case AX12_CW_ANGLE_LIMIT_L:
-        case AX12_CCW_ANGLE_LIMIT_L:
-        case AX12_MAX_TORQUE_L:
-        case AX12_GOAL_POSITION_L:
-        case AX12_MOVING_SPEED_L:
-        case AX12_TORQUE_LIMIT_L:
-        case AX12_PRESENT_POSITION_L:
-        case AX12_PRESENT_SPEED_L:
-        case AX12_PRESENT_LOAD_L:
-        case AX12_PUNCH_L:
-        {
-            val = dxl_read_word(dxlID, controlTableAddr);
-            break;
-        }
-        // Read byte
-        default:
-        {
-            val = dxl_read_byte(dxlID, controlTableAddr);
-            break;
-        }
-        }
-    }
-    // Sensor
-    else if (dxlID >= 100)
-    {
-        // Read word
-        switch (controlTableAddr)
-        {
-        case AXS1_MODEL_NUMBER_L:
-        case AXS1_SOUND_DETECTED_TIME_L:
-        case AXS1_REMOCON_RX_DATA_L:
-        case AXS1_REMOCON_TX_DATA_L:
-        {
-            val = dxl_read_word(dxlID, controlTableAddr);
-            break;
-        }
-        // Read byte
-        default:
-        {
-            val = dxl_read_byte(dxlID, controlTableAddr);
-            break;
-        }
-        }
-    }
-    else
-        return -1;
-
-    int CommStatus = dxl_get_result();
-    if (CommStatus == COMM_RXSUCCESS)
-    {
-        //ROS_DEBUG("Value received: %d", val);
-        printErrorCode();
-        return 0;
-    }
-    else
-    {
-        printCommStatus(CommStatus);
-        return -1;
-    }
-}
-
-
-bool JointController::setValue(int dxlID, int controlTableAddr, int val)
-{
-    // Motor
-    if ( (1 <= dxlID) and (dxlID < 100) or (dxlID == 254) )
-    {
-        switch (controlTableAddr)
-        {
-        case AX12_MODEL_NUMBER_L:
-        case AX12_CW_ANGLE_LIMIT_L:
-        case AX12_CCW_ANGLE_LIMIT_L:
-        case AX12_MAX_TORQUE_L:
-        case AX12_GOAL_POSITION_L:
-        case AX12_MOVING_SPEED_L:
-        case AX12_TORQUE_LIMIT_L:
-        case AX12_PRESENT_POSITION_L:
-        case AX12_PRESENT_SPEED_L:
-        case AX12_PRESENT_LOAD_L:
-        case AX12_PUNCH_L:
-        {
-            // 2 bytes
-            dxl_write_word(dxlID, controlTableAddr, val);
-            break;
-        }
-        default:
-        {
-            // 1 byte
-            dxl_write_byte(dxlID, controlTableAddr, val);
-            break;
-        }
-        }
-    }
-    // Sensor
-    else if (dxlID >= 100)
-    {
-        switch (controlTableAddr)
-        {
-        case AXS1_MODEL_NUMBER_L:
-        case AXS1_SOUND_DETECTED_TIME_L:
-        case AXS1_REMOCON_RX_DATA_L:
-        case AXS1_REMOCON_TX_DATA_L:
-        {
-            // 2 bytes
-            dxl_write_word(dxlID, controlTableAddr, val);
-            break;
-        }
-        default:
-        {
-            // 1 byte
-            dxl_write_byte(dxlID, controlTableAddr, val);
-            break;
-        }
-        }
-    }
-    else
-        return -1;
-
-    // No return Status Packet from a broadcast command
-    if (dxlID == 254)
-        return 0;
-    else
-    {
-        int CommStatus = dxl_get_result();
-        if (CommStatus == COMM_RXSUCCESS)
-        {
-            //ROS_DEBUG("Value sent: %d", val);
-            printErrorCode();
-            return 0;
-        }
-        else
-        {
-            printCommStatus(CommStatus);
-            return -1;
-        }
-    }
-}
-
-
-void JointController::sync_read(int ids[18])
-{
-    dxl_sync_read_start( AX12_PRESENT_POSITION_L, 2 );
-    for (int i = 0; i < NUM_OF_MOTORS; i++ )
-        dxl_sync_read_push_id( ids[i] );
-    dxl_sync_read_send();
-    int CommStatus = dxl_get_result();
-    if( CommStatus == COMM_RXSUCCESS )
-    {
-        for (int i = 0; i < NUM_OF_MOTORS; i++ )
-            printf( "%i=%i, ", ids[i] , dxl_sync_read_pop_word());
-    }
-    else
-        printCommStatus(CommStatus);
-    printf("\n");
-}
-
-
-int JointController::getSyncValues(
-        std_msgs::UInt16MultiArray dxlIDs, int controlTableStartAddr,
-        std_msgs::UInt16MultiArray &vals, std_msgs::UInt16MultiArray isWord)
-{
-    int numOfMotors = dxlIDs.data.size();
-
-    if ( numOfMotors == 0 )
-    {
-        ROS_ERROR("No motors specified.");
-        return -1;
-    }
-
-    if ( isWord.data.size() != (vals.data.size()/numOfMotors) )
-    {
-        ROS_ERROR("Input data size mismatch.");
-        return -1;
-    }
-
-    // Length of data for each servo
-    int dataLength = 0;
-
-    for (std::vector<u_int16_t>::const_iterator it = isWord.data.begin(); it != isWord.data.end(); ++it)
-    {
-        if (*it == false)
-            ++dataLength;
-        else
-            dataLength = dataLength + 2;
-    }
-
-    // Generate sync_read command
-    dxl_sync_read_start(controlTableStartAddr, dataLength);
-    for (int i = 0; i < numOfMotors; i++ )
-        dxl_sync_read_push_id(dxlIDs.data[i]);
-    dxl_sync_read_send();
-
-    int CommStatus = dxl_get_result();
-    if (CommStatus == COMM_RXSUCCESS)
-    {
-        for (int i = 0; i < numOfMotors; ++i)
-        {
-            for (int j = 0; j < isWord.data.size(); ++j)
-            {
-                int res = dxl_sync_read_pop_word();
-                ROS_INFO( "%d=%d, ", dxlIDs.data[i], res);
-                vals.data[vals.layout.dim[1].stride*i + j] = res;
-            }
-        }
-        printErrorCode();
-        return 0;
-    }
-    else
-    {
-        printCommStatus(CommStatus);
-        return -1;
-    }
-}
-
-
-int JointController::setSyncValues(
-        std_msgs::UInt16MultiArray dxlIDs, int controlTableStartAddr,
-        std_msgs::UInt16MultiArray vals, std_msgs::UInt16MultiArray isWord)
-{
-    int numOfMotors = dxlIDs.data.size();
-
-    if ( numOfMotors == 0 )
-    {
-        ROS_ERROR("No motors specified.");
-        return -1;
-    }
-
-    if ( isWord.data.size() != (vals.data.size()/numOfMotors) )
-    {
-        ROS_ERROR("Input data size mismatch.");
-        return -1;
-    }
-
-    // Length of data for each servo
-    int dataLength = 0;
-
-    for (std::vector<u_int16_t>::const_iterator it = isWord.data.begin(); it != isWord.data.end(); ++it)
-    {
-        if (*it == false)
-            ++dataLength;
-        else
-            dataLength = dataLength + 2;
-    }
-
-    // Make sync_write packet
-    ROS_DEBUG( "Packet" );
-    ROS_DEBUG( "ID:\t\t\t %d", BROADCAST_ID );
-    ROS_DEBUG( "Instr:\t\t\t %d", INST_SYNC_WRITE );
-    ROS_DEBUG( "Param 0 (start addr):\t %d", controlTableStartAddr );
-    ROS_DEBUG( "Param 1 (data length):\t %d", dataLength );
-    dxl_set_txpacket_id(BROADCAST_ID);
-    dxl_set_txpacket_instruction(INST_SYNC_WRITE);
-    dxl_set_txpacket_parameter(0, controlTableStartAddr);
-    dxl_set_txpacket_parameter(1, dataLength);
-
-    int paramIndex = 2;
-    for (int i = 0; i < numOfMotors; ++i)
-    {
-        ROS_DEBUG( "Param %d (dxl %d):\t %d", paramIndex, i, dxlIDs.data[i] );
-        dxl_set_txpacket_parameter( paramIndex++, dxlIDs.data[i] );
-        for (int j = 0; j < isWord.data.size(); ++j)
-        {
-            ROS_DEBUG( "Value: %d", (vals.data[vals.layout.dim[1].stride*i + j]) );
-            if (isWord.data[j])
-            {
-                // 2 bytes
-                ROS_DEBUG( "Param %d (data %dL):\t %d", paramIndex, j,
-                           dxl_get_lowbyte((int)(vals.data[vals.layout.dim[1].stride*i + j])) );
-                ROS_DEBUG( "Param %d (data %dH):\t %d", paramIndex + 1, j,
-                           dxl_get_highbyte((int)(vals.data[vals.layout.dim[1].stride*i + j])) );
-                dxl_set_txpacket_parameter(
-                            paramIndex++, dxl_get_lowbyte((int)(vals.data[vals.layout.dim[1].stride*i + j])) );
-                dxl_set_txpacket_parameter(
-                            paramIndex++, dxl_get_highbyte((int)(vals.data[vals.layout.dim[1].stride*i + j])) );
-            }
-            else
-            {
-                // 1 byte
-                ROS_DEBUG( "Param %d (data %d):\t %d", paramIndex, j,
-                           dxl_get_highbyte((int)(vals.data[vals.layout.dim[1].stride*i + j])) );
-                dxl_set_txpacket_parameter(
-                            paramIndex++, (int)(vals.data[vals.layout.dim[1].stride*i + j]) );
-            }
-            ROS_DEBUG("--");
-        }
-    }
-
-    ROS_DEBUG( "Length:\t\t\t %d", (dataLength + 1)*numOfMotors + 4 );
-    dxl_set_txpacket_length( (dataLength + 1)*numOfMotors + 4 );
-
-    dxl_txrx_packet();
-
-    int CommStatus = dxl_get_result();
-    if (CommStatus == COMM_RXSUCCESS)
-    {
-        printErrorCode();
-        return 0;
-    }
-    else
-    {
-        printCommStatus(CommStatus);
-        return -1;
     }
 }
 
@@ -1216,9 +1130,9 @@ int JointController::radPerSecToAxSpeed(float oldValue)
     //float newRange = newMax - newMin;
     //int newValue = round( (fabs(oldValue) - oldMin)*newRange/oldRange + newMin );
     int newValue = round( fabs(oldValue)/0.0116 );
-    if ( (0.0 <= oldValue) and (oldValue <= (1023*0.0116 + FLOAT_PRECISION_THRESH)) )
+    if ( (0.0 <= oldValue) && (oldValue <= (1023*0.0116 + FLOAT_PRECISION_THRESH)) )
         return newValue;
-    else if ( ((-1023*0.0116 - FLOAT_PRECISION_THRESH) <= oldValue) and (oldValue < 0.0) )
+    else if ( ((-1023*0.0116 - FLOAT_PRECISION_THRESH) <= oldValue) && (oldValue < 0.0) )
         return newValue | 0x400;  // Set bit 10 to 1
     else
     {
@@ -1261,9 +1175,9 @@ int JointController::decimalToAxTorque(float oldValue)
     //float newRange = newMax - newMin;
     //int newValue = round( (fabs(oldValue) - oldMin)*newRange/oldRange + newMin );
     int newValue = round( fabs(oldValue)/0.001 );
-    if ( (0.0 <= oldValue) and (oldValue <= (1023*0.001 + FLOAT_PRECISION_THRESH)) )
+    if ( (0.0 <= oldValue) && (oldValue <= (1023*0.001 + FLOAT_PRECISION_THRESH)) )
         return newValue;
-    else if ( ((-1023*0.001 - FLOAT_PRECISION_THRESH) <= oldValue) and (oldValue < 0.0) )
+    else if ( ((-1023*0.001 - FLOAT_PRECISION_THRESH) <= oldValue) && (oldValue < 0.0) )
         return newValue | 0x400;  // Set bit 10 to 1
     else
     {

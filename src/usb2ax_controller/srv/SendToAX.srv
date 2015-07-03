@@ -1,5 +1,5 @@
-uint32 dxlID
-uint32 address
-uint32 value
+uint16 dxlID
+uint16 address
+uint16 value
 ---
 bool txSuccess

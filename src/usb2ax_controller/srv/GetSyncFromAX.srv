@@ -1,6 +1,6 @@
-std_msgs/UInt16MultiArray dxlIDs
+uint16[] dxlIDs
 uint16 startAddress
-std_msgs/UInt16MultiArray isWord
+bool[] isWord
 ---
-std_msgs/UInt16MultiArray values
+uint16[] values
 bool txSuccess
