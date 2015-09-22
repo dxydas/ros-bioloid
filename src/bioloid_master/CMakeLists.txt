@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  moveit_ros_planning_interface
 )
 
 ## System dependencies are found with CMake's conventions
@@ -18,6 +19,60 @@ find_package(catkin REQUIRED COMPONENTS
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
 # catkin_python_setup()
+
+
+########
+## Qt ##
+########
+
+# References:
+# http://doc.qt.io/qt-5/cmake-manual.html
+# http://www.cmake.org/cmake/help/v3.0/manual/cmake-qt.7.html
+# http://www.kdab.com/using-cmake-with-qt-5/
+# http://rdu.im/ros/programming/2014/03/25/using-qt-in-ros-catkin-packages.html
+
+#set(CMAKE_MODULE_PATH /usr/lib/i386-linux-gnu/qt5)
+
+# Tell CMake to run moc when necessary:
+set(CMAKE_AUTOMOC ON)
+# As moc files are generated in the binary dir, tell CMake
+# to always look for includes there:
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+# Widgets finds its own dependencies (QtGui and QtCore)
+find_package(Qt5Widgets REQUIRED)
+
+# The Qt5Widgets_INCLUDES also includes the include directories for
+# dependencies QtCore and QtGui
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
+
+# We need to add -DQT_WIDGETS_LIB when using QtWidgets in Qt 5
+add_definitions(${Qt5Widgets_DEFINITIONS})
+
+# Executables fail to build with Qt 5 in the default configuration
+# without -fPIE. We add that here.
+set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+
+set(HEADER_FILES
+  src/mainwindow.h
+  src/rosworker.h
+  src/customlistwidget.h
+  src/robotposeslistmodel.h
+  src/outputlog.h
+  src/doubleslider.h
+)
+
+set(SOURCE_FILES
+  src/main.cpp
+  src/mainwindow.cpp
+  src/rosworker.cpp
+  src/customlistwidget.cpp
+  src/robotposeslistmodel.cpp
+  src/outputlog.cpp
+  src/doubleslider.cpp
+  ${MOC_FILES}
+)
+
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -104,6 +159,8 @@ include_directories(
 
 ## Declare a cpp executable
 # add_executable(bioloid_master_node src/bioloid_master_node.cpp)
+add_executable(moveit_api_test src/moveit_api_test.cpp)
+add_executable(mainwindow ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
@@ -113,6 +170,10 @@ include_directories(
 # target_link_libraries(bioloid_master_node
 #   ${catkin_LIBRARIES}
 # )
+target_link_libraries(moveit_api_test ${catkin_LIBRARIES})
+# The Qt5Widgets_LIBRARIES variable also includes QtGui and QtCore
+target_link_libraries(mainwindow Qt5::Widgets ${catkin_LIBRARIES} ${Qt5Widgets_LIBRARIES})
+#qt5_use_modules(mainwindow Widgets)
 
 #############
 ## Install ##
