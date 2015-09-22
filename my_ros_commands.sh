@@ -84,15 +84,21 @@ rosrun usb2ax_controller test_balancer                                          
 roslaunch bioloid_moveit_config setup_assistant.launch                          # Start MoveIt Setup Assistant
 # Use the MoveIt RViz plugin
 roslaunch bioloid_moveit_config demo.launch                                     # Start RViz with MoveIt MotionPlanning plugin
-# Use the MoveIt RViz plugin with database
+# Use the MoveIt RViz plugin with default database
 roslaunch bioloid_moveit_config demo.launch db:=true                            # Start RViz with MoveIt MotionPlanning plugin and default database
+# Use the MoveIt RViz plugin with custom database
+roslaunch bioloid_moveit_config warehouse.launch moveit_warehouse_database_path:=~/bioloid_warehouse_mongo_db
+roslaunch bioloid_moveit_config demo.launch
 # Test MoveIt Move Group API
 rosrun bioloid_master moveit_api_test                                           # Run test program: MoveIt Move Group Interface/C++ API
 #############
 
-# GUI
+# GUI ##
 rosrun bioloid_master mainwindow                                                # Start robot GUI (WIP)
+########
 
+
+# Notes
 
 # Getting MongoDB to work with NTFS: Add "permissions" flag to /etc/fstab for drive to be mounted
 # See link: http://askubuntu.com/questions/251901/configuring-mongo-db-to-work-with-ntfs-drive

@@ -5,4 +5,4 @@ moveit_setup_assistant_config:
   SRDF:
     relative_path: config/bioloid.srdf
   CONFIG:
-    generated_timestamp: 1428355264
+    generated_timestamp: 1440242354

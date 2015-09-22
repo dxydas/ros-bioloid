@@ -168,3 +168,55 @@ torso:
     - TRRTkConfigDefault
     - PRMkConfigDefault
     - PRMstarkConfigDefault
+right_hand:
+  planner_configs:
+    - SBLkConfigDefault
+    - ESTkConfigDefault
+    - LBKPIECEkConfigDefault
+    - BKPIECEkConfigDefault
+    - KPIECEkConfigDefault
+    - RRTkConfigDefault
+    - RRTConnectkConfigDefault
+    - RRTstarkConfigDefault
+    - TRRTkConfigDefault
+    - PRMkConfigDefault
+    - PRMstarkConfigDefault
+left_hand:
+  planner_configs:
+    - SBLkConfigDefault
+    - ESTkConfigDefault
+    - LBKPIECEkConfigDefault
+    - BKPIECEkConfigDefault
+    - KPIECEkConfigDefault
+    - RRTkConfigDefault
+    - RRTConnectkConfigDefault
+    - RRTstarkConfigDefault
+    - TRRTkConfigDefault
+    - PRMkConfigDefault
+    - PRMstarkConfigDefault
+right_foot:
+  planner_configs:
+    - SBLkConfigDefault
+    - ESTkConfigDefault
+    - LBKPIECEkConfigDefault
+    - BKPIECEkConfigDefault
+    - KPIECEkConfigDefault
+    - RRTkConfigDefault
+    - RRTConnectkConfigDefault
+    - RRTstarkConfigDefault
+    - TRRTkConfigDefault
+    - PRMkConfigDefault
+    - PRMstarkConfigDefault
+left_foot:
+  planner_configs:
+    - SBLkConfigDefault
+    - ESTkConfigDefault
+    - LBKPIECEkConfigDefault
+    - BKPIECEkConfigDefault
+    - KPIECEkConfigDefault
+    - RRTkConfigDefault
+    - RRTConnectkConfigDefault
+    - RRTstarkConfigDefault
+    - TRRTkConfigDefault
+    - PRMkConfigDefault
+    - PRMstarkConfigDefault

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bioloid">
-<!-- Modified Bioloid Comprehensive humanoid, with CM-5 replaced by PC and custom sensors -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bioloid_compr_18_servos">
+<!-- Bioloid Comprehensive humanoid with 18 AX-12+ servos -->
 
 <xacro:property name="pi" value="3.14159"/>
 <xacro:property name="cad_dir" value="file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD"/>
@@ -109,28 +109,6 @@
     </joint>
 </xacro:macro>
 
-<!-- IMU -->
-<joint name="imu_to_base_joint" type="fixed">
-    <parent link="imu_link"/>
-    <origin xyz="0.01 0 0.0788" rpy="0 0 0"/>
-    <child link="base_link"/>
-</joint>
-<link name="imu_link">
-    <visual>
-        <geometry>
-            <box size="0.04 0.02 0.005"/>
-        </geometry>
-        <material name="green">
-            <color rgba="0.0 1.0 0.0 1.0"/>
-        </material>
-    </visual>
-    <!--<inertial>
-      <origin xyz="0 0 0"/>
-      <mass value="1.0"/>
-      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
-    </inertial>-->
-</link>
-
 <!-- Base -->
 <joint name="base_to_torso_joint" type="fixed">
     <parent link="base_link"/>
@@ -138,101 +116,6 @@
     <child link="torso_link"/>
 </joint>
 <link name="base_link">
-</link>
-
-<!-- Camera -->
-<!--<joint name="camera_joint" type="fixed">
-    <origin xyz="0 0 0.075" rpy="${pi/2} 0 ${pi/2}"/>
-    <parent link="base_link"/>
-    <child link="camera_link"/>
-</joint>
-<link name="camera_link">-->
-    <!--<visual>
-        <geometry>
-            <box size="0.01 0.01 0.01"/>
-        </geometry>
-        <material name="black">
-            <color rgba="0.0 0.0 0.0 1.0"/>
-        </material>
-    </visual>
-    <inertial>
-      <origin xyz="0 0 0"/>
-      <mass value="1.0"/>
-      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
-    </inertial>-->
-<!--</link>-->
-
-<!-- Head -->
-<joint name="head_joint" type="fixed">
-    <origin xyz="0 0 0.058" rpy="0 0 0"/>
-    <parent link="base_link"/>
-    <child link="head_link"/>
-</joint>
-<link name="head_link">
-    <visual>
-        <xacro:default_geometry cad_file="FP04-F5"/>
-        <origin xyz="0 0 0" rpy="${pi/2} 0 ${-pi/2}"/>
-    </visual>
-    <visual>
-        <xacro:default_geometry cad_file="FP04-F10"/>
-        <origin xyz="0 0 -0.0342" rpy="${pi/2} 0 ${-pi/2}"/>
-    </visual>
-    <visual>
-        <xacro:default_geometry cad_file="RaspPiB_plus_3d_step_V10" suffix="_FCD-Conv"/>
-        <origin xyz="-0.008 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
-    </visual>
-    <collision name="head_bracket_collision">
-        <origin xyz="-0.009 0 0"/>
-        <geometry>
-            <box size="0.0405 0.029 0.083"/>
-        </geometry>
-    </collision>
-    <collision name="head_spacer_collision">
-        <origin xyz="0 0 -0.0342"/>
-        <geometry>
-            <box size="0.0251 0.0383 0.0041"/>
-        </geometry>
-    </collision>
-    <collision name="raspberry_pi_collision">
-        <origin xyz="-0.0023 -0.0008 0.0008"/>
-        <geometry>
-            <box size="0.021 0.087 0.058"/>
-        </geometry>
-    </collision>
-    <inertial>
-      <origin xyz="0 0 0"/>
-      <mass value="1.0"/>
-      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
-    </inertial>
-</link>
-
-<!-- CPU case -->
-<joint name="cpu_case_joint" type="fixed">
-    <origin xyz="0 0 0.058" rpy="0 0 0"/>
-    <parent link="base_link"/>
-    <child link="cpu_case_link"/>
-</joint>
-<link name="cpu_case_link">
-    <visual>
-        <origin xyz="0 0 0"/>
-        <geometry>
-            <box size="0.026 0.092 0.063"/>
-        </geometry>
-        <material name="smoke_grey_transp">
-            <color rgba="0.2 0.2 0.2 0.8"/>
-        </material>
-    </visual>
-    <collision name="cpu_case_collision">
-        <origin xyz="0 0 0"/>
-        <geometry>
-            <box size="0.026 0.092 0.063"/>
-        </geometry>
-    </collision>
-    <inertial>
-      <origin xyz="0 0 0"/>
-      <mass value="1.0"/>
-      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
-    </inertial>
 </link>
 
 <!-- Torso -->
@@ -245,22 +128,14 @@
         <xacro:default_geometry cad_file="BPF-CHEST-B"/>
         <origin rpy="${pi/2} 0 0"/>
     </visual>
-    <!--<visual>
+    <visual>
         <xacro:default_geometry cad_file="CM-5"/>
         <origin xyz="0 0.032 -0.015" rpy="0 ${pi} 0"/>
-    </visual>-->
+    </visual>
     <!-- Sensor 100 -->
-    <!--<visual>
+    <visual>
         <xacro:default_geometry cad_file="AX-S1"/>
         <origin xyz="0 0 0.025" rpy="${-pi/2} 0 ${pi}"/>
-    </visual>-->
-    <visual>
-        <xacro:default_geometry cad_file="Backpack-DX"/>
-        <origin xyz="0 0.019 -0.0145" rpy="0 0 ${pi/2}"/>
-    </visual>
-    <visual>
-        <xacro:default_geometry cad_file="Battery-Turnigy-2200mAh"/>
-        <origin xyz="0 0.032 -0.008" rpy="0 ${pi/2} ${pi/2}"/>
     </visual>
     <!-- Motor 1 -->
     <visual>
@@ -290,40 +165,18 @@
         <xacro:default_geometry cad_file="AX-12"/>
         <origin xyz="0.033 0.016 -0.0655" rpy="0 ${pi} 0"/>
     </visual>
-    <!--<collision name="head_collision">
+    <collision name="head_collision">
         <origin xyz="0 0.0122 0.035"/>
         <geometry>
 		    <box size="0.033 0.054 0.044"/>
         </geometry>
-    </collision>-->
+    </collision>
     <collision name="torso_collision_top">
-        <origin xyz="0 0.0075 -0.015"/>
+        <origin xyz="0 0.019 -0.015"/>
         <geometry>
-		    <box size="0.103 0.066 0.0635"/>
+		    <box size="0.103 0.0905 0.0635"/>
         </geometry>
     </collision>
-
-
-    <collision name="Backpack-DX_collision">
-        <origin xyz="0 0.041 -0.0145"/>
-        <geometry>
-            <box size="0.09 0.0441 0.058"/>
-        </geometry>
-    </collision>
-    <collision name="Battery-Turnigy-2200mAh_collision">
-        <origin xyz="0 0.04425 -0.008"/>
-        <geometry>
-            <box size="0.108 0.0246 0.036"/>
-        </geometry>
-    </collision>
-    <collision name="Battery-Turnigy-2200mAh_collision_lead">
-        <origin xyz="-0.0515 0.04425 -0.031"/>
-        <geometry>
-            <box size="0.0041 0.0246 0.01"/>
-        </geometry>
-    </collision>
-
-
     <collision name="torso_collision_bottom">
         <origin xyz="0 0.00625 -0.0648"/>
         <geometry>

@@ -89,7 +89,9 @@ Visualization Manager:
         All Enabled: true
         base_link:
           Value: true
-        camera_link:
+        cpu_case_link:
+          Value: true
+        head_link:
           Value: true
         imu_link:
           Value: true
@@ -153,7 +155,9 @@ Visualization Manager:
           odom:
             imu_link:
               base_link:
-                camera_link:
+                cpu_case_link:
+                  {}
+                head_link:
                   {}
                 torso_link:
                   left_hip_twist_link:
@@ -198,10 +202,16 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        camera_link:
+        cpu_case_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+          Value: true
+        head_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         imu_link:
           Alpha: 1
           Show Axes: false
@@ -352,22 +362,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.559105
+      Distance: 0.521703
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.0189711
-        Y: 0.016518
-        Z: 0.0200326
+        X: 0.0230443
+        Y: -0.00100847
+        Z: 0.00223286
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.330203
+      Pitch: 0.360203
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.58343
+      Yaw: 5.34343
     Saved: ~
 Window Geometry:
   Camera:

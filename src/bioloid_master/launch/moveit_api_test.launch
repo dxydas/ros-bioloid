@@ -1,0 +1,4 @@
+<launch>
+  <include file="$(find bioloid_moveit_config)/launch/demo.launch"/>
+  <node name="moveit_api_test" pkg="bioloid_master" type="moveit_api_test" respawn="false" output="screen"></node>
+</launch>
