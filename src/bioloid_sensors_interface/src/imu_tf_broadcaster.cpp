@@ -23,8 +23,8 @@ int main(int argc, char **argv)
             tf::StampedTransform(
                 tf::Transform(broadcaster.getQ(), tf::Vector3(0.0, 0.0, 0.0)),
                 ros::Time::now(), "odom", "imu_link") );
-        loop_rate.sleep();
         ros::spinOnce();
+        loop_rate.sleep();
 
 //        std::cout << "dt: " << broadcaster.getDt() << std::endl;
 //        std::cout << "q.x: " << broadcaster.getQ().x() << std::endl;

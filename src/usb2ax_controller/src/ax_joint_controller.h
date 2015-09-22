@@ -12,6 +12,8 @@
 #include "usb2ax_controller/SetMotorParam.h"
 #include <vector>
 
+int main(int argc, char **argv);
+
 class JointController
 {
 public:
@@ -44,8 +46,8 @@ public:
                                         usb2ax_controller::GetMotorParam::Response &res);
     bool setMotorMaxTorqueInDecimal(usb2ax_controller::SetMotorParam::Request &req,
                                     usb2ax_controller::SetMotorParam::Response &res);
-    bool getAllMotorPositions(usb2ax_controller::GetSyncFromAX::Request &req,
-                              usb2ax_controller::GetSyncFromAX::Response &res);
+    bool getAllMotorPositionsInRad(usb2ax_controller::GetSyncFromAX::Request &req,
+                                   usb2ax_controller::GetSyncFromAX::Response &res);
     bool homeAllMotors(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
     // Tests
     bool testSending();

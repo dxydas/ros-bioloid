@@ -7,5 +7,3 @@ bioloid_sensors_interface.includes
 launch/avr_sensors_serial_plot.launch
 launch/avr_sensors_serial_process.launch
 src/imu_tf_broadcaster.h
-src/imu_tf_broadcaster_rpy.h
-src/imu_tf_broadcaster_rpy.cpp

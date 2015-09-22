@@ -64,8 +64,8 @@ int main(int argc, char **argv)
         &JointController::getMotorCurrentTorqueInDecimal, &jointController);
     ros::ServiceServer setMotorMaxTorqueInDecimalService = n.advertiseService("SetMotorMaxTorqueInDecimal",
         &JointController::setMotorMaxTorqueInDecimal, &jointController);
-    ros::ServiceServer getAllMotorPositionsService = n.advertiseService("GetAllMotorPositions",
-        &JointController::getAllMotorPositions, &jointController);
+    ros::ServiceServer getAllMotorPositionsInRadService = n.advertiseService("GetAllMotorPositionsInRad",
+        &JointController::getAllMotorPositionsInRad, &jointController);
     ros::ServiceServer homeAllMotorsService = n.advertiseService("HomeAllMotors",
         &JointController::homeAllMotors, &jointController);
 
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 //    jointController.testSendingSync();
 //    ros::Duration(2.0).sleep();
 
-//    jointController.getAllMotorPositions(syncGet_req, syncGet_res);
+//    jointController.getAllMotorPositionsInRad(syncGet_req, syncGet_res);
 //    ros::Duration(1.0).sleep();
 
 //    // Home all motors
@@ -757,8 +757,8 @@ bool JointController::setMotorMaxTorqueInDecimal(usb2ax_controller::SetMotorPara
 }
 
 
-bool JointController::getAllMotorPositions(usb2ax_controller::GetSyncFromAX::Request &req,
-                                           usb2ax_controller::GetSyncFromAX::Response &res)
+bool JointController::getAllMotorPositionsInRad(usb2ax_controller::GetSyncFromAX::Request &req,
+                                                usb2ax_controller::GetSyncFromAX::Response &res)
 {
     req.dxlIDs.resize(numOfConnectedMotors);
     req.startAddress = AX12_PRESENT_POSITION_L;
