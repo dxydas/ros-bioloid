@@ -16,8 +16,8 @@ int main(int argc, char **argv)
 
     ros::NodeHandle n;
 
-    //ros::ServiceClient getMotorGoalPositionInRadClient =
-    //        n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorGoalPositionInRad");
+    //ros::ServiceClient getMotorCurrentPositionInRadClient =
+    //        n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentPositionInRad");
     ros::ServiceClient setMotorGoalPositionInRadClient =
             n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalPositionInRad");
     ros::ServiceClient setMotorGoalSpeedInRadPerSecClient =

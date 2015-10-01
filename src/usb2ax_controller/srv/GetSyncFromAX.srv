@@ -3,4 +3,4 @@ uint16 startAddress
 bool[] isWord
 ---
 uint16[] values
-bool txSuccess
+bool rxSuccess

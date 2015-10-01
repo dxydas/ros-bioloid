@@ -18,3 +18,5 @@ srv/SendSyncToAX.srv
 srv/GetMotorParam.srv
 srv/SetMotorParam.srv
 src/test_balancer.cpp
+srv/SetMotorParams.srv
+srv/GetMotorParams.srv

@@ -41,7 +41,10 @@ int main(int argc, char **argv)
     ros::Rate loop_rate(1000);  // Hz
 
     // Joint state publisher
-    jointController.pub = n.advertise<sensor_msgs::JointState>("ax_joint_states", 1000);
+    jointController.jointStatePub = n.advertise<sensor_msgs::JointState>("ax_joint_states", 1000);
+
+    // Goal joint state publisher
+    jointController.goalJointStatePub = n.advertise<sensor_msgs::JointState>("ax_goal_joint_states", 1000);
 
     // Services
     ros::ServiceServer getFromAXService = n.advertiseService("GetFromAX",
@@ -54,18 +57,26 @@ int main(int argc, char **argv)
         &JointController::sendSyncToAX, &jointController);
     ros::ServiceServer getMotorCurrentPositionInRadService = n.advertiseService("GetMotorCurrentPositionInRad",
         &JointController::getMotorCurrentPositionInRad, &jointController);
+    ros::ServiceServer getMotorGoalPositionInRadService = n.advertiseService("GetMotorGoalPositionInRad",
+        &JointController::getMotorGoalPositionInRad, &jointController);
     ros::ServiceServer setMotorGoalPositionInRadService = n.advertiseService("SetMotorGoalPositionInRad",
         &JointController::setMotorGoalPositionInRad, &jointController);
     ros::ServiceServer getMotorCurrentSpeedInRadPerSecService = n.advertiseService("GetMotorCurrentSpeedInRadPerSec",
         &JointController::getMotorCurrentSpeedInRadPerSec, &jointController);
+    ros::ServiceServer getMotorGoalSpeedInRadPerSecService = n.advertiseService("GetMotorGoalSpeedInRadPerSec",
+        &JointController::getMotorGoalSpeedInRadPerSec, &jointController);
     ros::ServiceServer setMotorGoalSpeedInRadPerSecService = n.advertiseService("SetMotorGoalSpeedInRadPerSec",
         &JointController::setMotorGoalSpeedInRadPerSec, &jointController);
     ros::ServiceServer getMotorCurrentTorqueInDecimalService = n.advertiseService("GetMotorCurrentTorqueInDecimal",
         &JointController::getMotorCurrentTorqueInDecimal, &jointController);
     ros::ServiceServer setMotorMaxTorqueInDecimalService = n.advertiseService("SetMotorMaxTorqueInDecimal",
         &JointController::setMotorMaxTorqueInDecimal, &jointController);
-    ros::ServiceServer getAllMotorPositionsInRadService = n.advertiseService("GetAllMotorPositionsInRad",
-        &JointController::getAllMotorPositionsInRad, &jointController);
+    ros::ServiceServer getAllMotorGoalPositionsInRadService = n.advertiseService("GetAllMotorGoalPositionsInRad",
+        &JointController::getAllMotorGoalPositionsInRad, &jointController);
+    ros::ServiceServer getAllMotorGoalSpeedsInRadPerSecService = n.advertiseService("GetAllMotorGoalSpeedsInRadPerSec",
+        &JointController::getAllMotorGoalSpeedsInRadPerSec, &jointController);
+    ros::ServiceServer getAllMotorMaxTorquesInDecimalService = n.advertiseService("GetAllMotorMaxTorquesInDecimal",
+        &JointController::getAllMotorMaxTorquesInDecimal, &jointController);
     ros::ServiceServer homeAllMotorsService = n.advertiseService("HomeAllMotors",
         &JointController::homeAllMotors, &jointController);
 
@@ -139,7 +150,9 @@ int main(int argc, char **argv)
 JointController::JointController() :
     deviceIndex(0),
     baudNum(1),
-    numOfConnectedMotors(0)
+    numOfConnectedMotors(0),
+    timeOfLastGoalJointStatePublication(0, 0),
+    goalJointStatePublicationPeriodInSecs(2.0)
 {
     connectedMotors.resize(NUM_OF_MOTORS+1);
     for (std::vector<bool>::iterator it = connectedMotors.begin(); it != connectedMotors.end(); ++it)
@@ -276,53 +289,74 @@ bool JointController::init()
         req.value = 0;
         sendToAX(req, res);
     }
+
+    goal_joint_state = joint_state;
+
     return true;
 }
 
 
 void JointController::run()
 {
-    joint_state.header.stamp = ros::Time::now();
-
-//    for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
-//    {
-//        if (connectedMotors[dxlID])
-//        {
-//            usb2ax_controller::GetMotorParam::Request req;
-//            usb2ax_controller::GetMotorParam::Response res;
-//            req.dxlID = dxlID;
-//            joint_state.position[dxlID] = getMotorCurrentPositionInRad(req, res);
-//            joint_state.velocity[dxlID] = getMotorCurrentSpeedInRadPerSec(req, res);
-//            joint_state.effort[dxlID] = getMotorCurrentTorqueInDecimal(req, res);
-//        }
-//    }
+    ros::Time currentTime = ros::Time::now();
 
     // Get position, speed and torque with a sync_read command
+    joint_state.header.stamp = currentTime;
     usb2ax_controller::GetSyncFromAX::Request req;
     usb2ax_controller::GetSyncFromAX::Response res;
     req.dxlIDs.resize(numOfConnectedMotors);
     req.startAddress = AX12_PRESENT_POSITION_L;
     req.isWord.resize(3);
-    req.isWord[0] = true;
-    req.isWord[1] = true;
-    req.isWord[2] = true;
+    for (int i = 0; i < req.isWord.size(); ++i)
+        req.isWord[i] = true;
     for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
     {
         if (connectedMotors[dxlID])
-            req.dxlIDs[dxlID-1] = dxlID;
+            req.dxlIDs[dxlID - 1] = dxlID;
     }
     if ( getSyncFromAX(req, res) )
     {
         int i = 0;
         for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
         {
-            joint_state.position[dxlID] = directionSign[dxlID]*(axPositionToRad(res.values[i++])) + positionOffsets[dxlID];
+            joint_state.position[dxlID] =
+                    directionSign[dxlID]*(axPositionToRad(res.values[i++])) + positionOffsets[dxlID];
             joint_state.velocity[dxlID] = axSpeedToRadPerSec(res.values[i++]);
             joint_state.effort[dxlID] = axTorqueToDecimal(res.values[i++]);
         }
     }
+    jointStatePub.publish(joint_state);
 
-    pub.publish(joint_state);
+    if ( (currentTime - timeOfLastGoalJointStatePublication).toSec() >= goalJointStatePublicationPeriodInSecs )
+    {
+        // Get goal position, goal speed and max torque with a sync_read command
+        goal_joint_state.header.stamp = currentTime;
+        usb2ax_controller::GetSyncFromAX::Request req;
+        usb2ax_controller::GetSyncFromAX::Response res;
+        req.dxlIDs.resize(numOfConnectedMotors);
+        req.startAddress = AX12_GOAL_POSITION_L;
+        req.isWord.resize(3);
+        for (int i = 0; i < req.isWord.size(); ++i)
+            req.isWord[i] = true;
+        for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
+        {
+            if (connectedMotors[dxlID])
+                req.dxlIDs[dxlID - 1] = dxlID;
+        }
+        if ( getSyncFromAX(req, res) )
+        {
+            int i = 0;
+            for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
+            {
+                goal_joint_state.position[dxlID] =
+                        directionSign[dxlID]*(axPositionToRad(res.values[i++])) + positionOffsets[dxlID];
+                goal_joint_state.velocity[dxlID] = axSpeedToRadPerSec(res.values[i++]);
+                goal_joint_state.effort[dxlID] = axTorqueToDecimal(res.values[i++]);
+            }
+        }
+        goalJointStatePub.publish(goal_joint_state);
+        timeOfLastGoalJointStatePublication = currentTime;
+    }
 }
 
 
@@ -506,7 +540,7 @@ bool JointController::getSyncFromAX(usb2ax_controller::GetSyncFromAX::Request &r
     if ( numOfMotors == 0 )
     {
         ROS_ERROR("No motors specified.");
-        res.txSuccess = false;
+        res.rxSuccess = false;
         return false;
     }
 
@@ -545,13 +579,13 @@ bool JointController::getSyncFromAX(usb2ax_controller::GetSyncFromAX::Request &r
             }
         }
         printErrorCode();
-        res.txSuccess = true;
+        res.rxSuccess = true;
         return true;
     }
     else
     {
         printCommStatus(CommStatus);
-        res.txSuccess = false;
+        res.rxSuccess = false;
         return false;
     }
 }
@@ -667,10 +701,35 @@ bool JointController::getMotorCurrentPositionInRad(usb2ax_controller::GetMotorPa
     if ( getFromAX(req2, res2) )
     {
         res.value = directionSign[req.dxlID]*(axPositionToRad(res2.value)) + positionOffsets[req.dxlID];
+        res.rxSuccess = res2.rxSuccess;
         return true;
     }
     else
+    {
+        res.rxSuccess = res2.rxSuccess;
         return false;
+    }
+}
+
+
+bool JointController::getMotorGoalPositionInRad(usb2ax_controller::GetMotorParam::Request &req,
+                                                usb2ax_controller::GetMotorParam::Response &res)
+{
+    usb2ax_controller::GetFromAX::Request req2;
+    usb2ax_controller::GetFromAX::Response res2;
+    req2.dxlID = req.dxlID;
+    req2.address = AX12_GOAL_POSITION_L;
+    if ( getFromAX(req2, res2) )
+    {
+        res.value = directionSign[req.dxlID]*(axPositionToRad(res2.value)) + positionOffsets[req.dxlID];
+        res.rxSuccess = res2.rxSuccess;
+        return true;
+    }
+    else
+    {
+        res.rxSuccess = res2.rxSuccess;
+        return false;
+    }
 }
 
 
@@ -687,9 +746,15 @@ bool JointController::setMotorGoalPositionInRad(usb2ax_controller::SetMotorParam
     req2.address = AX12_GOAL_POSITION_L;
     req2.value = radToAxPosition(directionSign[req.dxlID]*(req.value - positionOffsets[req.dxlID]));
     if ( sendToAX(req2, res2) )
+    {
+        res.txSuccess = res2.txSuccess;
         return true;
+    }
     else
+    {
+        res.txSuccess = res2.txSuccess;
         return false;
+    }
 }
 
 
@@ -703,10 +768,35 @@ bool JointController::getMotorCurrentSpeedInRadPerSec(usb2ax_controller::GetMoto
     if ( getFromAX(req2, res2) )
     {
         res.value = axSpeedToRadPerSec(res2.value);
+        res.rxSuccess = res2.rxSuccess;
         return true;
     }
     else
+    {
+        res.rxSuccess = res2.rxSuccess;
         return false;
+    }
+}
+
+
+bool JointController::getMotorGoalSpeedInRadPerSec(usb2ax_controller::GetMotorParam::Request &req,
+                                                   usb2ax_controller::GetMotorParam::Response &res)
+{
+    usb2ax_controller::GetFromAX::Request req2;
+    usb2ax_controller::GetFromAX::Response res2;
+    req2.dxlID = req.dxlID;
+    req2.address = AX12_MOVING_SPEED_L;
+    if ( getFromAX(req2, res2) )
+    {
+        res.value = axSpeedToRadPerSec(res2.value);
+        res.rxSuccess = res2.rxSuccess;
+        return true;
+    }
+    else
+    {
+        res.rxSuccess = res2.rxSuccess;
+        return false;
+    }
 }
 
 
@@ -719,9 +809,15 @@ bool JointController::setMotorGoalSpeedInRadPerSec(usb2ax_controller::SetMotorPa
     req2.address = AX12_MOVING_SPEED_L;
     req2.value = radPerSecToAxSpeed(req.value);
     if ( sendToAX(req2, res2) )
+    {
+        res.txSuccess = res2.txSuccess;
         return true;
+    }
     else
+    {
+        res.txSuccess = res2.txSuccess;
         return false;
+    }
 }
 
 
@@ -735,10 +831,14 @@ bool JointController::getMotorCurrentTorqueInDecimal(usb2ax_controller::GetMotor
     if ( getFromAX(req2, res2) )
     {
         res.value = axTorqueToDecimal(res2.value);
+        res.rxSuccess = res2.rxSuccess;
         return true;
     }
     else
+    {
+        res.rxSuccess = res2.rxSuccess;
         return false;
+    }
 }
 
 
@@ -751,28 +851,109 @@ bool JointController::setMotorMaxTorqueInDecimal(usb2ax_controller::SetMotorPara
     req2.address = AX12_TORQUE_LIMIT_L;
     req2.value = decimalToAxTorque(req.value);
     if ( sendToAX(req2, res2) )
+    {
+        res.txSuccess = res2.txSuccess;
         return true;
+    }
     else
+    {
+        res.txSuccess = res2.txSuccess;
         return false;
+    }
 }
 
 
-bool JointController::getAllMotorPositionsInRad(usb2ax_controller::GetSyncFromAX::Request &req,
-                                                usb2ax_controller::GetSyncFromAX::Response &res)
+bool JointController::getAllMotorGoalPositionsInRad(usb2ax_controller::GetMotorParams::Request &req,
+                                                    usb2ax_controller::GetMotorParams::Response &res)
 {
-    req.dxlIDs.resize(numOfConnectedMotors);
-    req.startAddress = AX12_PRESENT_POSITION_L;
-    req.isWord.resize(1);
-    req.isWord[0] = true;
+    usb2ax_controller::GetSyncFromAX::Request req2;
+    usb2ax_controller::GetSyncFromAX::Response res2;
+
+    req2.dxlIDs.resize(numOfConnectedMotors);
+    req2.startAddress = AX12_GOAL_POSITION_L;
+    req2.isWord.resize(1);
+    req2.isWord[0] = true;
     for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
     {
         if (connectedMotors[dxlID])
-            req.dxlIDs[dxlID-1] = dxlID;
+            req2.dxlIDs[dxlID - 1] = dxlID;
     }
-    if ( getSyncFromAX(req, res) )
+    if ( getSyncFromAX(req2, res2) )
+    {
+        res.values.resize(res2.values.size());
+        for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
+            res.values[dxlID - 1] =
+                    directionSign[dxlID]*(axPositionToRad(res2.values[dxlID - 1])) + positionOffsets[dxlID];
+        res.rxSuccess = res2.rxSuccess;
         return true;
+    }
     else
+    {
+        res.rxSuccess = res2.rxSuccess;
         return false;
+    }
+}
+
+
+bool JointController::getAllMotorGoalSpeedsInRadPerSec(usb2ax_controller::GetMotorParams::Request &req,
+                                                       usb2ax_controller::GetMotorParams::Response &res)
+{
+    usb2ax_controller::GetSyncFromAX::Request req2;
+    usb2ax_controller::GetSyncFromAX::Response res2;
+
+    req2.dxlIDs.resize(numOfConnectedMotors);
+    req2.startAddress = AX12_MOVING_SPEED_L;
+    req2.isWord.resize(1);
+    req2.isWord[0] = true;
+    for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
+    {
+        if (connectedMotors[dxlID])
+            req2.dxlIDs[dxlID - 1] = dxlID;
+    }
+    if ( getSyncFromAX(req2, res2) )
+    {
+        res.values.resize(res2.values.size());
+        for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
+            res.values[dxlID - 1] = axSpeedToRadPerSec(res2.values[dxlID - 1]);
+        res.rxSuccess = res2.rxSuccess;
+        return true;
+    }
+    else
+    {
+        res.rxSuccess = res2.rxSuccess;
+        return false;
+    }
+}
+
+
+bool JointController::getAllMotorMaxTorquesInDecimal(usb2ax_controller::GetMotorParams::Request &req,
+                                                     usb2ax_controller::GetMotorParams::Response &res)
+{
+    usb2ax_controller::GetSyncFromAX::Request req2;
+    usb2ax_controller::GetSyncFromAX::Response res2;
+
+    req2.dxlIDs.resize(numOfConnectedMotors);
+    req2.startAddress = AX12_MAX_TORQUE_L;
+    req2.isWord.resize(1);
+    req2.isWord[0] = true;
+    for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
+    {
+        if (connectedMotors[dxlID])
+            req2.dxlIDs[dxlID - 1] = dxlID;
+    }
+    if ( getSyncFromAX(req2, res2) )
+    {
+        res.values.resize(res2.values.size());
+        for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
+            res.values[dxlID - 1] = axTorqueToDecimal(res2.values[dxlID -1]);
+        res.rxSuccess = res2.rxSuccess;
+        return true;
+    }
+    else
+    {
+        res.rxSuccess = res2.rxSuccess;
+        return false;
+    }
 }
 
 
@@ -791,8 +972,8 @@ bool JointController::homeAllMotors(std_srvs::Empty::Request &req, std_srvs::Emp
     {
         if (connectedMotors[dxlID])
         {
-            req2.dxlIDs[dxlID-1] = dxlID;
-            req2.values[dxlID-1] = radToAxPosition(directionSign[dxlID]*(0.0 - positionOffsets[dxlID]));
+            req2.dxlIDs[dxlID - 1] = dxlID;
+            req2.values[dxlID - 1] = radToAxPosition(directionSign[dxlID]*(0.0 - positionOffsets[dxlID]));
         }
     }
 

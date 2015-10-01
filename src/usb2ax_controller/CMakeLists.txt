@@ -61,6 +61,8 @@ add_service_files(
   SendSyncToAX.srv
   GetMotorParam.srv
   SetMotorParam.srv
+  GetMotorParams.srv
+  SetMotorParams.srv
 )
 
 ## Generate actions in the 'action' folder
