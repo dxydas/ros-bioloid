@@ -20,12 +20,14 @@ RosWorker::RosWorker(int argc, char* argv[], const char* nodeName, QWidget* pare
     //RosCommonNode(argc, argv, nodeName),
     argc(argc), argv(argv), mNodeName(nodeName), QObject(parent), mIsMasterRunning(false)
 {
-    currentJointState.name.resize(NUM_OF_MOTORS);
-    currentJointState.position.resize(NUM_OF_MOTORS);
-    currentJointState.velocity.resize(NUM_OF_MOTORS);
-    goalJointState.name.resize(NUM_OF_MOTORS);
-    goalJointState.position.resize(NUM_OF_MOTORS);
-    goalJointState.velocity.resize(NUM_OF_MOTORS);
+    currentJointState.name.resize(NUM_OF_MOTORS + 1);
+    currentJointState.position.resize(NUM_OF_MOTORS + 1);
+    currentJointState.velocity.resize(NUM_OF_MOTORS + 1);
+    currentJointState.effort.resize(NUM_OF_MOTORS + 1);
+    goalJointState.name.resize(NUM_OF_MOTORS + 1);
+    goalJointState.position.resize(NUM_OF_MOTORS + 1);
+    goalJointState.velocity.resize(NUM_OF_MOTORS + 1);
+    goalJointState.effort.resize(NUM_OF_MOTORS + 1);
 }
 
 
@@ -52,25 +54,48 @@ void RosWorker::init()
         emit connectedToRosMaster();
 
         jointStateSub = n.subscribe("ax_joint_states", 1000, &RosWorker::jointStateCallback, this);
+        goalJointStateSub = n.subscribe("ax_goal_joint_states", 1000, &RosWorker::goalJointStateCallback, this);
 
         QTimer* connectionHealthCheckTimer = new QTimer(this);
         connect( connectionHealthCheckTimer, SIGNAL(timeout()), this, SLOT(runConnectionHealthCheck()) );
         connectionHealthCheckTimer->start(5000);
 
-        getSyncFromAXSrv.request.dxlIDs.resize(NUM_OF_MOTORS);
-        for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
-            getSyncFromAXSrv.request.dxlIDs[dxlID-1] = dxlID;
-        getSyncFromAXSrv.request.isWord.resize(1);
-        getSyncFromAXSrv.request.isWord[0] = true;
-        getSyncFromAXClient = n.serviceClient<usb2ax_controller::GetSyncFromAX>("GetSyncFromAX");
-        goalJointState.name.resize(NUM_OF_MOTORS);
-        goalJointState.position.resize(NUM_OF_MOTORS);
-        goalJointState.velocity.resize(NUM_OF_MOTORS);
-        goalJointState.effort.resize(NUM_OF_MOTORS);
+        getFromAXClient =
+                n.serviceClient<usb2ax_controller::GetFromAX>("GetFromAX");
+        sendtoAXClient =
+                n.serviceClient<usb2ax_controller::SendToAX>("SendToAX");
+        getSyncFromAXClient =
+                n.serviceClient<usb2ax_controller::GetSyncFromAX>("GetSyncFromAX");
+        sendSyncToAXClient =
+                n.serviceClient<usb2ax_controller::SendSyncToAX>("SendSyncToAX");
+        getMotorCurrentPositionInRadClient =
+                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentPositionInRad");
+        getMotorGoalPositionInRadClient =
+                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorGoalPositionInRad");
+        setMotorGoalPositionInRadClient =
+                n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalPositionInRad");
+        getMotorCurrentSpeedInRadPerSecClient =
+                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentSpeedInRadPerSec");
+        getMotorGoalSpeedInRadPerSecClient =
+                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorGoalSpeedInRadPerSec");
+        setMotorGoalSpeedInRadPerSecClient =
+                n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalSpeedInRadPerSec");
+        getMotorCurrentTorqueInDecimalClient =
+                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentTorqueInDecimal");
+        setMotorMaxTorqueInDecimalClient =
+                n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorMaxTorqueInDecimal");
+        getAllMotorGoalPositionsInRadClient =
+                n.serviceClient<usb2ax_controller::GetMotorParams>("GetAllMotorGoalPositionsInRad");
+        getAllMotorGoalSpeedsInRadPerSecClient =
+                n.serviceClient<usb2ax_controller::GetMotorParams>("GetAllMotorGoalSpeedsInRadPerSec");
+        getAllMotorMaxTorquesInDecimalClient =
+                n.serviceClient<usb2ax_controller::GetMotorParams>("GetAllMotorMaxTorquesInDecimal");
+        homeAllMotorsClient =
+                n.serviceClient<std_srvs::Empty>("HomeAllMotors");
 
-        QTimer* secondaryDataFeedbackTimer = new QTimer(this);
-        connect( secondaryDataFeedbackTimer, SIGNAL(timeout()), this, SLOT(runSecondaryDataFeedback()) );
-        secondaryDataFeedbackTimer->start(5000);
+//        QTimer* secondaryDataFeedbackTimer = new QTimer(this);
+//        connect( secondaryDataFeedbackTimer, SIGNAL(timeout()), this, SLOT(runSecondaryDataFeedback()) );
+//        secondaryDataFeedbackTimer->start(2000);
 
         WorkerThread* workerThread = new WorkerThread();
         connect( workerThread, SIGNAL(finished()), workerThread, SLOT(deleteLater()) );
@@ -82,16 +107,6 @@ void RosWorker::init()
 }
 
 
-//void RosWorker::run() {
-//    ros::Rate loop_rate(1);  // Hz
-//    while ( ros::ok() )
-//    {
-//        ros::spinOnce();
-//        loop_rate.sleep();
-//    }
-//}
-
-
 void RosWorker::jointStateCallback(const sensor_msgs::JointState::ConstPtr &msg)
 {
     currentJointState.name = msg->name;
@@ -99,6 +114,16 @@ void RosWorker::jointStateCallback(const sensor_msgs::JointState::ConstPtr &msg)
     currentJointState.velocity = msg->velocity;
     currentJointState.effort = msg->effort;
     emit jointStateUpdated(currentJointState);
+}
+
+
+void RosWorker::goalJointStateCallback(const sensor_msgs::JointState::ConstPtr &msg)
+{
+    goalJointState.name = msg->name;
+    goalJointState.position = msg->position;
+    goalJointState.velocity = msg->velocity;
+    goalJointState.effort = msg->effort;
+    emit secondaryDataUpdated(goalJointState);
 }
 
 
@@ -116,22 +141,38 @@ void RosWorker::runConnectionHealthCheck()
 }
 
 
-void RosWorker::runSecondaryDataFeedback()
+void RosWorker::setAllMotorTorquesOff()
 {
-    getSyncFromAXSrv.request.startAddress = AX12_GOAL_POSITION_L;
-    if ( getSyncFromAXClient.call(getSyncFromAXSrv) )
-    {
-        for (int i = 0; i < NUM_OF_MOTORS; ++i)
-            goalJointState.position[i] = getSyncFromAXSrv.response.values[i];
+    usb2ax_controller::SendToAX srv;
+    srv.request.dxlID = 254;
+    srv.request.address = AX12_TORQUE_ENABLE;
+    srv.request.value = 0;
 
-        getSyncFromAXSrv.request.startAddress = AX12_MOVING_SPEED_L;
-        if ( getSyncFromAXClient.call(getSyncFromAXSrv) )
-        {
-            for (int i = 0; i < NUM_OF_MOTORS; ++i)
-                goalJointState.velocity[i] = getSyncFromAXSrv.response.values[i];
-
-            emit secondaryDataUpdated(currentJointState);
-        }
-    }
+    sendtoAXClient.call(srv);
 }
+
+
+//void RosWorker::runSecondaryDataFeedback()
+//{
+//    usb2ax_controller::GetMotorParams srv;
+
+//    if ( getAllMotorGoalPositionsInRadClient.call(srv) )
+//    {
+//        for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
+//            goalJointState.position[dxlId] = srv.response.values[dxlId - 1];
+//        emit secondaryDataUpdated(goalJointState);
+//    }
+//    if ( getAllMotorGoalSpeedsInRadPerSecClient.call(srv) )
+//    {
+//        for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
+//            goalJointState.velocity[dxlId] = srv.response.values[dxlId - 1];
+//        emit secondaryDataUpdated(goalJointState);
+//    }
+//    if ( getAllMotorMaxTorquesInDecimalClient.call(srv) )
+//    {
+//        for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
+//           goalJointState.effort[dxlId] = srv.response.values[dxlId - 1];
+//        emit secondaryDataUpdated(goalJointState);
+//    }
+//}
 
