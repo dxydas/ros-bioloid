@@ -3,9 +3,9 @@
 
 #include <qt5/QtCore/QVector>
 #include <qt5/QtWidgets/QMainWindow>
+#include <qt5/QtWidgets/QWidget>
 #include <qt5/QtWidgets/QMenu>
 #include <qt5/QtWidgets/QAction>
-#include <qt5/QtWidgets/QWidget>
 #include <qt5/QtWidgets/QPushButton>
 #include <qt5/QtWidgets/QLineEdit>
 //
@@ -16,6 +16,7 @@
 #include "customlistwidget.h"
 #include "outputlog.h"
 #include "doubleslider.h"
+#include "motorvalueeditor.h"
 
 class MainWindow : public QMainWindow
 {
@@ -37,13 +38,19 @@ public slots:
     void executeMotion();
     void addToQueue();
     void removeFromQueue();
+
     void nodeConnectedToRosMaster();
     void nodeDisconnectedFromRosMaster();
+
     void enableMotionButtons();
     void disableMotionButtons();
+
     void updateJointStateValues(sensor_msgs::JointState js);
     void updateSecondaryRobotValues(sensor_msgs::JointState js);
     void updateJointStateValuesFromPose(const QModelIndex &modelIndex);
+
+    void openMotorValueEditor();
+
     void quit();
 
 private:
@@ -53,7 +60,7 @@ private:
 
     QMenu* fileMenu;
     QAction* exitAct;
-    QWidget* widget;
+
     QPushButton* initRosNodeButton;
     QPushButton* addPoseButton;
     QPushButton* removePoseButton;
@@ -63,11 +70,15 @@ private:
     QPushButton* executeMotionButton;
     QPushButton* addToQueueButton;
     QPushButton* removeFromQueueButton;
+
+    QPushButton* openMotorValueEditorButton;
+    QPushButton* setAllMotorTorquesOffButton;
+
     QPushButton* saveAvailablePosesFileButton;
     QPushButton* loadAvailablePosesFileButton;
     QPushButton* saveQueuedPosesFileButton;
     QPushButton* loadQueuedPosesFileButton;
-    OutputLog* outputLog;
+
     CustomListWidget* availablePosesCustomListWidget;
     CustomListWidget* queuedPosesCustomListWidget;
     QVector<DoubleSlider*> presentPosSliders;
@@ -75,6 +86,10 @@ private:
     QVector<QLineEdit*> goalPosLineEdits;
     QVector<QLineEdit*> presentSpeedLineEdits;
     QVector<QLineEdit*> movingSpeedLineEdits;
+
+    OutputLog* outputLog;
+
+    MotorValueEditor* motorValueEditor;
 };
 
 #endif // MAINWINDOW_H

@@ -1,3 +1,4 @@
+../usb2ax_controller/src/ax12ControlTableMacros.h
 src/moveit_api_test.cpp
 src/moveit_api_test.h
 src/main.cpp
@@ -15,4 +16,5 @@ src/outputlog.h
 src/outputlog.cpp
 src/doubleslider.h
 src/doubleslider.cpp
-../usb2ax_controller/src/ax12ControlTableMacros.h
+src/motorvalueeditor.h
+src/motorvalueeditor.cpp

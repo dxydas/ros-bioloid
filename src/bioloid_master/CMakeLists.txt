@@ -60,6 +60,7 @@ set(HEADER_FILES
   src/robotposeslistmodel.h
   src/outputlog.h
   src/doubleslider.h
+  src/motorvalueeditor.h
 )
 
 set(SOURCE_FILES
@@ -70,6 +71,7 @@ set(SOURCE_FILES
   src/robotposeslistmodel.cpp
   src/outputlog.cpp
   src/doubleslider.cpp
+  src/motorvalueeditor.cpp
   ${MOC_FILES}
 )
 
