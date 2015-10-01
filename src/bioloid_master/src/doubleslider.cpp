@@ -1,5 +1,6 @@
 #include "doubleslider.h"
 #include <qt5/QtCore/QPoint>
+#include <qt5/QtCore/QRect>
 #include <qt5/QtGui/QPainter>
 #include <qt5/QtGui/QColor>
 #include <qt5/QtWidgets/QAbstractSlider>
@@ -24,7 +25,7 @@ void DoubleSlider::paintEvent(QPaintEvent* ev)
 {
     QPainter* painter = new QPainter(this);
     QStyle* style = QApplication::style();
-    QStyleOptionSlider* option = new QStyleOptionSlider();
+    QStyleOptionSlider* option = new QStyleOptionSlider;
     int min = QStyle::sliderPositionFromValue(minimum(), maximum(), minimum(), size().width());
     int max = QStyle::sliderPositionFromValue(minimum(), maximum(), maximum(), size().width());
     option->rect.setTopLeft(QPoint(min, 0.0));
@@ -36,6 +37,7 @@ void DoubleSlider::paintEvent(QPaintEvent* ev)
     painter->setBrush(QColor("#66CCFF"));
     option->sliderPosition = QStyle::sliderPositionFromValue(minimum(), maximum(), secondSliderValue, size().width());;
     QRect rect = style->subControlRect(QStyle::CC_Slider, option, QStyle::SC_SliderHandle, this);
+    rect.adjust(0, 0, -1, -1);
     painter->drawRect(rect);
 
     setStyleSheet( "QSlider::handle:horizontal {"
