@@ -132,11 +132,11 @@ void RobotPosesListModel::savePosesFile(QString fileName)
         return;
 
     QTextStream out(&file);
-    out << QString("Pose name,").leftJustified(20);
+    out << QString("Pose name,").leftJustified(22);
     for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
     {
         if (dxlID < NUM_OF_MOTORS)
-            out << QString("ID%1,").arg(dxlID, 2, 10, QChar('0')).leftJustified(10);
+            out << QString("ID%1,").arg(dxlID, 2, 10, QChar('0')).leftJustified(11);
         else
             out << "ID" << QString("%1").arg(dxlID, 2, 10, QChar('0'));
     }
@@ -144,18 +144,18 @@ void RobotPosesListModel::savePosesFile(QString fileName)
 
     std::ostringstream oss;
     oss.precision(4);
-    oss.fill('0');
+    oss.fill(' ');
     oss.setf(std::ios::fixed, std::ios::floatfield);
     for (int i = 0; i < mRobotPosesList.size(); ++i)
     {
-        if ( mRobotPosesList[i].jointState.position.size() == NUM_OF_MOTORS )
+        if ( mRobotPosesList[i].jointState.position.size() > NUM_OF_MOTORS )
         {
             out << (mRobotPosesList[i].name + ",").leftJustified(20);
 
             oss.str("");
-            for (int j = 0; j < mRobotPosesList[i].jointState.position.size(); ++j)
+            for (int j = 1; j < mRobotPosesList[i].jointState.position.size(); ++j)
             {
-                oss.width(7);  // Not 'sticky'
+                oss.width(8);  // Not 'sticky'
                 oss << mRobotPosesList[i].jointState.position[j];
                 if (j < (mRobotPosesList[i].jointState.position.size() - 1))
                     oss << ",  ";
@@ -178,17 +178,17 @@ void RobotPosesListModel::loadPosesFile(QString fileName, QModelIndex &index)
     mRobotPosesList.clear();
 
     QTextStream in(&file);
+    in.readLine();  // Skip headers
     while (!in.atEnd())
     {
         QString line = in.readLine();
         QStringList field = line.split(",");
-        if ( field.size() == (NUM_OF_MOTORS + 1) )
+        if ( field.size() > NUM_OF_MOTORS )
         {
             RobotPoseStruct poseStruct;
             poseStruct.name = field[0];
-            poseStruct.jointState.position.resize(NUM_OF_MOTORS);
-            for (int i = 0; i < NUM_OF_MOTORS; ++i)
-                poseStruct.jointState.position[i] = field[i+1].toDouble();
+            for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
+                poseStruct.jointState.position[dxlId] = field[dxlId].toDouble();
             mRobotPosesList.append(poseStruct);
         }
     }
