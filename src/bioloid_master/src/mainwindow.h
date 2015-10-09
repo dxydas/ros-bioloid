@@ -4,6 +4,7 @@
 #include <qt5/QtCore/QVector>
 #include <qt5/QtWidgets/QMainWindow>
 #include <qt5/QtWidgets/QWidget>
+#include <qt5/QtWidgets/QDockWidget>
 #include <qt5/QtWidgets/QMenu>
 #include <qt5/QtWidgets/QAction>
 #include <qt5/QtWidgets/QPushButton>
@@ -17,6 +18,7 @@
 #include "outputlog.h"
 #include "doubleslider.h"
 #include "motorvalueeditor.h"
+#include "motordials.h"
 
 class MainWindow : public QMainWindow
 {
@@ -49,17 +51,24 @@ public slots:
     void updateSecondaryRobotValues(sensor_msgs::JointState js);
     void updateJointStateValuesFromPose(const QModelIndex &modelIndex);
 
-    void openMotorValueEditor();
+//    void showMotorValueEditor(bool checked);
 
+    void about();
     void quit();
 
 private:
     void setUpLayout();
+    void customiseLayout();
+    void connectSignalsAndSlots();
 
     RosWorker* rosWorker;
+    MotorValueEditor* motorValueEditor;
+    MotorDials* motorDials;
+    OutputLog* outputLog;
 
-    QMenu* fileMenu;
     QAction* exitAct;
+    QAction* aboutQtAct;
+    QAction* aboutAct;
 
     QPushButton* initRosNodeButton;
     QPushButton* addPoseButton;
@@ -71,7 +80,7 @@ private:
     QPushButton* addToQueueButton;
     QPushButton* removeFromQueueButton;
 
-    QPushButton* openMotorValueEditorButton;
+    //QPushButton* openMotorValueEditorButton;
     QPushButton* setAllMotorTorquesOffButton;
 
     QPushButton* saveAvailablePosesFileButton;
@@ -81,15 +90,20 @@ private:
 
     CustomListWidget* availablePosesCustomListWidget;
     CustomListWidget* queuedPosesCustomListWidget;
+
     QVector<DoubleSlider*> presentPosSliders;
     QVector<QLineEdit*> presentPosLineEdits;
     QVector<QLineEdit*> goalPosLineEdits;
     QVector<QLineEdit*> presentSpeedLineEdits;
     QVector<QLineEdit*> movingSpeedLineEdits;
 
-    OutputLog* outputLog;
-
-    MotorValueEditor* motorValueEditor;
+    QDockWidget* motorFeedbackDockWidget;
+    QDockWidget* motorCommandsDockWidget;
+    QDockWidget* poseControlDockWidget;
+    QDockWidget* fileIoDockWidget;
+    QDockWidget* outputLogDockWidget;
+    QDockWidget* motorValueEditorDockWidget;
+    QDockWidget* motorDialsDockWidget;
 };
 
 #endif // MAINWINDOW_H

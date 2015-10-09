@@ -11,18 +11,19 @@ class DoubleSlider : public QSlider
     Q_OBJECT
 public:
     explicit DoubleSlider(QWidget* parent = 0);
-    explicit DoubleSlider(Qt::Orientation orientation, QWidget* parent = 0);
+    explicit DoubleSlider(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent = 0);
     int getFirstSliderValue() const { return firstSliderValue; }
     int getSecondSliderValue() const { return secondSliderValue; }
 
 signals:
+    void firstValueChanged(int value);
+    void secondValueChanged(int value);
 
 public slots:
-    void setValue(int value) { firstSliderValue = value; }
-    void setSecondValue(int value) { secondSliderValue = value; }
+    void setFirstValue(int value);
+    void setSecondValue(int value);
 
 private:
-    //bool event(QEvent *event);
     void paintEvent(QPaintEvent* ev);
     int firstSliderValue;
     int secondSliderValue;

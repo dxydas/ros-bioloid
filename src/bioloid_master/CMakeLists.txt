@@ -61,6 +61,7 @@ set(HEADER_FILES
   src/outputlog.h
   src/doubleslider.h
   src/motorvalueeditor.h
+  src/motordials.h
 )
 
 set(SOURCE_FILES
@@ -72,6 +73,7 @@ set(SOURCE_FILES
   src/outputlog.cpp
   src/doubleslider.cpp
   src/motorvalueeditor.cpp
+  src/motordials.cpp
   ${MOC_FILES}
 )
 

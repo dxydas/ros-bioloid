@@ -122,6 +122,8 @@ MotorValueEditor::MotorValueEditor(RosWorker* rosWorker, QWidget* parent) :
 
     setLayout(layout);
 
+    customiseLayout();
+
     connect( optionsComboBox, SIGNAL(currentIndexChanged(const QString &)),
              this, SLOT(updateOption(const QString &)) );
     connect( signalMapper, SIGNAL(mapped(int)), this, SLOT(setValue(int)) );
@@ -213,8 +215,8 @@ void MotorValueEditor::populateMap(QMap<QString, int>* inputMap)
 
 void MotorValueEditor::setValue(int dxlId)
 {
-    std::cout << "Dynamixel ID: " << dxlId << ", Current address: "
-              << mSelectedControlTableAddress << std::endl;
+//    std::cout << "Dynamixel ID: " << dxlId << ", Current address: "
+//              << mSelectedControlTableAddress << std::endl;
 
     switch (mSelectedControlTableAddress)
     {
@@ -301,6 +303,44 @@ void MotorValueEditor::setValue(int dxlId)
         // Do nothing
         break;
     }
+    }
+}
+
+
+void MotorValueEditor::customiseLayout()
+{
+    QString buttonStyleSheet =
+            ( "QPushButton {"
+              "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
+              "stop: 0 lightsteelblue, stop: 1 steelblue);"
+              "border: solid #8F8F91;"
+              "border-style: outset;"
+              "border-width: 4px;"
+              "border-radius: 10px; }"
+              //"border-color: beige; }"
+              //"font: bold 14px; }"
+              //"min-width: 10em;"
+              //"padding: 6px; }"
+              "QPushButton:flat {"
+              "border: none;"  /* no border for a flat push button */
+              "}"
+              "QPushButton:default {"
+              "border-color: navy;"  /* make the default button prominent */
+              "}"
+              "QPushButton:pressed {"
+              "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
+              "stop: 0 royalblue, stop: 1 dodgerblue);"
+              "border-style: inset; }" );
+
+    QString editBoxStyleSheet =
+            ( "background-color: lightslategrey;" );
+
+    optionsComboBox->setStyleSheet(editBoxStyleSheet);
+    for (int i = 0; i <= NUM_OF_MOTORS; ++i)
+    {
+        currentValueLineEdits[i]->setStyleSheet(editBoxStyleSheet);
+        goalValueSpinBoxes[i]->setStyleSheet(editBoxStyleSheet);
+        setValueButtons[i]->setStyleSheet(buttonStyleSheet);
     }
 }
 

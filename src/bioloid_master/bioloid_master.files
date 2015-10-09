@@ -18,3 +18,5 @@ src/doubleslider.h
 src/doubleslider.cpp
 src/motorvalueeditor.h
 src/motorvalueeditor.cpp
+src/motordials.h
+src/motordials.cpp

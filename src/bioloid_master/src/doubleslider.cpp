@@ -6,25 +6,40 @@
 #include <qt5/QtWidgets/QAbstractSlider>
 #include <qt5/QtWidgets/QStyle>
 #include <qt5/QtWidgets/QStyleOptionSlider>
-#include <QApplication>
+#include <qt5/QtWidgets/QApplication>
 
 
 DoubleSlider::DoubleSlider(QWidget* parent) :
-    QSlider(parent), firstSliderValue(0), secondSliderValue(0)
+    DoubleSlider(Qt::Horizontal, parent)
 {
 }
 
 
 DoubleSlider::DoubleSlider(Qt::Orientation orientation, QWidget* parent) :
-    QSlider(orientation, parent)
+    QSlider(orientation, parent), firstSliderValue(0), secondSliderValue(0)
 {
+    connect( this, SIGNAL(firstValueChanged(int)), this, SLOT(update()) );
+    connect( this, SIGNAL(secondValueChanged(int)), this, SLOT(update()) );
+}
+
+
+void DoubleSlider::setFirstValue(int value)
+{
+    firstSliderValue = value;
+    emit firstValueChanged(value);
+}
+
+
+void DoubleSlider::setSecondValue(int value)
+{
+    secondSliderValue = value;
+    emit secondValueChanged(value);
 }
 
 
 void DoubleSlider::paintEvent(QPaintEvent* ev)
 {
-    QPainter* painter = new QPainter(this);
-    QStyle* style = QApplication::style();
+    QPainter painter(this);
     QStyleOptionSlider* option = new QStyleOptionSlider;
     int min = QStyle::sliderPositionFromValue(minimum(), maximum(), minimum(), size().width());
     int max = QStyle::sliderPositionFromValue(minimum(), maximum(), maximum(), size().width());
@@ -33,22 +48,40 @@ void DoubleSlider::paintEvent(QPaintEvent* ev)
     option->minimum = min;
     option->maximum = max;
 
-    painter->setPen(Qt::blue);
-    painter->setBrush(QColor("#66CCFF"));
-    option->sliderPosition = QStyle::sliderPositionFromValue(minimum(), maximum(), secondSliderValue, size().width());;
-    QRect rect = style->subControlRect(QStyle::CC_Slider, option, QStyle::SC_SliderHandle, this);
+    // Draw groove
+    painter.setPen(QColor("steelblue"));
+    painter.setBrush(QColor("lightsteelblue"));
+    QRect rect = style()->subControlRect(QStyle::CC_Slider, option, QStyle::SC_SliderGroove, this);
+    rect.adjust(0, 0, -2, -1);
+    painter.drawRect(rect);
+
+    // Draw second handle
+    painter.setPen(QColor("navy"));
+    painter.setBrush(QColor("midnightblue"));
+    option->sliderPosition = style()->sliderPositionFromValue(minimum(), maximum(), secondSliderValue, size().width());;
+    rect = style()->subControlRect(QStyle::CC_Slider, option, QStyle::SC_SliderHandle, this);
     rect.adjust(0, 0, -1, -1);
-    painter->drawRect(rect);
+    painter.drawRect(rect);
 
-    setStyleSheet( "QSlider::handle:horizontal {"
-              "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #B4B4B4, stop:1 #8F8F8F);"
-              "border: 1px solid #5C5C5C;"
-              "width: 18px;"
-              "margin: -2px 0;"
-              "border-radius: 3px;}" );
-    option->sliderPosition = QStyle::sliderPositionFromValue(minimum(), maximum(), firstSliderValue, size().width());;
-    style->drawComplexControl(QStyle::CC_Slider, option, painter, this);
+    // Draw first handle
+    painter.setPen(QColor("blue"));
+    painter.setBrush(QColor("royalblue"));
+    option->sliderPosition = style()->sliderPositionFromValue(minimum(), maximum(), firstSliderValue, size().width());;
+    rect = style()->subControlRect(QStyle::CC_Slider, option, QStyle::SC_SliderHandle, this);
+    rect.adjust(0, 0, -1, -1);
+    painter.drawRect(rect);
 
-    painter->end();
+    // setStyleSheet() does not apply to the custom sliders, however calling it allows the slider positions to refresh when
+    // their values change, without the need to mouseover. No idea why this works!
+    // The alternative of calling repaint() every time a value is changed made the GUI very slow!
+//    setStyleSheet("");
+
+
+//    setStyleSheet( "QSlider::groove:horizontal {"
+//                   "background: royalblue; }"
+//                   "QSlider::handle:horizontal {"
+//                   "background: lightsteelblue }" );
+//    option->sliderPosition = QStyle::sliderPositionFromValue(minimum(), maximum(), firstSliderValue, size().width());;
+//    style->drawComplexControl(QStyle::CC_Slider, option, painter, this);
 }
 

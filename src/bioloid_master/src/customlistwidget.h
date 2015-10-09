@@ -18,6 +18,7 @@ public:
     QListView* getListView() const { return mListView; }
 
 private:
+    void customiseLayout();
     QPushButton* moveUpButton;
     QPushButton* moveDownButton;
     RobotPosesListModel* mRobotPosesListModel;
