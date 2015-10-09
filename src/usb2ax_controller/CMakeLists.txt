@@ -124,6 +124,7 @@ add_executable(test_balancer src/test_balancer.cpp src/simplePID.cpp)
 # add_dependencies(usb2ax_controller_node usb2ax_controller_generate_messages_cpp)
 add_dependencies(ax_joint_controller usb2ax_controller_generate_messages_cpp)
 add_dependencies(test_interface usb2ax_controller_generate_messages_cpp)
+add_dependencies(test_balancer usb2ax_controller_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(usb2ax_controller_node

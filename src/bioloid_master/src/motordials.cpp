@@ -54,7 +54,7 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
         presentPosLineEdits[i] = new QLineEdit(str);
         presentSpeedLineEdits[i] = new QLineEdit(str);
 
-        connect( dials[i], SIGNAL(sliderPressed()), signalMapper, SLOT(map()) );
+        connect( dials[i], SIGNAL(valueChanged(int)), signalMapper, SLOT(map()) );
         connect( dials[i], SIGNAL(valueChanged(int)), this, SLOT(setValue(int)) );
 
         signalMapper->setMapping(dials[i], i + 1);
@@ -102,7 +102,8 @@ void MotorDials::setValue(int value)
 {
     if ( callTime.elapsed() >= 100 )
     {
-//        std::cout << "Time: " << callTime.toString("ddd dd MMMM yyyy, hh:mm:ss ").toStdString() << std::endl;
+//        std::cout << "Motor selected: " << mSelectedMotor << std::endl;
+//        std::cout << "Time: " << callTime.toString("hh:mm:ss ").toStdString() << std::endl;
 //        std::cout << "Value: " << value / 1000.0 << std::endl;
 
     //    std::ostringstream oss;
