@@ -152,7 +152,7 @@ JointController::JointController() :
     baudNum(1),
     numOfConnectedMotors(0),
     timeOfLastGoalJointStatePublication(0, 0),
-    goalJointStatePublicationPeriodInSecs(2.0)
+    goalJointStatePublicationPeriodInMSecs(2000)
 {
     connectedMotors.resize(NUM_OF_MOTORS+1);
     for (std::vector<bool>::iterator it = connectedMotors.begin(); it != connectedMotors.end(); ++it)
@@ -221,10 +221,10 @@ bool JointController::init()
 
         // Right arm
         joint_state.name[1] = "right_shoulder_swing_joint";
-        positionOffsets[1] = M_PI/2.0;
+        positionOffsets[1] = 0.0;
         directionSign[1] = 1;
         joint_state.name[3] = "right_shoulder_lateral_joint";
-        positionOffsets[3] = M_PI/2.0;
+        positionOffsets[3] = 0.0;
         directionSign[3] = 1;
         joint_state.name[5] = "right_elbow_joint";
         positionOffsets[5] = 0.0;
@@ -232,10 +232,10 @@ bool JointController::init()
 
         // Left arm
         joint_state.name[2] ="left_shoulder_swing_joint";
-        positionOffsets[2] = M_PI/2.0;
+        positionOffsets[2] = 0.0;
         directionSign[2] = -1;
         joint_state.name[4] ="left_shoulder_lateral_joint";
-        positionOffsets[4] = M_PI/2.0;
+        positionOffsets[4] = 0.0;
         directionSign[4] = -1;
         joint_state.name[6] ="left_elbow_joint";
         positionOffsets[6] = 0.0;
@@ -327,7 +327,7 @@ void JointController::run()
     }
     jointStatePub.publish(joint_state);
 
-    if ( (currentTime - timeOfLastGoalJointStatePublication).toSec() >= goalJointStatePublicationPeriodInSecs )
+    if ( ((currentTime - timeOfLastGoalJointStatePublication).toSec()*1000) >= goalJointStatePublicationPeriodInMSecs )
     {
         // Get goal position, goal speed and max torque with a sync_read command
         goal_joint_state.header.stamp = currentTime;
@@ -355,6 +355,7 @@ void JointController::run()
             }
         }
         goalJointStatePub.publish(goal_joint_state);
+
         timeOfLastGoalJointStatePublication = currentTime;
     }
 }

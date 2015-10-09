@@ -84,7 +84,7 @@ private:
     sensor_msgs::JointState joint_state;
     sensor_msgs::JointState goal_joint_state;
     ros::Time timeOfLastGoalJointStatePublication;
-    double goalJointStatePublicationPeriodInSecs;
+    int goalJointStatePublicationPeriodInMSecs;
 };
 
 #endif // AX_JOINT_CONTROLLER_H

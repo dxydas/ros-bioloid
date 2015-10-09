@@ -6,6 +6,7 @@
 <robot name="bioloid" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <!-- Modified Bioloid Comprehensive humanoid, with CM-5 replaced by PC and custom sensors -->
   <!-- Typically, STL/DAE model units are in mm, but RViz units are in m, hence models must be scaled down by 1000. -->
+  <!-- <xacro:macro name="shoulder_swing_joint" params="prefix reflect x"> -->
   <!-- IMU -->
   <joint name="imu_to_base_joint" type="fixed">
     <parent link="imu_link"/>
@@ -253,7 +254,8 @@
   <!-- Torso to right shoulder -->
   <joint name="right_shoulder_swing_joint" type="revolute">
     <parent link="torso_link"/>
-    <origin rpy="0 -1.570795 0.0" xyz="-0.032 0 0"/>
+    <!-- <origin xyz="${reflect*(-0.032)} 0 0" rpy="0 ${reflect*(-pi/2)} ${x*pi}"/> -->
+    <origin rpy="-1.570795 0 1.570795" xyz="-0.032 0 0"/>
     <axis xyz="0 0 1"/>
     <child link="right_shoulder_swing_link"/>
     <limit effort="10" lower="-3.14159" upper="3.14159" velocity="1.0"/>
@@ -280,7 +282,8 @@
   <!-- Torso to left shoulder -->
   <joint name="left_shoulder_swing_joint" type="revolute">
     <parent link="torso_link"/>
-    <origin rpy="0 1.570795 3.14159" xyz="0.032 0 0"/>
+    <!-- <origin xyz="${reflect*(-0.032)} 0 0" rpy="0 ${reflect*(-pi/2)} ${x*pi}"/> -->
+    <origin rpy="1.570795 0 -1.570795" xyz="0.032 0 0"/>
     <axis xyz="0 0 1"/>
     <child link="left_shoulder_swing_link"/>
     <limit effort="10" lower="-3.14159" upper="3.14159" velocity="1.0"/>
@@ -307,10 +310,11 @@
   <!-- Right shoulder to upper arm -->
   <joint name="right_shoulder_lateral_joint" type="revolute">
     <parent link="right_shoulder_swing_link"/>
-    <origin rpy="-1.570795 0 0" xyz="-0.014 0 0.044"/>
+    <!-- <origin xyz="${reflect*(-0.014)} 0 ${reflect*0.044}" rpy="${-pi/2} 0 0"/> -->
+    <origin rpy="-1.570795 1.570795 0" xyz="-0.014 0 0.044"/>
     <axis xyz="0 0 1"/>
     <child link="right_upper_arm_link"/>
-    <limit effort="10" lower="-0.2" upper="3.14159" velocity="1.0"/>
+    <limit effort="10" lower="-3.14159" upper="3.14159" velocity="1.0"/>
   </joint>
   <link name="right_upper_arm_link">
     <visual>
@@ -364,10 +368,11 @@
   <!-- Left shoulder to upper arm -->
   <joint name="left_shoulder_lateral_joint" type="revolute">
     <parent link="left_shoulder_swing_link"/>
-    <origin rpy="-1.570795 0 0" xyz="0.014 0 -0.044"/>
+    <!-- <origin xyz="${reflect*(-0.014)} 0 ${reflect*0.044}" rpy="${-pi/2} 0 0"/> -->
+    <origin rpy="-1.570795 1.570795 0" xyz="0.014 0 -0.044"/>
     <axis xyz="0 0 1"/>
     <child link="left_upper_arm_link"/>
-    <limit effort="10" lower="-0.2" upper="3.14159" velocity="1.0"/>
+    <limit effort="10" lower="-3.14159" upper="3.14159" velocity="1.0"/>
   </joint>
   <link name="left_upper_arm_link">
     <visual>

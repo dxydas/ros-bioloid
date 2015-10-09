@@ -13,10 +13,12 @@
 <xacro:macro name="z_rot">
     <axis xyz="0 0 1"/>
 </xacro:macro>
-<xacro:macro name="shoulder_swing_joint" params="prefix reflect x">
+<!-- <xacro:macro name="shoulder_swing_joint" params="prefix reflect x"> -->
+<xacro:macro name="shoulder_swing_joint" params="prefix reflect">
     <joint name="${prefix}_shoulder_swing_joint" type="revolute">
         <parent link="torso_link"/>
-        <origin xyz="${reflect*(-0.032)} 0 0" rpy="0 ${reflect*(-pi/2)} ${x*pi}"/>
+        <!-- <origin xyz="${reflect*(-0.032)} 0 0" rpy="0 ${reflect*(-pi/2)} ${x*pi}"/> -->
+        <origin xyz="${reflect*(-0.032)} 0 0" rpy="${reflect*(-pi/2)} 0 ${reflect*(pi/2)}"/>
         <xacro:z_rot/>
         <child link="${prefix}_shoulder_swing_link"/>
         <limit lower="${-pi}" upper="${pi}" effort="10" velocity="1.0"/>
@@ -25,10 +27,11 @@
 <xacro:macro name="shoulder_lateral_joint" params="prefix reflect">
     <joint name="${prefix}_shoulder_lateral_joint" type="revolute">
         <parent link="${prefix}_shoulder_swing_link"/>
-        <origin xyz="${reflect*(-0.014)} 0 ${reflect*0.044}" rpy="${-pi/2} 0 0"/>
+        <!-- <origin xyz="${reflect*(-0.014)} 0 ${reflect*0.044}" rpy="${-pi/2} 0 0"/> -->
+        <origin xyz="${reflect*(-0.014)} 0 ${reflect*0.044}" rpy="${-pi/2} ${pi/2} 0"/>
         <xacro:z_rot/>
         <child link="${prefix}_upper_arm_link"/>
-        <limit lower="${-0.2}" upper="${pi}" effort="10" velocity="1.0"/>
+        <limit lower="${-pi}" upper="${pi}" effort="10" velocity="1.0"/>
     </joint>
 </xacro:macro>
 <xacro:macro name="elbow_joint" params="prefix reflect">
@@ -191,7 +194,7 @@
 </link>
 
 <!-- Torso to right shoulder -->
-<xacro:shoulder_swing_joint prefix="right" reflect="1" x="0"/>
+<xacro:shoulder_swing_joint prefix="right" reflect="1"/>
 <link name="right_shoulder_swing_link">
     <visual>
         <xacro:default_geometry cad_file="FP04-F1"/>
@@ -211,7 +214,7 @@
 </link>
 
 <!-- Torso to left shoulder -->
-<xacro:shoulder_swing_joint prefix="left" reflect="-1" x="1"/>
+<xacro:shoulder_swing_joint prefix="left" reflect="-1"/>
 <link name="left_shoulder_swing_link">
     <visual>
         <xacro:default_geometry cad_file="FP04-F1"/>
