@@ -375,7 +375,8 @@ void MainWindow::customiseLayout()
               "background: qradialgradient(cx:0, cy:0, radius: 1,"
               "fx:0.5, fy:0.5, stop:0 lightgrey, stop:1 grey); }"
               "QDockWidget::title {"
-              "background: steelblue; }"
+              "background: steelblue;"
+              "padding-right: -200px; }"  // Negative padding stops the vertical title bar from being truncated
               "QDockWidget::close-button, QDockWidget::float-button {"
               "border: 2px solid steelblue;"
               "background: steelblue; }"
