@@ -164,7 +164,6 @@ JointController::JointController() :
     joint_state.velocity.resize(NUM_OF_MOTORS+1);
     joint_state.effort.resize(NUM_OF_MOTORS+1);
 
-    positionOffsets.resize(NUM_OF_MOTORS+1);
     directionSign.resize(NUM_OF_MOTORS+1);
 }
 
@@ -216,69 +215,50 @@ bool JointController::init()
         joint_state.position[0] = 0.0;
         joint_state.velocity[0] = 0.0;
         joint_state.effort[0] = 0.0;
-        positionOffsets[0] = 0.0;
         directionSign[0] = 1;
 
         // Right arm
         joint_state.name[1] = "right_shoulder_swing_joint";
-        positionOffsets[1] = 0.0;
         directionSign[1] = 1;
         joint_state.name[3] = "right_shoulder_lateral_joint";
-        positionOffsets[3] = 0.0;
         directionSign[3] = 1;
         joint_state.name[5] = "right_elbow_joint";
-        positionOffsets[5] = 0.0;
         directionSign[5] = 1;
 
         // Left arm
         joint_state.name[2] ="left_shoulder_swing_joint";
-        positionOffsets[2] = 0.0;
         directionSign[2] = -1;
         joint_state.name[4] ="left_shoulder_lateral_joint";
-        positionOffsets[4] = 0.0;
         directionSign[4] = -1;
         joint_state.name[6] ="left_elbow_joint";
-        positionOffsets[6] = 0.0;
         directionSign[6] = -1;
 
         // Right leg
         joint_state.name[7] ="right_hip_twist_joint";
-        positionOffsets[7] = 0.0;
         directionSign[7] = 1;
         joint_state.name[9] ="right_hip_lateral_joint";
-        positionOffsets[9] = 0.0;
         directionSign[9] = -1;
         joint_state.name[11] ="right_hip_swing_joint";
-        positionOffsets[11] = 0.0;
         directionSign[11] = -1;
         joint_state.name[13] ="right_knee_joint";
-        positionOffsets[13] = 0.0;
         directionSign[13] = 1;
         joint_state.name[15] ="right_ankle_swing_joint";
-        positionOffsets[15] = 0.0;
         directionSign[15] = 1;
         joint_state.name[17] ="right_ankle_lateral_joint";
-        positionOffsets[17] = 0.0;
         directionSign[17] = 1;
 
         // Left leg
         joint_state.name[8] ="left_hip_twist_joint";
-        positionOffsets[8] = 0.0;
         directionSign[8] = -1;
         joint_state.name[10] ="left_hip_lateral_joint";
-        positionOffsets[10] = 0.0;
         directionSign[10] = 1;
         joint_state.name[12] ="left_hip_swing_joint";
-        positionOffsets[12] = 0.0;
         directionSign[12] = 1;
         joint_state.name[14] ="left_knee_joint";
-        positionOffsets[14] = 0.0;
         directionSign[14] = -1;
         joint_state.name[16] ="left_ankle_swing_joint";
-        positionOffsets[16] = 0.0;
         directionSign[16] = -1;
         joint_state.name[18] ="left_ankle_lateral_joint";
-        positionOffsets[18] = 0.0;
         directionSign[18] = -1;
 
         // Reduce Return Delay Time to speed up comms
@@ -319,8 +299,7 @@ void JointController::run()
         int i = 0;
         for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
         {
-            joint_state.position[dxlID] =
-                    directionSign[dxlID]*(axPositionToRad(res.values[i++])) + positionOffsets[dxlID];
+            joint_state.position[dxlID] = directionSign[dxlID]*axPositionToRad(res.values[i++]);
             joint_state.velocity[dxlID] = axSpeedToRadPerSec(res.values[i++]);
             joint_state.effort[dxlID] = axTorqueToDecimal(res.values[i++]);
         }
@@ -348,8 +327,7 @@ void JointController::run()
             int i = 0;
             for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
             {
-                goal_joint_state.position[dxlID] =
-                        directionSign[dxlID]*(axPositionToRad(res.values[i++])) + positionOffsets[dxlID];
+                goal_joint_state.position[dxlID] = directionSign[dxlID]*axPositionToRad(res.values[i++]);
                 goal_joint_state.velocity[dxlID] = axSpeedToRadPerSec(res.values[i++]);
                 goal_joint_state.effort[dxlID] = axTorqueToDecimal(res.values[i++]);
             }
@@ -701,7 +679,7 @@ bool JointController::getMotorCurrentPositionInRad(usb2ax_controller::GetMotorPa
     req2.address = AX12_PRESENT_POSITION_L;
     if ( getFromAX(req2, res2) )
     {
-        res.value = directionSign[req.dxlID]*(axPositionToRad(res2.value)) + positionOffsets[req.dxlID];
+        res.value = directionSign[req.dxlID]*axPositionToRad(res2.value);
         res.rxSuccess = res2.rxSuccess;
         return true;
     }
@@ -722,7 +700,7 @@ bool JointController::getMotorGoalPositionInRad(usb2ax_controller::GetMotorParam
     req2.address = AX12_GOAL_POSITION_L;
     if ( getFromAX(req2, res2) )
     {
-        res.value = directionSign[req.dxlID]*(axPositionToRad(res2.value)) + positionOffsets[req.dxlID];
+        res.value = directionSign[req.dxlID]*axPositionToRad(res2.value);
         res.rxSuccess = res2.rxSuccess;
         return true;
     }
@@ -737,15 +715,14 @@ bool JointController::getMotorGoalPositionInRad(usb2ax_controller::GetMotorParam
 bool JointController::setMotorGoalPositionInRad(usb2ax_controller::SetMotorParam::Request &req,
                                                 usb2ax_controller::SetMotorParam::Response &res)
 {
-    ROS_DEBUG("Offset: %g", positionOffsets[req.dxlID]);
     ROS_DEBUG("Direction sign: %d", directionSign[req.dxlID]);
-    ROS_DEBUG("Value: %d", radToAxPosition(directionSign[req.dxlID]*(req.value - positionOffsets[req.dxlID])));
+    ROS_DEBUG("Value: %d", radToAxPosition(directionSign[req.dxlID]*req.value));
     ROS_DEBUG("----");
     usb2ax_controller::SendToAX::Request req2;
     usb2ax_controller::SendToAX::Response res2;
     req2.dxlID = req.dxlID;
     req2.address = AX12_GOAL_POSITION_L;
-    req2.value = radToAxPosition(directionSign[req.dxlID]*(req.value - positionOffsets[req.dxlID]));
+    req2.value = radToAxPosition(directionSign[req.dxlID]*req.value);
     if ( sendToAX(req2, res2) )
     {
         res.txSuccess = res2.txSuccess;
@@ -884,7 +861,7 @@ bool JointController::getAllMotorGoalPositionsInRad(usb2ax_controller::GetMotorP
         res.values.resize(res2.values.size());
         for (int dxlID = 1; dxlID <= numOfConnectedMotors; ++dxlID)
             res.values[dxlID - 1] =
-                    directionSign[dxlID]*(axPositionToRad(res2.values[dxlID - 1])) + positionOffsets[dxlID];
+                    directionSign[dxlID]*axPositionToRad(res2.values[dxlID - 1]);
         res.rxSuccess = res2.rxSuccess;
         return true;
     }
@@ -974,7 +951,7 @@ bool JointController::homeAllMotors(std_srvs::Empty::Request &req, std_srvs::Emp
         if (connectedMotors[dxlID])
         {
             req2.dxlIDs[dxlID - 1] = dxlID;
-            req2.values[dxlID - 1] = radToAxPosition(directionSign[dxlID]*(0.0 - positionOffsets[dxlID]));
+            req2.values[dxlID - 1] = radToAxPosition(0.0);
         }
     }
 
@@ -1061,7 +1038,7 @@ bool JointController::testValueConversions()
 
     posInRad = 0.0;
     ROS_INFO("Test position in rad: \t\t\t%g", posInRad);
-    posInAx = radToAxPosition(directionSign[0]*(posInRad - positionOffsets[0]));
+    posInAx = radToAxPosition(directionSign[0]*posInRad);
     ROS_INFO("Test position converted to AX value: \t%d", posInAx);
     ROS_INFO("----");
 

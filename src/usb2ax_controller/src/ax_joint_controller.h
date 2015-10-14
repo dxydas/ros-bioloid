@@ -79,7 +79,6 @@ private:
     int baudNum;
     int numOfConnectedMotors;
     std::vector<bool> connectedMotors;
-    std::vector<float> positionOffsets;
     std::vector<int> directionSign;
     sensor_msgs::JointState joint_state;
     sensor_msgs::JointState goal_joint_state;
