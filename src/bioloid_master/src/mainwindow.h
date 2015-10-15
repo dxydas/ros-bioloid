@@ -51,8 +51,6 @@ public slots:
     void updateSecondaryRobotValues(sensor_msgs::JointState js);
     void updateJointStateValuesFromPose(const QModelIndex &modelIndex);
 
-//    void showMotorValueEditor(bool checked);
-
     void about();
     void quit();
 
@@ -80,7 +78,6 @@ private:
     QPushButton* addToQueueButton;
     QPushButton* removeFromQueueButton;
 
-    //QPushButton* openMotorValueEditorButton;
     QPushButton* setAllMotorTorquesOffButton;
 
     QPushButton* saveAvailablePosesFileButton;

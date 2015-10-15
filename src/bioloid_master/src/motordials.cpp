@@ -4,7 +4,6 @@
 #include <qt5/QtCore/Qt>
 #include <qt5/QtCore/QString>
 #include <qt5/QtCore/QSignalMapper>
-#include <qt5/QtWidgets/QGroupBox>
 #include <qt5/QtWidgets/QGridLayout>
 #include <qt5/QtWidgets/QLabel>
 #include <qt5/QtWidgets/QAbstractSlider>
@@ -22,7 +21,6 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
 
     QSignalMapper* signalMapper = new QSignalMapper(this);
 
-    QVector<QGroupBox*> groupBoxes;
     groupBoxes.resize(NUM_OF_MOTORS);
     QVector<QGridLayout*> gridLayouts;
     gridLayouts.resize(NUM_OF_MOTORS);
@@ -129,45 +127,25 @@ void MotorDials::setValue(int value)
 
 void MotorDials::updateJointStateValues(sensor_msgs::JointState js)
 {
-    // js[0] is empty/unused
-    if ( (js.position.size() > NUM_OF_MOTORS) )
+    if ( (js.position.size() >= NUM_OF_MOTORS) )
     {
-        for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
+        for (int i = 0; i < NUM_OF_MOTORS; ++i)
         {
             std::ostringstream oss;
             oss.precision(4);
             oss.width(8);
             oss.fill(' ');
             oss.setf(std::ios::fixed, std::ios::floatfield);
-            oss << js.position[dxlId];
-            presentPosLineEdits[dxlId - 1]->setText( QString::fromStdString(oss.str()) );
+            oss << js.position[i];
+            presentPosLineEdits[i]->setText( QString::fromStdString(oss.str()) );
 
             oss.str("");
             oss.width(8);  // Not 'sticky'
-            oss << js.velocity[dxlId];
-            presentSpeedLineEdits[dxlId - 1]->setText( QString::fromStdString(oss.str()) );
+            oss << js.velocity[i];
+            presentSpeedLineEdits[i]->setText( QString::fromStdString(oss.str()) );
         }
     }
 }
-
-
-//void MotorDials::updateSecondaryRobotValues(sensor_msgs::JointState js)
-//{
-//    // js[0] is empty/unused
-//    if ( (js.position.size() > NUM_OF_MOTORS) )
-//    {
-//        for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
-//        {
-//            std::ostringstream oss;
-//            oss.precision(4);
-//            oss.width(8);
-//            oss.fill(' ');
-//            oss.setf(std::ios::fixed, std::ios::floatfield);
-//            oss << js.position[dxlId];
-//            goalPosLineEdits[dxlId - 1]->setText( QString::fromStdString(oss.str()) );
-//        }
-//    }
-//}
 
 
 void MotorDials::initialiseDials(bool visible)
@@ -175,12 +153,11 @@ void MotorDials::initialiseDials(bool visible)
     if (visible)
     {
         sensor_msgs::JointState js = mRosWorker->getCurrentJointState();
-        // js[0] is empty/unused
-        if ( (js.position.size() > NUM_OF_MOTORS) )
+        if ( (js.position.size() >= NUM_OF_MOTORS) )
         {
-            for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
+            for (int i = 0; i < NUM_OF_MOTORS; ++i)
             {
-                dials[dxlId - 1]->setValue( static_cast<float>(js.position[dxlId])*1000 );
+                dials[i]->setValue( static_cast<float>(js.position[i])*1000 );
             }
         }
     }
@@ -189,15 +166,30 @@ void MotorDials::initialiseDials(bool visible)
 
 void MotorDials::customiseLayout()
 {
-    QString dialStyleSheet =
-            ( "QDial {"
-              "background-color: slategrey; }" );
+    QString groupBoxStyleSheet =
+            ( "QGroupBox {"
+              //"background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 silver, stop: 1 white);"
+              "border: 2px solid gray;"
+              "border-radius: 5px;"
+              "margin-top: 1.5ex; }"
+              "QGroupBox::title {"
+              "subcontrol-origin: margin;"
+              "subcontrol-position: top center;"
+              "padding: 0 3px;"
+              "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 silver, stop: 1 white);"
+              "border: 2px solid gray;"
+              "border-radius: 5px; }" );
+
+//    QString dialStyleSheet =
+//            ( "QDial {"
+//              "background-color: slategrey; }" );
 
     QString editBoxStyleSheet =
             ( "background-color: lightslategrey;" );
 
     for (int i = 0; i < NUM_OF_MOTORS; ++i)
     {
+        groupBoxes[i]->setStyleSheet(groupBoxStyleSheet);
         //dials[i]->setStyleSheet(dialStyleSheet);
         presentPosLineEdits[i]->setStyleSheet(editBoxStyleSheet);
         presentSpeedLineEdits[i]->setStyleSheet(editBoxStyleSheet);

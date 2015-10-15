@@ -153,16 +153,13 @@ void MainWindow::setUpLayout()
     motorFeedbackSubLayout->addWidget(vlineFrames[0], 0, 1, motorFeedbackSubLayout->rowCount(), 1);
 
 
-    //openMotorValueEditorButton = new QPushButton("Open motor value editor");
     setAllMotorTorquesOffButton = new QPushButton("Set all motor torques OFF");
     setAllMotorTorquesOffButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setAllMotorTorquesOffButton->setStyleSheet("QPushButton { color: white; background-color: #AA0000 }");
 
-
     QGridLayout *motorCommandsSubLayout = new QGridLayout;
     row = 0;
     col = 0;
-    //motorCommandsSubLayout->addWidget(openMotorValueEditorButton, row, col++);
     motorCommandsSubLayout->addWidget(setAllMotorTorquesOffButton, row, col++, -1, 1);
 
 
@@ -303,7 +300,6 @@ void MainWindow::setUpLayout()
     addDockWidget(Qt::RightDockWidgetArea, poseControlDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, fileIoDockWidget);
     addDockWidget(Qt::BottomDockWidgetArea, outputLogDockWidget);
-    //addDockWidget(Qt::RightDockWidgetArea, motorValueEditorDockWidget);
 
     motorValueEditorDockWidget->setFloating(true);
     motorValueEditorDockWidget->move( QApplication::desktop()->screenGeometry().center() -
@@ -578,51 +574,44 @@ void MainWindow::nodeDisconnectedFromRosMaster()
 void MainWindow::enableMotionButtons()
 {
     addPoseButton->setEnabled(true);
-    //removePoseButton->setEnabled(true);
     setStartStateButton->setEnabled(true);
     setGoalStateButton->setEnabled(true);
     planMotionButton->setEnabled(true);
     executeMotionButton->setEnabled(true);
-
-    //openMotorValueEditorButton->setEnabled(true);
 }
 
 
 void MainWindow::disableMotionButtons()
 {
     addPoseButton->setEnabled(false);
-    //removePoseButton->setEnabled(false);
     setStartStateButton->setEnabled(false);
     setGoalStateButton->setEnabled(false);
     planMotionButton->setEnabled(false);
     executeMotionButton->setEnabled(false);
-
-    //openMotorValueEditorButton->setEnabled(false);
 }
 
 
 void MainWindow::updateJointStateValues(sensor_msgs::JointState js)
 {
-    // js[0] is empty/unused
-    if ( (js.position.size() > NUM_OF_MOTORS) && (js.velocity.size() > NUM_OF_MOTORS) )
+    if ( (js.position.size() >= NUM_OF_MOTORS) && (js.velocity.size() >= NUM_OF_MOTORS) )
     {
-        for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
+        for (int i = 0; i < NUM_OF_MOTORS; ++i)
         {
             // -2.618..2.618 rad, converted to -2618..2618 int range
-            presentPosSliders[dxlId - 1]->setFirstValue(js.position[dxlId] * 1000);
+            presentPosSliders[i]->setFirstValue(js.position[i] * 1000);
 
             std::ostringstream oss;
             oss.precision(4);
             oss.width(8);
             oss.fill(' ');
             oss.setf(std::ios::fixed, std::ios::floatfield);
-            oss << js.position[dxlId];
-            presentPosLineEdits[dxlId - 1]->setText( QString::fromStdString(oss.str()) );
+            oss << js.position[i];
+            presentPosLineEdits[i]->setText( QString::fromStdString(oss.str()) );
 
             oss.str("");
             oss.width(8);  // Not 'sticky'
-            oss << js.velocity[dxlId];
-            presentSpeedLineEdits[dxlId - 1]->setText( QString::fromStdString(oss.str()) );
+            oss << js.velocity[i];
+            presentSpeedLineEdits[i]->setText( QString::fromStdString(oss.str()) );
         }
     }
 }
@@ -630,23 +619,22 @@ void MainWindow::updateJointStateValues(sensor_msgs::JointState js)
 
 void MainWindow::updateSecondaryRobotValues(sensor_msgs::JointState js)
 {
-    // js[0] is empty/unused
-    if ( (js.position.size() > NUM_OF_MOTORS) && (js.velocity.size() > NUM_OF_MOTORS) )
+    if ( (js.position.size() >= NUM_OF_MOTORS) && (js.velocity.size() >= NUM_OF_MOTORS) )
     {
-        for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
+        for (int i = 0; i < NUM_OF_MOTORS; ++i)
         {
             std::ostringstream oss;
             oss.precision(4);
             oss.width(8);
             oss.fill(' ');
             oss.setf(std::ios::fixed, std::ios::floatfield);
-            oss << js.position[dxlId];
-            goalPosLineEdits[dxlId - 1]->setText( QString::fromStdString(oss.str()) );
+            oss << js.position[i];
+            goalPosLineEdits[i]->setText( QString::fromStdString(oss.str()) );
 
             oss.str("");
             oss.width(8);  // Not 'sticky'
-            oss << js.velocity[dxlId];
-            movingSpeedLineEdits[dxlId - 1]->setText( QString::fromStdString(oss.str()) );
+            oss << js.velocity[i];
+            movingSpeedLineEdits[i]->setText( QString::fromStdString(oss.str()) );
         }
     }
 }
@@ -654,13 +642,12 @@ void MainWindow::updateSecondaryRobotValues(sensor_msgs::JointState js)
 
 void MainWindow::updateJointStateValuesFromPose(const QModelIndex &modelIndex)
 {
-    // js[0] is empty/unused
     sensor_msgs::JointState js = availablePosesCustomListWidget->
             getRobotPosesListModel()->getCurrentPose(modelIndex).jointState;
-    if (js.position.size() > NUM_OF_MOTORS)
+    if (js.position.size() >= NUM_OF_MOTORS)
     {
-    for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
-        presentPosSliders[dxlId - 1]->setSecondValue(js.position[dxlId] * 1000);
+    for (int i = 0; i < NUM_OF_MOTORS; ++i)
+        presentPosSliders[i]->setSecondValue(js.position[i] * 1000);
     }
 }
 

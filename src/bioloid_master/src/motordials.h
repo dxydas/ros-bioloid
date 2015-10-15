@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <qt5/QtCore/QVector>
 #include <qt5/QtCore/QTime>
+#include <qt5/QtWidgets/QGroupBox>
 #include <qt5/QtWidgets/QDial>
 #include <qt5/QtWidgets/QLineEdit>
 #include "rosworker.h"
@@ -25,6 +26,7 @@ public slots:
 private:
     void customiseLayout();
 
+    QVector<QGroupBox*> groupBoxes;
     QVector<QDial*> dials;
     QVector<QLineEdit*> presentPosLineEdits;
     QVector<QLineEdit*> presentSpeedLineEdits;
