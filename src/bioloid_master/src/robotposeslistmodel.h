@@ -12,16 +12,13 @@
 struct RobotPoseStruct
 {
     QString name;
-    //geometry_msgs::Pose pose;
-    //QVector<double> jointPositions;
     sensor_msgs::JointState jointState;
     RobotPoseStruct()
     {
         name = "";
-        //QVector<double> jp(NUM_OF_MOTORS, 0.0);
-        //jointPositions = jp;
-        jointState.position.resize(NUM_OF_MOTORS + 1);
-        jointState.velocity.resize(NUM_OF_MOTORS + 1);
+        jointState.position.resize(NUM_OF_MOTORS);
+        jointState.velocity.resize(NUM_OF_MOTORS);
+        jointState.effort.resize(NUM_OF_MOTORS);
     }
 };
 

@@ -132,15 +132,16 @@ void RobotPosesListModel::savePosesFile(QString fileName)
         return;
 
     QTextStream out(&file);
-    out << QString("Pose name,").leftJustified(22);
+    out << QString("Pose name,").leftJustified(20);
     for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
     {
+        out << QString("ID%1 pos,").arg(dxlID, 2, 10, QChar('0')).leftJustified(11);
+        out << QString("ID%1 vel,").arg(dxlID, 2, 10, QChar('0')).leftJustified(11);
         if (dxlID < NUM_OF_MOTORS)
-            out << QString("ID%1,").arg(dxlID, 2, 10, QChar('0')).leftJustified(11);
+            out << QString("ID%1 eff,").arg(dxlID, 2, 10, QChar('0')).leftJustified(11);
         else
-            out << "ID" << QString("%1").arg(dxlID, 2, 10, QChar('0'));
+            out << "ID" << QString("%1 eff\n").arg(dxlID, 2, 10, QChar('0'));
     }
-    out << "\n";
 
     std::ostringstream oss;
     oss.precision(4);
@@ -148,15 +149,29 @@ void RobotPosesListModel::savePosesFile(QString fileName)
     oss.setf(std::ios::fixed, std::ios::floatfield);
     for (int i = 0; i < mRobotPosesList.size(); ++i)
     {
-        if ( mRobotPosesList[i].jointState.position.size() > NUM_OF_MOTORS )
+        if ( (mRobotPosesList[i].jointState.position.size() >= NUM_OF_MOTORS) &&
+             (mRobotPosesList[i].jointState.velocity.size() >= NUM_OF_MOTORS) &&
+             (mRobotPosesList[i].jointState.effort.size() >= NUM_OF_MOTORS) )
         {
             out << (mRobotPosesList[i].name + ",").leftJustified(20);
 
             oss.str("");
-            for (int j = 1; j < mRobotPosesList[i].jointState.position.size(); ++j)
+            for (int j = 0; j < mRobotPosesList[i].jointState.position.size(); ++j)
             {
+                // Position
                 oss.width(8);  // Not 'sticky'
                 oss << mRobotPosesList[i].jointState.position[j];
+                oss << ",  ";
+
+                // Velocity
+                oss.width(8);  // Not 'sticky'
+                oss << mRobotPosesList[i].jointState.velocity[j];
+                oss << ",  ";
+
+                // Effort
+                oss.width(8);  // Not 'sticky'
+                oss << mRobotPosesList[i].jointState.effort[j];
+
                 if (j < (mRobotPosesList[i].jointState.position.size() - 1))
                     oss << ",  ";
             }
@@ -187,8 +202,12 @@ void RobotPosesListModel::loadPosesFile(QString fileName, QModelIndex &index)
         {
             RobotPoseStruct poseStruct;
             poseStruct.name = field[0];
-            for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
-                poseStruct.jointState.position[dxlId] = field[dxlId].toDouble();
+            for (int i = 1; i <= NUM_OF_MOTORS; ++i)
+            {
+                poseStruct.jointState.position[i - 1] = field[(i - 1)*3 + 1].toDouble();
+                poseStruct.jointState.velocity[i - 1] = field[(i - 1)*3 + 2].toDouble();
+                poseStruct.jointState.effort  [i - 1] = field[(i - 1)*3 + 3].toDouble();
+            }
             mRobotPosesList.append(poseStruct);
         }
     }

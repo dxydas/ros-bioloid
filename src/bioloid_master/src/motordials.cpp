@@ -70,8 +70,9 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
 
         groupBoxes[i]->setLayout(gridLayouts[i]);
 
-        row = i / 6;
-        col = i % 6;
+        int gridCols = 6;
+        row = i / gridCols;
+        col = i % gridCols;
         mainGridLayout->addWidget(groupBoxes[i], row, col);
     }
 

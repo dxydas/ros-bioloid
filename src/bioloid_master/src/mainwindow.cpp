@@ -217,8 +217,14 @@ void MainWindow::setUpLayout()
         poseStruct.name = "test" + QString::fromStdString(oss.str());
 
         for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
-            poseStruct.jointState.position[dxlId] =
+        {
+            poseStruct.jointState.position[dxlId - 1] =
                     static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (2.618 + 2.618) - 2.618;
+            poseStruct.jointState.velocity[dxlId - 1] =
+                    static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (11.8668 + 11.8668) - 11.8668;
+            poseStruct.jointState.effort[dxlId - 1] =
+                    static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (1.0 + 1.0) - 1.0;
+        }
 
         availablePosesList.push_back(poseStruct);
     }
