@@ -19,6 +19,7 @@
 #include "doubleslider.h"
 #include "motorvalueeditor.h"
 #include "motordials.h"
+#include "moveithandler.h"
 
 class MainWindow : public QMainWindow
 {
@@ -34,10 +35,6 @@ public slots:
     void initRosNode();
     void addPose();
     void removePose();
-    void setStartState();
-    void setGoalState();
-    void planMotion();
-    void executeMotion();
     void addToQueue();
     void removeFromQueue();
 
@@ -62,6 +59,7 @@ private:
     RosWorker* rosWorker;
     MotorValueEditor* motorValueEditor;
     MotorDials* motorDials;
+    MoveItHandler* moveItHandler;
     OutputLog* outputLog;
 
     QAction* exitAct;

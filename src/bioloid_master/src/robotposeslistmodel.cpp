@@ -229,4 +229,3 @@ RobotPoseStruct RobotPosesListModel::getCurrentPose(const QModelIndex &index) co
         return mRobotPosesList.at(index.row());
 
 }
-

@@ -2,6 +2,7 @@
 #include <qt5/QtCore/QTimer>
 #include "../usb2ax_controller/src/ax12ControlTableMacros.h"  // TODO: Fix this
 
+
 #define NUM_OF_MOTORS 18
 
 
@@ -93,14 +94,9 @@ void RosWorker::init()
         homeAllMotorsClient =
                 n.serviceClient<std_srvs::Empty>("HomeAllMotors");
 
-//        QTimer* secondaryDataFeedbackTimer = new QTimer(this);
-//        connect( secondaryDataFeedbackTimer, SIGNAL(timeout()), this, SLOT(runSecondaryDataFeedback()) );
-//        secondaryDataFeedbackTimer->start(2000);
-
         WorkerThread* workerThread = new WorkerThread();
         connect( workerThread, SIGNAL(finished()), workerThread, SLOT(deleteLater()) );
         workerThread->start();
-
     }
     else
         mIsMasterRunning = false;
@@ -150,29 +146,3 @@ void RosWorker::setAllMotorTorquesOff()
 
     sendtoAXClient.call(srv);
 }
-
-
-//void RosWorker::runSecondaryDataFeedback()
-//{
-//    usb2ax_controller::GetMotorParams srv;
-
-//    if ( getAllMotorGoalPositionsInRadClient.call(srv) )
-//    {
-//        for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
-//            goalJointState.position[dxlId] = srv.response.values[dxlId - 1];
-//        emit secondaryDataUpdated(goalJointState);
-//    }
-//    if ( getAllMotorGoalSpeedsInRadPerSecClient.call(srv) )
-//    {
-//        for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
-//            goalJointState.velocity[dxlId] = srv.response.values[dxlId - 1];
-//        emit secondaryDataUpdated(goalJointState);
-//    }
-//    if ( getAllMotorMaxTorquesInDecimalClient.call(srv) )
-//    {
-//        for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
-//           goalJointState.effort[dxlId] = srv.response.values[dxlId - 1];
-//        emit secondaryDataUpdated(goalJointState);
-//    }
-//}
-

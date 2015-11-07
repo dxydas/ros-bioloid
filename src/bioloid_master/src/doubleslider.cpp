@@ -9,12 +9,6 @@
 #include <qt5/QtWidgets/QApplication>
 
 
-DoubleSlider::DoubleSlider(QWidget* parent) :
-    DoubleSlider(Qt::Horizontal, parent)
-{
-}
-
-
 DoubleSlider::DoubleSlider(Qt::Orientation orientation, QWidget* parent) :
     QSlider(orientation, parent), firstSliderValue(0), secondSliderValue(0)
 {
@@ -70,18 +64,4 @@ void DoubleSlider::paintEvent(QPaintEvent* ev)
     rect = style()->subControlRect(QStyle::CC_Slider, option, QStyle::SC_SliderHandle, this);
     rect.adjust(0, 0, -1, -1);
     painter.drawRect(rect);
-
-    // setStyleSheet() does not apply to the custom sliders, however calling it allows the slider positions to refresh when
-    // their values change, without the need to mouseover. No idea why this works!
-    // The alternative of calling repaint() every time a value is changed made the GUI very slow!
-//    setStyleSheet("");
-
-
-//    setStyleSheet( "QSlider::groove:horizontal {"
-//                   "background: royalblue; }"
-//                   "QSlider::handle:horizontal {"
-//                   "background: lightsteelblue }" );
-//    option->sliderPosition = QStyle::sliderPositionFromValue(minimum(), maximum(), firstSliderValue, size().width());;
-//    style->drawComplexControl(QStyle::CC_Slider, option, painter, this);
 }
-

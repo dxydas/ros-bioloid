@@ -178,4 +178,3 @@ void CustomListWidget::loadPosesFile()
     mRobotPosesListModel->loadPosesFile(fileName, index);
     mListView->setCurrentIndex(index);
 }
-

@@ -1,9 +1,9 @@
 ../usb2ax_controller/src/ax12ControlTableMacros.h
-src/moveit_api_test.cpp
 src/moveit_api_test.h
+src/moveit_api_test.cpp
 src/main.cpp
-src/mainwindow.cpp
 src/mainwindow.h
+src/mainwindow.cpp
 CMakeLists.txt
 package.xml
 src/rosworker.h
@@ -20,3 +20,5 @@ src/motorvalueeditor.h
 src/motorvalueeditor.cpp
 src/motordials.h
 src/motordials.cpp
+src/moveithandler.h
+src/moveithandler.cpp

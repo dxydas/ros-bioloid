@@ -27,9 +27,13 @@ Q_DECLARE_METATYPE(sensor_msgs::JointState)
 MainWindow::MainWindow(int argc, char* argv[], QWidget* parent) :
     QMainWindow(parent)
 {
-    rosWorker = new RosWorker(argc, argv, "robot_gui");
+    qRegisterMetaType<sensor_msgs::JointState>("JointState");
+
+    rosWorker = new RosWorker(argc, argv, "rosoloid_gui");
     motorValueEditor = new MotorValueEditor(rosWorker);
     motorDials = new MotorDials(rosWorker);
+    moveItHandler = new MoveItHandler;
+    outputLog = new OutputLog;
 
     setUpLayout();
     customiseLayout();
@@ -88,8 +92,8 @@ void MainWindow::setUpLayout()
     {
         motorIdLabels[i] = new QLabel(QString::number(i + 1));
         presentPosSliders[i] = new DoubleSlider(Qt::Horizontal, this);
-        presentPosSliders[i]->setMinimum(-2618);
-        presentPosSliders[i]->setMaximum(2618);
+        presentPosSliders[i]->setMinimum(-2606);
+        presentPosSliders[i]->setMaximum(2606);
         presentPosSliders[i]->setValue(0);
         presentPosSliders[i]->setSecondValue(0);
 
@@ -245,7 +249,6 @@ void MainWindow::setUpLayout()
     QWidget* fileIoWidget =  new QWidget(this);
     fileIoWidget->setLayout(fileIoSubLayout);
 
-    outputLog = new OutputLog;
     outputLog->setReadOnly(true);
 
         row = 0;
@@ -462,10 +465,12 @@ void MainWindow::connectSignalsAndSlots()
     connect( initRosNodeButton, SIGNAL(clicked()), this, SLOT(initRosNode()) );
     connect( addPoseButton, SIGNAL(clicked()), this, SLOT(addPose()) );
     connect( removePoseButton, SIGNAL(clicked()), this, SLOT(removePose()) );
-    connect( setStartStateButton, SIGNAL(clicked()), this, SLOT(setStartState()) );
-    connect( setGoalStateButton, SIGNAL(clicked()), this, SLOT(setGoalState()) );
-    connect( planMotionButton, SIGNAL(clicked()), this, SLOT(planMotion()) );
-    connect( executeMotionButton, SIGNAL(clicked()), this, SLOT(executeMotion()) );
+
+    connect( setStartStateButton, SIGNAL(clicked()), moveItHandler, SLOT(setStartState()) );
+    connect( setGoalStateButton, SIGNAL(clicked()), moveItHandler, SLOT(setGoalState()) );
+    connect( planMotionButton, SIGNAL(clicked()), moveItHandler, SLOT(planMotion()) );
+    connect( executeMotionButton, SIGNAL(clicked()), moveItHandler, SLOT(executeMotion()) );
+
     connect( addToQueueButton, SIGNAL(clicked()), this, SLOT(addToQueue()) );
     connect( removeFromQueueButton, SIGNAL(clicked()), this, SLOT(removeFromQueue()) );
 
@@ -483,7 +488,6 @@ void MainWindow::connectSignalsAndSlots()
     connect( rosWorker, SIGNAL(connectedToRosMaster()), this, SLOT(enableMotionButtons()) );
     connect( rosWorker, SIGNAL(disconnectedFromRosMaster()), this, SLOT(nodeDisconnectedFromRosMaster()) );
     connect( rosWorker, SIGNAL(disconnectedFromRosMaster()), this, SLOT(disableMotionButtons()) );
-    qRegisterMetaType<sensor_msgs::JointState>("JointState");
     connect( rosWorker, SIGNAL(jointStateUpdated(sensor_msgs::JointState)),
              this, SLOT(updateJointStateValues(sensor_msgs::JointState)) );
     connect( rosWorker, SIGNAL(secondaryDataUpdated(sensor_msgs::JointState)),
@@ -526,30 +530,6 @@ void MainWindow::addPose()
 void MainWindow::removePose()
 {
     availablePosesCustomListWidget->remove();
-}
-
-
-void MainWindow::setStartState()
-{
-
-}
-
-
-void MainWindow::setGoalState()
-{
-
-}
-
-
-void MainWindow::planMotion()
-{
-
-}
-
-
-void MainWindow::executeMotion()
-{
-
 }
 
 
@@ -603,7 +583,7 @@ void MainWindow::updateJointStateValues(sensor_msgs::JointState js)
     {
         for (int i = 0; i < NUM_OF_MOTORS; ++i)
         {
-            // -2.618..2.618 rad, converted to -2618..2618 int range
+            // -2.606..2.606 rad, converted to -2606..2606 int range
             presentPosSliders[i]->setFirstValue(js.position[i] * 1000);
 
             std::ostringstream oss;
@@ -672,4 +652,3 @@ void MainWindow::quit()
 {
     QApplication::quit();
 }
-

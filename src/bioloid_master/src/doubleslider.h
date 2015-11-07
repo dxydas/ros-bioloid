@@ -10,7 +10,6 @@ class DoubleSlider : public QSlider
 {
     Q_OBJECT
 public:
-    explicit DoubleSlider(QWidget* parent = 0);
     explicit DoubleSlider(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent = 0);
     int getFirstSliderValue() const { return firstSliderValue; }
     int getSecondSliderValue() const { return secondSliderValue; }

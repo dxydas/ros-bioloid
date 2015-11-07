@@ -1,7 +1,7 @@
 #ifndef MOTORDIALS_H
 #define MOTORDIALS_H
 
-#include <QWidget>
+#include <qt5/QtWidgets/QWidget>
 #include <qt5/QtCore/QVector>
 #include <qt5/QtCore/QTime>
 #include <qt5/QtWidgets/QGroupBox>
@@ -25,7 +25,6 @@ public slots:
 
 private:
     void customiseLayout();
-
     QVector<QGroupBox*> groupBoxes;
     QVector<QDial*> dials;
     QVector<QLineEdit*> presentPosLineEdits;

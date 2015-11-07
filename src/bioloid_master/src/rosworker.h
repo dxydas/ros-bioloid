@@ -4,8 +4,8 @@
 #include <qt5/QtCore/QThread>
 #include <qt5/QtWidgets/QWidget>
 #include "ros/ros.h"
-#include "std_srvs/Empty.h"
 #include "sensor_msgs/JointState.h"
+#include "std_srvs/Empty.h"
 #include "usb2ax_controller/GetFromAX.h"
 #include "usb2ax_controller/SendToAX.h"
 #include "usb2ax_controller/GetSyncFromAX.h"
@@ -50,6 +50,17 @@ public:
     ros::ServiceClient getAllMotorMaxTorquesInDecimalClient;
     ros::ServiceClient homeAllMotorsClient;
 
+signals:
+    void connectedToRosMaster();
+    void disconnectedFromRosMaster();
+    void jointStateUpdated(sensor_msgs::JointState js);
+    void secondaryDataUpdated(sensor_msgs::JointState js);
+
+public slots:
+    void runConnectionHealthCheck();
+    //void runSecondaryDataFeedback();
+    void setAllMotorTorquesOff();
+
 private:
     int argc;
     char** argv;
@@ -61,17 +72,6 @@ private:
     ros::Subscriber goalJointStateSub;
     sensor_msgs::JointState currentJointState;
     sensor_msgs::JointState goalJointState;
-
-signals:
-    void connectedToRosMaster();
-    void disconnectedFromRosMaster();
-    void jointStateUpdated(sensor_msgs::JointState js);
-    void secondaryDataUpdated(sensor_msgs::JointState js);
-
-public slots:
-    void runConnectionHealthCheck();
-    //void runSecondaryDataFeedback();
-    void setAllMotorTorquesOff();
 };
 
 #endif // ROSWORKER_H

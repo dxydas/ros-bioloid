@@ -343,4 +343,3 @@ void MotorValueEditor::customiseLayout()
         setValueButtons[i]->setStyleSheet(buttonStyleSheet);
     }
 }
-

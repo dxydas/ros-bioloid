@@ -62,6 +62,7 @@ set(HEADER_FILES
   src/doubleslider.h
   src/motorvalueeditor.h
   src/motordials.h
+  src/moveithandler.h
 )
 
 set(SOURCE_FILES
@@ -74,6 +75,7 @@ set(SOURCE_FILES
   src/doubleslider.cpp
   src/motorvalueeditor.cpp
   src/motordials.cpp
+  src/moveithandler.cpp
   ${MOC_FILES}
 )
 
@@ -164,7 +166,7 @@ include_directories(
 ## Declare a cpp executable
 # add_executable(bioloid_master_node src/bioloid_master_node.cpp)
 add_executable(moveit_api_test src/moveit_api_test.cpp)
-add_executable(mainwindow ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H})
+add_executable(rosoloid_gui ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
@@ -176,8 +178,8 @@ add_executable(mainwindow ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H})
 # )
 target_link_libraries(moveit_api_test ${catkin_LIBRARIES})
 # The Qt5Widgets_LIBRARIES variable also includes QtGui and QtCore
-target_link_libraries(mainwindow Qt5::Widgets ${catkin_LIBRARIES} ${Qt5Widgets_LIBRARIES})
-#qt5_use_modules(mainwindow Widgets)
+target_link_libraries(rosoloid_gui Qt5::Widgets ${catkin_LIBRARIES} ${Qt5Widgets_LIBRARIES})
+#qt5_use_modules(rosoloid_gui Widgets)
 
 #############
 ## Install ##

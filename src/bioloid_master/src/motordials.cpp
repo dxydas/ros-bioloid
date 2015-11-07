@@ -36,8 +36,8 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
         gridLayouts[i] = new QGridLayout;
 
         dials[i] = new QDial;
-        dials[i]->setMinimum(-2618);
-        dials[i]->setMaximum(2618);
+        dials[i]->setMinimum(-2606);
+        dials[i]->setMaximum(2606);
         dials[i]->setWrapping(false);
         dials[i]->setNotchesVisible(true);
         //dials[i]->setNotchTarget(10);
@@ -83,7 +83,6 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
     callTime.start();
 
     connect( signalMapper, SIGNAL(mapped(int)), this, SLOT(setMotor(int)) );
-
     connect( mRosWorker, SIGNAL(jointStateUpdated(sensor_msgs::JointState)),
              this, SLOT(updateJointStateValues(sensor_msgs::JointState)) );
 }
@@ -196,4 +195,3 @@ void MotorDials::customiseLayout()
         presentSpeedLineEdits[i]->setStyleSheet(editBoxStyleSheet);
     }
 }
-
