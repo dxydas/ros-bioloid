@@ -58,17 +58,20 @@ export ROSCONSOLE_CONFIG_FILE=$ROS_DIR/myrosconsole.config
 # My roslaunch/rosrun files
 
 ## Simulated robot ##
+# Load robot description and start state publishers
+roslaunch bioloid_master bioloid_pubs.launch dummy_imu:=true
 # Visualise robot using URDF, no IMU
-roslaunch bioloid_master bioloid_display_dummy_imu.launch                       # Start RViz, publish robot/joint state, publish dummy IMU frame
+roslaunch bioloid_master bioloid_pubs.launch dummy_imu:=true
+roslaunch bioloid_master bioloid_rviz.launch                                    # Start RViz, publish robot/joint state, publish dummy IMU frame
 #####################
 
 ## Real robot ##
 # Visualise real sensor data
 roslaunch bioloid_sensors_interface avr_sensors_serial_plot.launch              # Start sensors interface, rqt_plot
 # Visualise robot using URDF
-roslaunch usb2ax_controller controller.launch                                   # Initialise servo controller, publish joint states
+roslaunch usb2ax_controller controller.launch                                   # Initialise servo controller with position control disabled
 roslaunch bioloid_sensors_interface avr_sensors_serial_process.launch           # Start sensors interface, publish IMU frame
-roslaunch bioloid_master bioloid_display.launch                                 # Start RViz, publish robot/joint state
+roslaunch bioloid_master bioloid_rviz.launch                                    # Start RViz, publish robot/joint state
 # Test servo motion
 roslaunch usb2ax_controller controller.launch
 roslaunch bioloid_sensors_interface avr_sensors_serial_process.launch
@@ -82,20 +85,28 @@ rosrun usb2ax_controller test_balancer                                          
 ## MoveIt! ##
 # Configure the MoveIt SRDF
 roslaunch bioloid_moveit_config setup_assistant.launch                          # Start MoveIt Setup Assistant
-# Use the MoveIt RViz plugin
+# Run the MoveIt RViz plugin
 roslaunch bioloid_moveit_config demo.launch                                     # Start RViz with MoveIt MotionPlanning plugin
-# Use the MoveIt RViz plugin with default database
+# Run the MoveIt RViz plugin with default database
 roslaunch bioloid_moveit_config demo.launch db:=true                            # Start RViz with MoveIt MotionPlanning plugin and default database
-# Use the MoveIt RViz plugin with custom database
+# Run the MoveIt RViz plugin with custom database
 roslaunch bioloid_moveit_config warehouse.launch moveit_warehouse_database_path:=~/bioloid_warehouse_mongo_db
 roslaunch bioloid_moveit_config demo.launch
 # Test MoveIt Move Group API
 rosrun bioloid_master moveit_api_test                                           # Run test program: MoveIt Move Group Interface/C++ API
+# Run MoveIt with ros_control controller interface to hardware
+roslaunch usb2ax_controller controller.launch pos_control:=true                 # Position control enabled. Use arg dummy_imu:=true if IMU is not running.
+roslaunch bioloid_master bioloid_controllers.launch                             # Start ros_control controller spawner
+roslaunch bioloid_sensors_interface avr_sensors_serial_process.launch
+roslaunch bioloid_moveit_config demo_custom.launch                              # Loads controller configuration instead of fake controllers
 #############
 
-# GUI ##
-rosrun bioloid_master mainwindow                                                # Start robot GUI (WIP)
-########
+# GUIs ##
+# Bioloid Sensors Visualiser (Python, for Raspberry Pi 2)
+python /mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/Raspberry_Pi_2/Pi.py
+# ROSoloid Control GUI (Qt, for PC)
+cd $CATKIN_WS && rosrun bioloid_master rosoloid_gui                             # Run from catkin workspace in order to correctly locate relative assets path
+#########
 
 
 # Notes

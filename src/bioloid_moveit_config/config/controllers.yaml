@@ -1,0 +1,87 @@
+controller_list:
+  - name: right_arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - right_shoulder_swing_joint
+      - right_shoulder_lateral_joint
+      - right_elbow_joint
+  - name: left_arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - left_shoulder_swing_joint
+      - left_shoulder_lateral_joint
+      - left_elbow_joint
+  - name: right_leg_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - right_hip_twist_joint
+      - right_hip_lateral_joint
+      - right_hip_swing_joint
+      - right_knee_joint
+      - right_ankle_swing_joint
+      - right_ankle_lateral_joint
+  - name: left_leg_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - left_hip_twist_joint
+      - left_hip_lateral_joint
+      - left_hip_swing_joint
+      - left_knee_joint
+      - left_ankle_swing_joint
+      - left_ankle_lateral_joint
+  - name: both_arms_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    joints:
+      - left_shoulder_swing_joint
+      - left_shoulder_lateral_joint
+      - left_elbow_joint
+      - right_shoulder_swing_joint
+      - right_shoulder_lateral_joint
+      - right_elbow_joint
+  - name: both_legs_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    joints:
+      - left_hip_twist_joint
+      - left_hip_lateral_joint
+      - left_hip_swing_joint
+      - left_knee_joint
+      - left_ankle_swing_joint
+      - left_ankle_lateral_joint
+      - right_hip_twist_joint
+      - right_hip_lateral_joint
+      - right_hip_swing_joint
+      - right_knee_joint
+      - right_ankle_swing_joint
+      - right_ankle_lateral_joint
+  - name: robot_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    joints:
+      - left_hip_twist_joint
+      - left_hip_lateral_joint
+      - left_hip_swing_joint
+      - left_knee_joint
+      - left_ankle_swing_joint
+      - left_ankle_lateral_joint
+      - left_shoulder_swing_joint
+      - left_shoulder_lateral_joint
+      - left_elbow_joint
+      - right_hip_twist_joint
+      - right_hip_lateral_joint
+      - right_hip_swing_joint
+      - right_knee_joint
+      - right_ankle_swing_joint
+      - right_ankle_lateral_joint
+      - right_shoulder_swing_joint
+      - right_shoulder_lateral_joint
+      - right_elbow_joint

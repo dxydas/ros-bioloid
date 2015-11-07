@@ -1,0 +1,80 @@
+# Publish all joint states -----------------------------------
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+# Position Controllers ---------------------------------------
+right_arm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - right_shoulder_swing_joint
+    - right_shoulder_lateral_joint
+    - right_elbow_joint
+left_arm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - left_shoulder_swing_joint
+    - left_shoulder_lateral_joint
+    - left_elbow_joint
+right_leg_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - right_hip_twist_joint
+    - right_hip_lateral_joint
+    - right_hip_swing_joint
+    - right_knee_joint
+    - right_ankle_swing_joint
+    - right_ankle_lateral_joint
+left_leg_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - left_hip_twist_joint
+    - left_hip_lateral_joint
+    - left_hip_swing_joint
+    - left_knee_joint
+    - left_ankle_swing_joint
+    - left_ankle_lateral_joint
+both_arms_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - left_shoulder_swing_joint
+    - left_shoulder_lateral_joint
+    - left_elbow_joint
+    - right_shoulder_swing_joint
+    - right_shoulder_lateral_joint
+    - right_elbow_joint
+both_legs_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - left_hip_twist_joint
+    - left_hip_lateral_joint
+    - left_hip_swing_joint
+    - left_knee_joint
+    - left_ankle_swing_joint
+    - left_ankle_lateral_joint
+    - right_hip_twist_joint
+    - right_hip_lateral_joint
+    - right_hip_swing_joint
+    - right_knee_joint
+    - right_ankle_swing_joint
+    - right_ankle_lateral_joint
+robot_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - left_hip_twist_joint
+    - left_hip_lateral_joint
+    - left_hip_swing_joint
+    - left_knee_joint
+    - left_ankle_swing_joint
+    - left_ankle_lateral_joint
+    - left_shoulder_swing_joint
+    - left_shoulder_lateral_joint
+    - left_elbow_joint
+    - right_hip_twist_joint
+    - right_hip_lateral_joint
+    - right_hip_swing_joint
+    - right_knee_joint
+    - right_ankle_swing_joint
+    - right_ankle_lateral_joint
+    - right_shoulder_swing_joint
+    - right_shoulder_lateral_joint
+    - right_elbow_joint
