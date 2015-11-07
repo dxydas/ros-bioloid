@@ -34,4 +34,3 @@ float SimplePID::update(const float& error, const float& position)
 
     return pTerm + iTerm - dTerm;
 }
-

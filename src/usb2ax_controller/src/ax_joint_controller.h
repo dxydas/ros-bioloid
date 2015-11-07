@@ -1,8 +1,10 @@
 #ifndef AX_JOINT_CONTROLLER_H
 #define AX_JOINT_CONTROLLER_H
 
+#include <vector>
 #include "ros/ros.h"
 #include "sensor_msgs/JointState.h"
+#include "control_msgs/FollowJointTrajectoryAction.h"
 #include "std_srvs/Empty.h"
 #include "usb2ax_controller/GetFromAX.h"
 #include "usb2ax_controller/SendToAX.h"
@@ -12,7 +14,11 @@
 #include "usb2ax_controller/SetMotorParam.h"
 #include "usb2ax_controller/GetMotorParams.h"
 #include "usb2ax_controller/SetMotorParams.h"
-#include <vector>
+#include "actionlib/server/simple_action_server.h"
+#include "controller_manager/controller_manager.h"
+#include "bioloidhw.h"
+
+typedef actionlib::SimpleActionServer<control_msgs::FollowJointTrajectoryAction> Server;
 
 int main(int argc, char **argv);
 
@@ -22,13 +28,14 @@ public:
     JointController();
     virtual ~JointController();
     bool init();
-    void run();
+    void read();
+    void write();
+    bool getPositionControlEnabled() const { return positionControlEnabled; }
+    void setPositionControlEnabled(bool value) { positionControlEnabled = value; }
     int getDeviceIndex() const {return deviceIndex;}
     void setDeviceIndex(int value) {deviceIndex = value;}
     int getBaudNum() const {return baudNum;}
     void setBaudNum(int value) {baudNum = value;}
-    ros::Publisher jointStatePub;
-    ros::Publisher goalJointStatePub;
     bool getFromAX(usb2ax_controller::GetFromAX::Request &req,
                    usb2ax_controller::GetFromAX::Response &res);
     bool sendToAX(usb2ax_controller::SendToAX::Request &req,
@@ -51,6 +58,8 @@ public:
                                       usb2ax_controller::SetMotorParam::Response &res);
     bool getMotorCurrentTorqueInDecimal(usb2ax_controller::GetMotorParam::Request &req,
                                         usb2ax_controller::GetMotorParam::Response &res);
+    bool getMotorMaxTorqueInDecimal(usb2ax_controller::GetMotorParam::Request &req,
+                                    usb2ax_controller::GetMotorParam::Response &res);
     bool setMotorMaxTorqueInDecimal(usb2ax_controller::SetMotorParam::Request &req,
                                     usb2ax_controller::SetMotorParam::Response &res);
     bool getAllMotorGoalPositionsInRad(usb2ax_controller::GetMotorParams::Request &req,
@@ -60,11 +69,10 @@ public:
     bool getAllMotorMaxTorquesInDecimal(usb2ax_controller::GetMotorParams::Request &req,
                                         usb2ax_controller::GetMotorParams::Response &res);
     bool homeAllMotors(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
-    // Tests
-    bool testSending();
-    bool testSendingSync();
-    bool testValueConversions();
-    void testArmWave();
+    ros::Publisher jointStatePub;
+    ros::Publisher goalJointStatePub;
+    BioloidHw* bioloidHw;
+    controller_manager::ControllerManager* cm;
 
 private:
     void printCommStatus(int CommStatus);
@@ -75,6 +83,7 @@ private:
     int radPerSecToAxSpeed(float oldValue);
     float axTorqueToDecimal(int oldValue);
     int decimalToAxTorque(float oldValue);
+    bool positionControlEnabled;
     int deviceIndex;
     int baudNum;
     int numOfConnectedMotors;
