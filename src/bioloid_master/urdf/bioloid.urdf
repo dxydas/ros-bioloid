@@ -5,6 +5,13 @@
 <!-- =================================================================================== -->
 <robot name="bioloid" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <!-- Modified Bioloid Comprehensive humanoid, with CM-5 replaced by PC and custom sensors -->
+  <!-- ros_control plugin -->
+  <gazebo>
+    <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
+      <robotNamespace>/</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+  </gazebo>
   <!-- Typically, STL/DAE model units are in mm, but RViz units are in m, hence models must be scaled down by 1000. -->
   <!-- <xacro:macro name="shoulder_swing_joint" params="prefix reflect x"> -->
   <!-- IMU -->
@@ -23,9 +30,9 @@
       </material>
     </visual>
     <!--<inertial>
-      <origin xyz="0 0 0"/>
-      <mass value="1.0"/>
-      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+        <origin xyz="0 0 0"/>
+        <mass value="1.0"/>
+        <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
     </inertial>-->
   </link>
   <!-- Base -->
@@ -52,9 +59,9 @@
         </material>
     </visual>
     <inertial>
-      <origin xyz="0 0 0"/>
-      <mass value="1.0"/>
-      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+        <origin xyz="0 0 0"/>
+        <mass value="1.0"/>
+        <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
     </inertial>-->
   <!--</link>-->
   <!-- Head -->
@@ -260,6 +267,16 @@
     <child link="right_shoulder_swing_link"/>
     <limit effort="10" lower="-3.14159" upper="3.14159" velocity="1.0"/>
   </joint>
+  <transmission name="right_shoulder_swing_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_shoulder_swing_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_shoulder_swing_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="right_shoulder_swing_link">
     <visual>
       <geometry>
@@ -288,6 +305,16 @@
     <child link="left_shoulder_swing_link"/>
     <limit effort="10" lower="-3.14159" upper="3.14159" velocity="1.0"/>
   </joint>
+  <transmission name="left_shoulder_swing_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_shoulder_swing_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_shoulder_swing_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="left_shoulder_swing_link">
     <visual>
       <geometry>
@@ -316,6 +343,16 @@
     <child link="right_upper_arm_link"/>
     <limit effort="10" lower="-3.14159" upper="3.14159" velocity="1.0"/>
   </joint>
+  <transmission name="right_shoulder_lateral_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_shoulder_lateral_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_shoulder_lateral_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="right_upper_arm_link">
     <visual>
       <geometry>
@@ -374,6 +411,16 @@
     <child link="left_upper_arm_link"/>
     <limit effort="10" lower="-3.14159" upper="3.14159" velocity="1.0"/>
   </joint>
+  <transmission name="left_shoulder_lateral_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_shoulder_lateral_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_shoulder_lateral_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="left_upper_arm_link">
     <visual>
       <geometry>
@@ -431,6 +478,16 @@
     <child link="right_lower_arm_link"/>
     <limit effort="10" lower="-1.77" upper="1.77" velocity="1.0"/>
   </joint>
+  <transmission name="right_elbow_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_elbow_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_elbow_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="right_lower_arm_link">
     <!-- Motor 5 -->
     <visual>
@@ -508,6 +565,16 @@
     <child link="left_lower_arm_link"/>
     <limit effort="10" lower="-1.77" upper="1.77" velocity="1.0"/>
   </joint>
+  <transmission name="left_elbow_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_elbow_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_elbow_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="left_lower_arm_link">
     <!-- Motor 6 -->
     <visual>
@@ -585,6 +652,16 @@
     <child link="right_hip_twist_link"/>
     <limit effort="10" lower="-0.7853975" upper="0.7853975" velocity="1.0"/>
   </joint>
+  <transmission name="right_hip_twist_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_hip_twist_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_hip_twist_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="right_hip_twist_link">
     <visual>
       <geometry>
@@ -612,6 +689,16 @@
     <child link="left_hip_twist_link"/>
     <limit effort="10" lower="-0.7853975" upper="0.7853975" velocity="1.0"/>
   </joint>
+  <transmission name="left_hip_twist_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_hip_twist_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_hip_twist_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="left_hip_twist_link">
     <visual>
       <geometry>
@@ -639,6 +726,16 @@
     <child link="right_hip_lateral_link"/>
     <limit effort="10" lower="-0.3" upper="0.3" velocity="1.0"/>
   </joint>
+  <transmission name="right_hip_lateral_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_hip_lateral_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_hip_lateral_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="right_hip_lateral_link">
     <!-- Motor 9 -->
     <visual>
@@ -698,6 +795,16 @@
     <child link="left_hip_lateral_link"/>
     <limit effort="10" lower="-0.3" upper="0.3" velocity="1.0"/>
   </joint>
+  <transmission name="left_hip_lateral_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_hip_lateral_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_hip_lateral_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="left_hip_lateral_link">
     <!-- Motor 10 -->
     <visual>
@@ -757,6 +864,16 @@
     <child link="right_upper_leg_link"/>
     <limit effort="10" lower="-1.570795" upper="1.570795" velocity="1.0"/>
   </joint>
+  <transmission name="right_hip_swing_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_hip_swing_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_hip_swing_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="right_upper_leg_link">
     <visual>
       <geometry>
@@ -796,6 +913,16 @@
     <child link="left_upper_leg_link"/>
     <limit effort="10" lower="-1.570795" upper="1.570795" velocity="1.0"/>
   </joint>
+  <transmission name="left_hip_swing_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_hip_swing_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_hip_swing_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="left_upper_leg_link">
     <visual>
       <geometry>
@@ -835,6 +962,16 @@
     <child link="right_lower_leg_link"/>
     <limit effort="10" lower="-3.14159" upper="0.0" velocity="1.0"/>
   </joint>
+  <transmission name="right_knee_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_knee_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_knee_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="right_lower_leg_link">
     <!-- Motor 13 -->
     <visual>
@@ -881,6 +1018,16 @@
     <child link="left_lower_leg_link"/>
     <limit effort="10" lower="-3.14159" upper="0.0" velocity="1.0"/>
   </joint>
+  <transmission name="left_knee_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_knee_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_knee_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="left_lower_leg_link">
     <!-- Motor 14 -->
     <visual>
@@ -927,6 +1074,16 @@
     <child link="right_ankle_swing_link"/>
     <limit effort="10" lower="-0.45" upper="1.570795" velocity="1.0"/>
   </joint>
+  <transmission name="right_ankle_swing_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_ankle_swing_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_ankle_swing_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="right_ankle_swing_link">
     <!-- Motor 15 -->
     <visual>
@@ -980,6 +1137,16 @@
     <child link="left_ankle_swing_link"/>
     <limit effort="10" lower="-0.45" upper="1.570795" velocity="1.0"/>
   </joint>
+  <transmission name="left_ankle_swing_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_ankle_swing_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_ankle_swing_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="left_ankle_swing_link">
     <!-- Motor 16 -->
     <visual>
@@ -1033,6 +1200,16 @@
     <child link="right_ankle_lateral_link"/>
     <limit effort="10" lower="-0.7" upper="0.7" velocity="1.0"/>
   </joint>
+  <transmission name="right_ankle_lateral_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_ankle_lateral_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_ankle_lateral_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="right_ankle_lateral_link">
     <visual>
       <geometry>
@@ -1091,6 +1268,16 @@
     <child link="left_ankle_lateral_link"/>
     <limit effort="10" lower="-0.7" upper="0.7" velocity="1.0"/>
   </joint>
+  <transmission name="left_ankle_lateral_joint_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_ankle_lateral_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_ankle_lateral_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
   <link name="left_ankle_lateral_link">
     <visual>
       <geometry>
