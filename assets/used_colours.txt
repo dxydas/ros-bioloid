@@ -1,0 +1,14 @@
+
+lightgrey       rgb(211, 211, 211)
+grey            rgb(128, 128, 128)
+lightslategrey  rgb(119, 136, 153)
+slategrey       rgb(112, 128, 144)
+dimgrey         rgb(105, 105, 105)
+
+
+lightsteelblue  rgb(176, 196, 222)
+steelblue       rgb( 70, 130, 180)
+---             rgb(50, 110, 160)
+
+dodgerblue  rgb( 30, 144, 255)
+royalblue   rgb( 65, 105, 225)
