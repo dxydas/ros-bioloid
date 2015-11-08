@@ -9,7 +9,7 @@
   <arg name="debug" default="false"/>
   <arg name="physics" default="ode"/>
   <arg name="verbose" default="false"/>
-  <arg name="world_name" default="$(find bioloid_master)/gazebo/bioloid_sandbox.world"/>
+  <arg name="world_name" default="$(find bioloid_master)/worlds/bioloid_sandbox.world"/>
   <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
 
   <!-- Set use_sim_time flag -->
