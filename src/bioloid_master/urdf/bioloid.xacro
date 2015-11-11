@@ -282,6 +282,10 @@
         <xacro:default_geometry cad_file="RaspPiB_plus_3d_step_V10" suffix="_FCD-Conv"/>
         <origin xyz="-0.008 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
     </visual>
+    <visual>
+        <xacro:default_geometry cad_file="USB2AX-v3.1"/>
+        <origin xyz="-0.0075 -0.0601 -0.001" rpy="0 ${pi/2} 0"/>
+    </visual>
     <collision name="head_bracket_collision">
         <origin xyz="-0.009 0 0"/>
         <geometry>
@@ -298,6 +302,12 @@
         <origin xyz="-0.0023 -0.0008 0.0008"/>
         <geometry>
             <box size="0.021 0.087 0.058"/>
+        </geometry>
+    </collision>
+    <collision name="usb2ax_collision">
+        <origin xyz="-0.0042 -0.05355 -0.001"/>
+        <geometry>
+            <box size="0.00661 0.037 0.0151"/>
         </geometry>
     </collision>
     <inertial>
@@ -403,8 +413,6 @@
 		    <box size="0.103 0.066 0.0635"/>
         </geometry>
     </collision>
-
-
     <collision name="Backpack-DX_collision">
         <origin xyz="0 0.041 -0.0145"/>
         <geometry>
@@ -423,8 +431,6 @@
             <box size="0.0041 0.0246 0.01"/>
         </geometry>
     </collision>
-
-
     <collision name="torso_collision_bottom">
         <origin xyz="0 0.00625 -0.0648"/>
         <geometry>

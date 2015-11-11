@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /MotionPlanning1
+        - /MotionPlanning1/Scene Robot1
         - /MotionPlanning1/Planning Request1
         - /MotionPlanning1/Planning Metrics1
         - /MotionPlanning1/Planned Path1
@@ -60,10 +61,16 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          camera_link:
+          cpu_case_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+            Value: true
+          head_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           imu_link:
             Alpha: 1
             Show Axes: false
@@ -231,10 +238,16 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          camera_link:
+          cpu_case_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+            Value: true
+          head_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           imu_link:
             Alpha: 1
             Show Axes: false
@@ -357,7 +370,7 @@ Visualization Manager:
             Value: true
         Robot Alpha: 0.5
         Show Robot Collision: false
-        Show Robot Visual: false
+        Show Robot Visual: true
       Value: true
   Enabled: true
   Global Options:
@@ -374,22 +387,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 0.418779
+      Distance: 0.423748
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.342984
-        Y: -0.169691
-        Z: 1.82224e-07
+        X: 0.235098
+        Y: -0.11112
+        Z: 2.39719e-07
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.409797
+      Pitch: 0.434797
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 5.87496
+      Yaw: 5.86496
     Saved: ~
 Window Geometry:
   Displays:
