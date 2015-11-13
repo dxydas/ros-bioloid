@@ -13,7 +13,7 @@
     <xacro:include filename="$(find bioloid_master)/urdf/bioloid_gazebo.xacro" ns="gazebo"/>
 
     <xacro:property name="pi" value="3.14159"/>
-    <xacro:property name="cad_dir" value="file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD"/>
+    <xacro:property name="cad_dir" value="file://$(find bioloid_master)/../../assets/cad"/>
     <!-- Typically, STL/DAE model units are in mm, but RViz units are in m, hence models must be scaled down by 1000. -->
     <xacro:macro name="default_geometry" params="cad_file suffix:=_FCD-Conv_BDR-Col extension:=dae">
         <geometry>

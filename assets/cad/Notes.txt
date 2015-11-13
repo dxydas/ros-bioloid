@@ -1,0 +1,22 @@
+Bioloid CAD models were originally downloaded from Robotis: http://www.robotis.com/xe/download_en/26324
+Utilised CAD programs and operations are written in shorthand in the file name suffixes.
+- FCD-Conv: .stp files were converted to .dae (Collada) using FreeCAD
+- BDR-Col: .dae files were coloured in Blender
+
+The originally converted .dae model units are in mm. Saving again as .dae in Blender shrunk the model by 100.
+To fix this, the files were edited by commenting out the scaling from all nodes under the <library_visual_scenes> element:
+<matrix sid="transform">0.01 0 0 0 0 0.01 0 0 0 0 0.01 0 0 0 0 1</matrix>
+
+There is also a bug in RViz which replaces the ambient color of Collada materials by light gray if at
+least one component of the specified ambient color is 0.0.
+To fix this, the files were edited by replacing:
+<color sid="ambient">0 0 0 1</color>
+with:
+<color sid="ambient">0.1 0.1 0.1 1</color>
+
+Scaling and ambient colour issues:
+http://answers.ros.org/question/12699/modeling-urdf-files-using-blender-and-exporting-to-collada-format/
+http://answers.ros.org/question/27734/mesh-rendering-in-rviz/
+http://answers.ros.org/question/10846/can-material-colors-be-applied-to-collada-dae-meshes/
+Collada specification:
+https://www.khronos.org/files/collada_spec_1_4.pdf

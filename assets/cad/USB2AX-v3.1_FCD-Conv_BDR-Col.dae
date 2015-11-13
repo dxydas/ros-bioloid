@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.71.0 commit date:2014-06-12, commit time:18:39, hash:169c95b</authoring_tool>
+    </contributor>
+    <created>2015-11-10T22:17:24</created>
+    <modified>2015-11-10T22:17:24</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_images/>
+  <library_effects>
+    <effect id="Silver-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0.2 0.2 0.2 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0.1 0.1 0.1 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.48 0.48 0.48 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">20</float>
+            </shininess>
+            <reflective>
+              <color>1 1 1 1</color>
+            </reflective>
+            <reflectivity>
+              <float>0.4</float>
+            </reflectivity>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="Silver-material" name="Silver">
+      <instance_effect url="#Silver-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="usb2ax_v3_1-mesh" name="usb2ax_v3_1">
+      <mesh>
+        <source id="usb2ax_v3_1-mesh-positions">
+          <float_array id="usb2ax_v3_1-mesh-positions-array" count="147">-6 6 1.6 6.25 -3.9 1.6 6 6 1.6 -7.5 10 1.6 -6 10 1.6 -2.75 -3.9 1.6 -7.5 -10 1.6 -2.75 -10 1.6 6 10 1.6 7.5 10 1.6 7.5 -10 1.6 6.25 -10 1.6 7.25 -4.9 2.6 -2.75 -4.9 2.6 7.25 -6.4 2.6 -2.75 -6.4 2.6 7.25 -6.4 5.6 -2.75 -6.4 5.6 7.25 -11.9 2.6 7.25 -6.9 5.6 7.25 -6.9 6.6 7.25 -11.9 6.6 6.25 -11.9 1.6 -2.75 -11.9 6.6 -2.75 -6.9 6.6 -2.75 -11.9 1.6 -2.75 -6.9 5.6 -7.5 10 0 -7.5 -10 0 7.5 -10 0 5.8 25 5 5.8 15.5 5 -5.8 25 5 -5.8 15.5 5 -5.8 24.7 2.6 -5.8 15.5 2.6 5.8 24.7 2.6 5.8 15.5 2.6 6 25 5.2 5.8 25 2.3 6 25 0.6 -5.8 25 2.3 -6 25 0.6 -6 25 5.2 6 6 5.2 6 10 0.6 -6 10 0.6 -6 6 5.2 7.5 10 0</float_array>
+          <technique_common>
+            <accessor source="#usb2ax_v3_1-mesh-positions-array" count="49" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="usb2ax_v3_1-mesh-normals">
+          <float_array id="usb2ax_v3_1-mesh-normals-array" count="282">0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 1 0 0 1 0 0 0.7071068 0.7071068 0 0.7071068 0.7071068 1 0 0 1 0 0 1 0 0 1 0 0 0.7071067 0 -0.7071068 0.7071067 0 -0.7071068 0.7071067 0 -0.7071068 0.7071068 0 -0.7071068 0 0 1 0 0 1 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 -1 0 0 -1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 -1 0 0 -1 0 0 1 0 0 1 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 0.7071076 0.7071059 0 0.7071076 0.7071059 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 -1 0 0 -1 0 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 -1 0 0 -1 1 0 0 1 0 0</float_array>
+          <technique_common>
+            <accessor source="#usb2ax_v3_1-mesh-normals-array" count="94" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="usb2ax_v3_1-mesh-colors-Col" name="Col">
+          <float_array id="usb2ax_v3_1-mesh-colors-Col-array" count="846">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</float_array>
+          <technique_common>
+            <accessor source="#usb2ax_v3_1-mesh-colors-Col-array" count="282" stride="3">
+              <param name="R" type="float"/>
+              <param name="G" type="float"/>
+              <param name="B" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="usb2ax_v3_1-mesh-vertices">
+          <input semantic="POSITION" source="#usb2ax_v3_1-mesh-positions"/>
+        </vertices>
+        <polylist material="Silver-material" count="94">
+          <input semantic="VERTEX" source="#usb2ax_v3_1-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#usb2ax_v3_1-mesh-normals" offset="1"/>
+          <input semantic="COLOR" source="#usb2ax_v3_1-mesh-colors-Col" offset="2" set="0"/>
+          <vcount>3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 </vcount>
+          <p>0 0 0 1 0 1 2 0 2 3 1 3 0 1 4 4 1 5 5 2 6 1 2 7 0 2 8 5 3 9 0 3 10 3 3 11 5 4 12 3 4 13 6 4 14 5 5 15 6 5 16 7 5 17 8 6 18 2 6 19 9 6 20 9 7 21 2 7 22 1 7 23 9 8 24 1 8 25 10 8 26 10 9 27 1 9 28 11 9 29 12 10 30 13 10 31 14 10 32 14 11 33 13 11 34 15 11 35 16 12 36 14 12 37 17 12 38 17 13 39 14 13 40 15 13 41 12 14 42 1 14 43 13 14 44 13 15 45 1 15 46 5 15 47 18 16 48 14 16 49 16 16 50 18 17 51 16 17 52 19 17 53 18 18 54 19 18 55 20 18 56 18 19 57 20 19 58 21 19 59 1 20 60 12 20 61 11 20 62 11 21 63 12 21 64 14 21 65 11 22 66 14 22 67 22 22 68 22 23 69 14 23 70 18 23 71 21 24 72 20 24 73 23 24 74 23 25 75 20 25 76 24 25 77 7 26 78 25 26 79 23 26 80 7 27 81 23 27 82 24 27 83 7 28 84 24 28 85 26 28 86 7 29 87 26 29 88 17 29 89 7 30 90 17 30 91 15 30 92 7 31 93 15 31 94 13 31 95 7 32 96 13 32 97 5 32 98 3 33 99 27 33 100 6 33 101 6 34 102 27 34 103 28 34 104 20 35 105 19 35 106 24 35 107 24 36 108 19 36 109 26 36 110 19 37 111 16 37 112 26 37 113 26 38 114 16 38 115 17 38 116 22 39 117 25 39 118 11 39 119 11 40 120 25 40 121 7 40 122 29 41 123 10 41 124 11 41 125 6 42 126 28 42 127 7 42 128 7 43 129 28 43 130 29 43 131 7 44 132 29 44 133 11 44 134 21 45 135 23 45 136 18 45 137 18 46 138 23 46 139 25 46 140 18 47 141 25 47 142 22 47 143 30 48 144 31 48 145 32 48 146 32 49 147 31 49 148 33 49 149 34 50 150 35 50 151 36 50 152 36 51 153 35 51 154 37 51 155 30 52 156 38 52 157 39 52 158 39 53 159 38 53 160 40 53 161 39 54 162 40 54 163 41 54 164 41 55 165 40 55 166 42 55 167 41 56 168 42 56 169 32 56 170 32 57 171 42 57 172 43 57 173 32 58 174 43 58 175 30 58 176 30 59 177 43 59 178 38 59 179 37 60 180 31 60 181 36 60 182 36 61 183 31 61 184 30 61 185 36 62 186 30 62 187 39 62 188 33 63 189 35 63 190 32 63 191 32 64 192 35 64 193 34 64 194 32 65 195 34 65 196 41 65 197 44 66 198 2 66 199 38 66 200 38 67 201 2 67 202 8 67 203 38 68 204 8 68 205 40 68 206 40 69 207 8 69 208 45 69 209 43 70 210 42 70 211 46 70 212 43 71 213 46 71 214 4 71 215 43 72 216 4 72 217 0 72 218 43 73 219 0 73 220 47 73 221 41 74 222 34 74 223 39 74 224 39 75 225 34 75 226 36 75 227 37 76 228 35 76 229 31 76 230 31 77 231 35 77 232 33 77 233 8 78 234 9 78 235 45 78 236 45 79 237 9 79 238 48 79 239 45 80 240 48 80 241 46 80 242 46 81 243 48 81 244 27 81 245 46 82 246 27 82 247 4 82 248 4 83 249 27 83 250 3 83 251 2 84 252 44 84 253 0 84 254 0 85 255 44 85 256 47 85 257 45 86 258 46 86 259 40 86 260 40 87 261 46 87 262 42 87 263 47 88 264 44 88 265 43 88 266 43 89 267 44 89 268 38 89 269 29 90 270 28 90 271 48 90 272 48 91 273 28 91 274 27 91 275 10 92 276 29 92 277 9 92 278 9 93 279 29 93 280 48 93 281</p>
+        </polylist>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_controllers/>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="usb2ax_v3_1" name="usb2ax_v3_1" type="NODE">
+        <!--<matrix sid="transform">0.01 0 0 0 0 0.01 0 0 0 0 0.01 0 0 0 0 1</matrix>-->
+        <instance_geometry url="#usb2ax_v3_1-mesh">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Silver-material" target="#Silver-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>
