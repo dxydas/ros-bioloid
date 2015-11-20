@@ -220,4 +220,72 @@
         </inertial>
     </link>
 
+    <!-- Right foot -->
+    <link name="right_foot_link">
+        <visual>
+            <xacro:default_geometry cad_file="FP04-F12"/>
+            <origin xyz="0 0.0235 -0.016" rpy="0 ${-pi/2} 0"/>
+        </visual>
+        <!-- FSR 0 -->
+        <visual>
+            <xacro:default_geometry cad_file="34-47021_FSR_400_Short_Tail"/>
+            <origin xyz="0.022 0.0319 -0.039" rpy="${pi} 0 0"/>
+        </visual>
+        <!-- FSR 1 -->
+        <visual>
+            <xacro:default_geometry cad_file="34-47021_FSR_400_Short_Tail"/>
+            <origin xyz="-0.022 0.0319 -0.039" rpy="${pi} 0 0"/>
+        </visual>
+        <!-- FSR 2 -->
+        <visual>
+            <xacro:default_geometry cad_file="34-47021_FSR_400_Short_Tail"/>
+            <origin xyz="-0.022 0.0319 0.007" rpy="${pi} ${pi} 0"/>
+        </visual>
+        <collision name="right_foot_collision">
+            <origin xyz="0 0.0277 -0.016"/>
+            <geometry>
+                <box size="0.061 0.009 0.101"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0 0 0"/>
+            <mass value="1.0"/>
+            <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+        </inertial>
+    </link>
+
+    <!-- Left foot -->
+    <link name="left_foot_link">
+        <visual>
+            <xacro:default_geometry cad_file="FP04-F12"/>
+            <origin xyz="0 -0.0235 0.016" rpy="${pi} ${pi/2} 0"/>
+        </visual>
+        <!-- FSR 3 -->
+        <visual>
+            <xacro:default_geometry cad_file="34-47021_FSR_400_Short_Tail"/>
+            <origin xyz="-0.022 -0.0319 0.039" rpy="0 0 0"/>
+        </visual>
+        <!-- FSR 4 -->
+        <visual>
+            <xacro:default_geometry cad_file="34-47021_FSR_400_Short_Tail"/>
+            <origin xyz="0.022 -0.0319 0.039" rpy="0 0 0"/>
+        </visual>
+        <!-- FSR 5 -->
+        <visual>
+            <xacro:default_geometry cad_file="34-47021_FSR_400_Short_Tail"/>
+            <origin xyz="0.022 -0.0319 -0.007" rpy="0 ${pi} 0"/>
+        </visual>
+        <collision name="left_foot_collision">
+            <origin xyz="0 -0.0277 0.016"/>
+            <geometry>
+                <box size="0.061 0.009 0.101"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0 0 0"/>
+            <mass value="1.0"/>
+            <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+        </inertial>
+    </link>
+
 </robot>
