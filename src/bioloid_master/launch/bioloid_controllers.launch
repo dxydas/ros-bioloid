@@ -3,8 +3,8 @@
     <rosparam file="$(find bioloid_master)/config/bioloid_jt_controllers.yaml" command="load"/>
 
     <!-- Start controller spawner for robot limbs - Load and start controllers -->
-    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/" args="right_arm_controller left_arm_controller right_leg_controller left_leg_controller"/>
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" ns="/" args="right_arm_controller left_arm_controller right_leg_controller left_leg_controller"/>
 
     <!-- Start controller spawner for robot limb groups - Load but don't start controllers (these groups may be useful in the future) -->
-    <node name="controller_spawner_combined_groups" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/" args="--stopped both_arms_controller both_legs_controller robot_controller"/>
+    <node name="controller_spawner_combined_groups" pkg="controller_manager" type="spawner" ns="/" args="--stopped both_arms_controller both_legs_controller robot_controller"/>
 </launch>
