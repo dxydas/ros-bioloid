@@ -1,9 +1,6 @@
 #include "rosworker.h"
 #include <qt5/QtCore/QTimer>
-#include "../usb2ax_controller/src/ax12ControlTableMacros.h"  // TODO: Fix this
-
-
-#define NUM_OF_MOTORS 18
+#include "commonvars.h"
 
 
 void WorkerThread::run()

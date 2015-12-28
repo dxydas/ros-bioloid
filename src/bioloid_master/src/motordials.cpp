@@ -7,9 +7,7 @@
 #include <qt5/QtWidgets/QGridLayout>
 #include <qt5/QtWidgets/QLabel>
 #include <qt5/QtWidgets/QAbstractSlider>
-#include "../usb2ax_controller/src/ax12ControlTableMacros.h"  // TODO: Fix this
-
-#define NUM_OF_MOTORS 18
+#include "commonvars.h"
 
 
 MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :

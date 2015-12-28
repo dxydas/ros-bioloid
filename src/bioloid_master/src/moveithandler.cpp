@@ -1,4 +1,5 @@
 #include "moveithandler.h"
+#include <qt5/QtCore/QVector>
 
 
 MoveItHandler::MoveItHandler(QWidget* parent) :
@@ -14,35 +15,61 @@ void MoveItHandler::init()
     group->setPlannerId("PRMkConfigDefault");
     group->setGoalTolerance(0.01);
 
-    startPose = group->getCurrentPose().pose;
-    targetPose = group->getCurrentPose().pose;
+//    startPose = group->getCurrentPose().pose;
+//    targetPose = group->getCurrentPose().pose;
+
+    group->getCurrentState()->copyJointGroupPositions(
+                group->getCurrentState()->getRobotModel()->getJointModelGroup(group->getName()),
+                startJointValues );
+    targetJointValues = startJointValues;
 }
 
 
-void MoveItHandler::setStartState()
+void MoveItHandler::setCurrentAsStartState()
 {
-    startPose = group->getCurrentPose().pose;
+//    startPose = group->getCurrentPose().pose;
+//    group->setStartState(startPose);
+    group->getCurrentState()->copyJointGroupPositions(
+                group->getCurrentState()->getRobotModel()->getJointModelGroup(group->getName()),
+                startJointValues );
+    group->setStartStateToCurrentState();
 }
 
 
-void MoveItHandler::setGoalState()
+void MoveItHandler::setCurrentAsGoalState()
 {
-    targetPose = group->getCurrentPose().pose;
+//    targetPose = group->getCurrentPose().pose;
+//    group->setPoseTarget(targetPose);
+    group->getCurrentState()->copyJointGroupPositions(
+                group->getCurrentState()->getRobotModel()->getJointModelGroup(group->getName()),
+                targetJointValues );
+    group->setJointValueTarget(targetJointValues);
 }
 
 
 void MoveItHandler::planMotion()
 {
-    group->setPoseTarget(targetPose);
-
-    // Now, we call the planner to compute the plan and visualize it.
-    // Note that we are just planning, not asking move_group to actually move the robot.
+    // Call the planner to compute the plan and visualize it.
+    // Note that this is just planning, not asking move_group to actually move the robot.
     bool success = group->plan(plan);
-    ROS_INFO("Visualizing move %s", success ? "SUCCESS" : "FAILED");
+    ROS_INFO("Visualising plan %s", success ? "SUCCESS" : "FAILED");
 }
 
 
 void MoveItHandler::executeMotion()
 {
     group->asyncExecute(plan);
+}
+
+
+void MoveItHandler::planAndExecuteChain(QList<RobotPoseStruct> robotPosesList)
+{
+    setCurrentAsStartState();
+    for (int i = 0; i < robotPosesList.size(); ++i)
+    {
+        targetJointValues = robotPosesList[i].jointState.position;
+        group->setJointValueTarget(targetJointValues);
+        planMotion();
+        executeMotion();
+    }
 }

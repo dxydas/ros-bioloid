@@ -35,6 +35,9 @@ public slots:
     void initRosNode();
     void addPose();
     void removePose();
+
+    void planAndExecuteChain();
+
     void addToQueue();
     void removeFromQueue();
 
@@ -69,10 +72,11 @@ private:
     QPushButton* initRosNodeButton;
     QPushButton* addPoseButton;
     QPushButton* removePoseButton;
-    QPushButton* setStartStateButton;
-    QPushButton* setGoalStateButton;
+    QPushButton* setCurrentAsStartStateButton;
+    QPushButton* setCurrentAsGoalStateButton;
     QPushButton* planMotionButton;
     QPushButton* executeMotionButton;
+    QPushButton* planAndExecuteChainButton;
     QPushButton* addToQueueButton;
     QPushButton* removeFromQueueButton;
 

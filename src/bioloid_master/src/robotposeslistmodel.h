@@ -6,21 +6,7 @@
 #include <qt5/QtCore/QList>
 #include <qt5/QtCore/QString>
 #include <moveit/move_group_interface/move_group.h>
-
-#define NUM_OF_MOTORS 18
-
-struct RobotPoseStruct
-{
-    QString name;
-    sensor_msgs::JointState jointState;
-    RobotPoseStruct()
-    {
-        name = "";
-        jointState.position.resize(NUM_OF_MOTORS);
-        jointState.velocity.resize(NUM_OF_MOTORS);
-        jointState.effort.resize(NUM_OF_MOTORS);
-    }
-};
+#include "commonvars.h"
 
 class RobotPosesListModel : public QAbstractListModel
 {

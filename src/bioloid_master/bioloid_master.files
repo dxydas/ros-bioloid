@@ -22,3 +22,4 @@ src/motordials.h
 src/motordials.cpp
 src/moveithandler.h
 src/moveithandler.cpp
+src/commonvars.h

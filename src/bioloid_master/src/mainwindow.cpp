@@ -18,8 +18,7 @@
 #include <qt5/QtWidgets/QDesktopWidget>
 #include <qt5/QtWidgets/QAbstractScrollArea>
 #include <qt5/QtWidgets/QMessageBox>
-
-#define NUM_OF_MOTORS 18
+#include "commonvars.h"
 
 Q_DECLARE_METATYPE(sensor_msgs::JointState)
 
@@ -184,10 +183,11 @@ void MainWindow::setUpLayout()
     initRosNodeButton = new QPushButton("Initialise ROS node");
     addPoseButton = new QPushButton("Add pose");
     removePoseButton = new QPushButton("Remove pose");
-    setStartStateButton = new QPushButton("Set as start state");
-    setGoalStateButton = new QPushButton("Set as goal state");
+    setCurrentAsStartStateButton = new QPushButton("Set current as start state");
+    setCurrentAsGoalStateButton = new QPushButton("Set current as goal state");
     planMotionButton = new QPushButton("Run motion planner");
     executeMotionButton = new QPushButton("Move to pose");
+    planAndExecuteChainButton = new QPushButton("Plan and execute chain");
     addToQueueButton = new QPushButton("Add to queue -->");
     removeFromQueueButton = new QPushButton("<-- Remove from queue");
 
@@ -199,10 +199,11 @@ void MainWindow::setUpLayout()
     poseButtonsSubLayout->addWidget(initRosNodeButton, row++, col);
     poseButtonsSubLayout->addWidget(addPoseButton, row++, col);
     poseButtonsSubLayout->addWidget(removePoseButton, row++, col);
-    poseButtonsSubLayout->addWidget(setStartStateButton, row++, col);
-    poseButtonsSubLayout->addWidget(setGoalStateButton, row++, col);
+    poseButtonsSubLayout->addWidget(setCurrentAsStartStateButton, row++, col);
+    poseButtonsSubLayout->addWidget(setCurrentAsGoalStateButton, row++, col);
     poseButtonsSubLayout->addWidget(planMotionButton, row++, col);
     poseButtonsSubLayout->addWidget(executeMotionButton, row++, col);
+    poseButtonsSubLayout->addWidget(planAndExecuteChainButton, row++, col);
     poseButtonsSubLayout->addWidget(addToQueueButton, row++, col);
     poseButtonsSubLayout->addWidget(removeFromQueueButton, row++, col);
 
@@ -432,10 +433,11 @@ void MainWindow::customiseLayout()
     initRosNodeButton->setStyleSheet(buttonStyleSheet);
     addPoseButton->setStyleSheet(buttonStyleSheet);
     removePoseButton->setStyleSheet(buttonStyleSheet);
-    setStartStateButton->setStyleSheet(buttonStyleSheet);
-    setGoalStateButton->setStyleSheet(buttonStyleSheet);
+    setCurrentAsStartStateButton->setStyleSheet(buttonStyleSheet);
+    setCurrentAsGoalStateButton->setStyleSheet(buttonStyleSheet);
     planMotionButton->setStyleSheet(buttonStyleSheet);
     executeMotionButton->setStyleSheet(buttonStyleSheet);
+    planAndExecuteChainButton->setStyleSheet(buttonStyleSheet);
     addToQueueButton->setStyleSheet(buttonStyleSheet);
     removeFromQueueButton->setStyleSheet(buttonStyleSheet);
     //
@@ -466,10 +468,11 @@ void MainWindow::connectSignalsAndSlots()
     connect( addPoseButton, SIGNAL(clicked()), this, SLOT(addPose()) );
     connect( removePoseButton, SIGNAL(clicked()), this, SLOT(removePose()) );
 
-    connect( setStartStateButton, SIGNAL(clicked()), moveItHandler, SLOT(setStartState()) );
-    connect( setGoalStateButton, SIGNAL(clicked()), moveItHandler, SLOT(setGoalState()) );
+    connect( setCurrentAsStartStateButton, SIGNAL(clicked()), moveItHandler, SLOT(setCurentAsStartState()) );
+    connect( setCurrentAsGoalStateButton, SIGNAL(clicked()), moveItHandler, SLOT(setCurrentAsGoalState()) );
     connect( planMotionButton, SIGNAL(clicked()), moveItHandler, SLOT(planMotion()) );
     connect( executeMotionButton, SIGNAL(clicked()), moveItHandler, SLOT(executeMotion()) );
+    connect( planAndExecuteChainButton, SIGNAL(clicked()), this, SLOT(planAndExecuteChain()) );
 
     connect( addToQueueButton, SIGNAL(clicked()), this, SLOT(addToQueue()) );
     connect( removeFromQueueButton, SIGNAL(clicked()), this, SLOT(removeFromQueue()) );
@@ -507,6 +510,7 @@ void MainWindow::initRosNode()
 {
     outputLog->appendTimestamped("ROS node initialised");
     rosWorker->init();
+    moveItHandler->init();
 }
 
 
@@ -530,6 +534,12 @@ void MainWindow::addPose()
 void MainWindow::removePose()
 {
     availablePosesCustomListWidget->remove();
+}
+
+
+void MainWindow::planAndExecuteChain()
+{
+    moveItHandler->planAndExecuteChain(queuedPosesCustomListWidget->getRobotPosesListModel()->getRobotPosesList());
 }
 
 
@@ -560,20 +570,22 @@ void MainWindow::nodeDisconnectedFromRosMaster()
 void MainWindow::enableMotionButtons()
 {
     addPoseButton->setEnabled(true);
-    setStartStateButton->setEnabled(true);
-    setGoalStateButton->setEnabled(true);
+    setCurrentAsStartStateButton->setEnabled(true);
+    setCurrentAsGoalStateButton->setEnabled(true);
     planMotionButton->setEnabled(true);
     executeMotionButton->setEnabled(true);
+    planAndExecuteChainButton->setEnabled(true);
 }
 
 
 void MainWindow::disableMotionButtons()
 {
     addPoseButton->setEnabled(false);
-    setStartStateButton->setEnabled(false);
-    setGoalStateButton->setEnabled(false);
+    setCurrentAsStartStateButton->setEnabled(false);
+    setCurrentAsGoalStateButton->setEnabled(false);
     planMotionButton->setEnabled(false);
     executeMotionButton->setEnabled(false);
+    planAndExecuteChainButton->setEnabled(false);
 }
 
 
