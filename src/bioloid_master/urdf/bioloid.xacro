@@ -4,7 +4,7 @@
     <!-- Select one and only one of the following include files -->
     <!-- 1) Standard parts of Bioloid Comprehensive humanoid with 18 AX-12+ servos, which have been replaced in custom version -->
     <!--    When using this URDF, ensure a transform from odom to base_link is being published -->
-    <!--<xacro:include filename="$(find bioloid_master)/urdf/bioloid_std_parts.xacro" ns="std_parts"/> -->
+    <!-- <xacro:include filename="$(find bioloid_master)/urdf/bioloid_std_parts.xacro" ns="std_parts"/> -->
     <!-- 2) Custom parts of modified Bioloid Comprehensive humanoid, with CM-5 replaced by PC and custom sensors -->
     <!--    When using this URDF, ensure a transform from odom to imu_link is being published -->
     <xacro:include filename="$(find bioloid_master)/urdf/bioloid_custom_parts.xacro" ns="custom_parts"/>
