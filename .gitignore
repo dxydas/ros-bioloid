@@ -55,7 +55,8 @@ build/
 devel/
 src/beginner_tutorials/
 
-# Qt Creator user files
+# Qt Creator project directories/files
+qt_creator*/
 *.creator.user
 
 # Unused assets (images etc.)
