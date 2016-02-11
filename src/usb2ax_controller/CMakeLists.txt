@@ -138,7 +138,7 @@ add_dependencies(test_balancer usb2ax_controller_generate_messages_cpp)
 # )
 target_link_libraries(ax_joint_controller ${catkin_LIBRARIES})
 target_link_libraries(test_interface ${catkin_LIBRARIES})
-target_link_libraries(test_balancer ${catkin_LIBRARIES} ncurses)
+target_link_libraries(test_balancer ${catkin_LIBRARIES})# ncurses)
 
 #############
 ## Install ##
