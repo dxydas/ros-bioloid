@@ -125,7 +125,6 @@ private:
     sensor_msgs::JointState goal_joint_state;
     ros::Time timeOfLastGoalJointStatePublication;
     int goalJointStatePublicationPeriodInMSecs;
-    std::mutex commsMutex;
 };
 
 #endif // AX_JOINT_CONTROLLER_H

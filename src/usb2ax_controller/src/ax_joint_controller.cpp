@@ -173,10 +173,6 @@ int main(int argc, char **argv)
     jointController.sendToAX(set_req, set_res);
     ROS_INFO("All motor torques turned off.");
 
-    // Start threaded spinner
-    ros::AsyncSpinner spinner(1);
-    spinner.start();
-
     // Main program loop
     ros::Time prevTime = ros::Time::now();
     while (ros::ok())
@@ -193,6 +189,7 @@ int main(int argc, char **argv)
 
         prevTime = currentTime;
 
+        ros::spinOnce();
         loop_rate.sleep();
     }
 
@@ -484,85 +481,76 @@ void JointController::write()
 bool JointController::receiveFromAX(usb2ax_controller::ReceiveFromAX::Request &req,
                                     usb2ax_controller::ReceiveFromAX::Response &res)
 {
-    try {
-        std::lock_guard<std::mutex> lock (commsMutex);
-
-        // Motor
-        if ( (1 <= req.dxlID) && (req.dxlID < 100) )
-        {
-            // Read word
-            switch (req.address)
-            {
-            case AX12_MODEL_NUMBER_L:
-            case AX12_CW_ANGLE_LIMIT_L:
-            case AX12_CCW_ANGLE_LIMIT_L:
-            case AX12_MAX_TORQUE_L:
-            case AX12_GOAL_POSITION_L:
-            case AX12_MOVING_SPEED_L:
-            case AX12_TORQUE_LIMIT_L:
-            case AX12_PRESENT_POSITION_L:
-            case AX12_PRESENT_SPEED_L:
-            case AX12_PRESENT_LOAD_L:
-            case AX12_PUNCH_L:
-            {
-                res.value = dxl_read_word(req.dxlID, req.address);
-                break;
-            }
-            // Read byte
-            default:
-            {
-                res.value = dxl_read_byte(req.dxlID, req.address);
-                break;
-            }
-            }
-        }
-        // Sensor
-        else if (req.dxlID >= 100)
-        {
-            // Read word
-            switch (req.address)
-            {
-            case AXS1_MODEL_NUMBER_L:
-            case AXS1_SOUND_DETECTED_TIME_L:
-            case AXS1_REMOCON_RX_DATA_L:
-            case AXS1_REMOCON_TX_DATA_L:
-            {
-                res.value = dxl_read_word(req.dxlID, req.address);
-                break;
-            }
-            // Read byte
-            default:
-            {
-                res.value = dxl_read_byte(req.dxlID, req.address);
-                break;
-            }
-            }
-        }
-        else
-        {
-            res.rxSuccess = false;
-            return false;
-        }
-
-        int CommStatus = dxl_get_result();
-        if (CommStatus == COMM_RXSUCCESS)
-        {
-            //ROS_DEBUG("Value received: %d", res.value);
-            printErrorCode();
-            res.rxSuccess = true;
-            return true;
-        }
-        else
-        {
-            printCommStatus(CommStatus);
-            res.rxSuccess = false;
-            return false;
-        }
-
-    }
-    catch (std::logic_error&)
+    // Motor
+    if ( (1 <= req.dxlID) && (req.dxlID < 100) )
     {
-        std::cout << "Exception caught\n";
+        // Read word
+        switch (req.address)
+        {
+        case AX12_MODEL_NUMBER_L:
+        case AX12_CW_ANGLE_LIMIT_L:
+        case AX12_CCW_ANGLE_LIMIT_L:
+        case AX12_MAX_TORQUE_L:
+        case AX12_GOAL_POSITION_L:
+        case AX12_MOVING_SPEED_L:
+        case AX12_TORQUE_LIMIT_L:
+        case AX12_PRESENT_POSITION_L:
+        case AX12_PRESENT_SPEED_L:
+        case AX12_PRESENT_LOAD_L:
+        case AX12_PUNCH_L:
+        {
+            res.value = dxl_read_word(req.dxlID, req.address);
+            break;
+        }
+            // Read byte
+        default:
+        {
+            res.value = dxl_read_byte(req.dxlID, req.address);
+            break;
+        }
+        }
+    }
+    // Sensor
+    else if (req.dxlID >= 100)
+    {
+        // Read word
+        switch (req.address)
+        {
+        case AXS1_MODEL_NUMBER_L:
+        case AXS1_SOUND_DETECTED_TIME_L:
+        case AXS1_REMOCON_RX_DATA_L:
+        case AXS1_REMOCON_TX_DATA_L:
+        {
+            res.value = dxl_read_word(req.dxlID, req.address);
+            break;
+        }
+            // Read byte
+        default:
+        {
+            res.value = dxl_read_byte(req.dxlID, req.address);
+            break;
+        }
+        }
+    }
+    else
+    {
+        res.rxSuccess = false;
+        return false;
+    }
+
+    int CommStatus = dxl_get_result();
+    if (CommStatus == COMM_RXSUCCESS)
+    {
+        //ROS_DEBUG("Value received: %d", res.value);
+        printErrorCode();
+        res.rxSuccess = true;
+        return true;
+    }
+    else
+    {
+        printCommStatus(CommStatus);
+        res.rxSuccess = false;
+        return false;
     }
 }
 
@@ -570,94 +558,85 @@ bool JointController::receiveFromAX(usb2ax_controller::ReceiveFromAX::Request &r
 bool JointController::sendToAX(usb2ax_controller::SendToAX::Request &req,
                                usb2ax_controller::SendToAX::Response &res)
 {
-    try {
-        std::lock_guard<std::mutex> lock (commsMutex);
+    // Motor
+    if ( ((1 <= req.dxlID) && (req.dxlID < 100)) || (req.dxlID == BROADCAST_ID) )
+    {
+        switch (req.address)
+        {
+        case AX12_MODEL_NUMBER_L:
+        case AX12_CW_ANGLE_LIMIT_L:
+        case AX12_CCW_ANGLE_LIMIT_L:
+        case AX12_MAX_TORQUE_L:
+        case AX12_GOAL_POSITION_L:
+        case AX12_MOVING_SPEED_L:
+        case AX12_TORQUE_LIMIT_L:
+        case AX12_PRESENT_POSITION_L:
+        case AX12_PRESENT_SPEED_L:
+        case AX12_PRESENT_LOAD_L:
+        case AX12_PUNCH_L:
+        {
+            // 2 bytes
+            dxl_write_word(req.dxlID, req.address, req.value);
+            break;
+        }
+        default:
+        {
+            // 1 byte
+            dxl_write_byte(req.dxlID, req.address, req.value);
+            break;
+        }
+        }
+    }
+    // Sensor
+    else if (req.dxlID >= 100)
+    {
+        switch (req.address)
+        {
+        case AXS1_MODEL_NUMBER_L:
+        case AXS1_SOUND_DETECTED_TIME_L:
+        case AXS1_REMOCON_RX_DATA_L:
+        case AXS1_REMOCON_TX_DATA_L:
+        {
+            // 2 bytes
+            dxl_write_word(req.dxlID, req.address, req.value);
+            break;
+        }
+        default:
+        {
+            // 1 byte
+            dxl_write_byte(req.dxlID, req.address, req.value);
+            break;
+        }
+        }
+    }
+    else
+    {
+        res.txSuccess = false;
+        return false;
+    }
 
-        // Motor
-        if ( ((1 <= req.dxlID) && (req.dxlID < 100)) || (req.dxlID == BROADCAST_ID) )
+    // No return Status Packet from a broadcast command
+    if (req.dxlID == BROADCAST_ID)
+    {
+        res.txSuccess = true;
+        return true;
+    }
+    else
+    {
+        int CommStatus = dxl_get_result();
+        if (CommStatus == COMM_RXSUCCESS)
         {
-            switch (req.address)
-            {
-            case AX12_MODEL_NUMBER_L:
-            case AX12_CW_ANGLE_LIMIT_L:
-            case AX12_CCW_ANGLE_LIMIT_L:
-            case AX12_MAX_TORQUE_L:
-            case AX12_GOAL_POSITION_L:
-            case AX12_MOVING_SPEED_L:
-            case AX12_TORQUE_LIMIT_L:
-            case AX12_PRESENT_POSITION_L:
-            case AX12_PRESENT_SPEED_L:
-            case AX12_PRESENT_LOAD_L:
-            case AX12_PUNCH_L:
-            {
-                // 2 bytes
-                dxl_write_word(req.dxlID, req.address, req.value);
-                break;
-            }
-            default:
-            {
-                // 1 byte
-                dxl_write_byte(req.dxlID, req.address, req.value);
-                break;
-            }
-            }
-        }
-        // Sensor
-        else if (req.dxlID >= 100)
-        {
-            switch (req.address)
-            {
-            case AXS1_MODEL_NUMBER_L:
-            case AXS1_SOUND_DETECTED_TIME_L:
-            case AXS1_REMOCON_RX_DATA_L:
-            case AXS1_REMOCON_TX_DATA_L:
-            {
-                // 2 bytes
-                dxl_write_word(req.dxlID, req.address, req.value);
-                break;
-            }
-            default:
-            {
-                // 1 byte
-                dxl_write_byte(req.dxlID, req.address, req.value);
-                break;
-            }
-            }
-        }
-        else
-        {
-            res.txSuccess = false;
-            return false;
-        }
-
-        // No return Status Packet from a broadcast command
-        if (req.dxlID == BROADCAST_ID)
-        {
+            //ROS_DEBUG("Value sent: %d", val);
+            printErrorCode();
             res.txSuccess = true;
             return true;
         }
         else
         {
-            int CommStatus = dxl_get_result();
-            if (CommStatus == COMM_RXSUCCESS)
-            {
-                //ROS_DEBUG("Value sent: %d", val);
-                printErrorCode();
-                res.txSuccess = true;
-                return true;
-            }
-            else
-            {
-                printCommStatus(CommStatus);
-                res.txSuccess = false;
-                return false;
-            }
+            printCommStatus(CommStatus);
+            res.txSuccess = false;
+            return false;
         }
-
-    }
-    catch (std::logic_error&)
-    {
-        std::cout << "Exception caught\n";
     }
 }
 
@@ -674,99 +653,89 @@ bool JointController::receiveSyncFromAX(usb2ax_controller::ReceiveSyncFromAX::Re
     // rosservice command line example:
     // rosservice call /ReceiveSyncFromAX '[1, 3, 5]' 36 3
 
-    try {
-        std::lock_guard<std::mutex> lock (commsMutex);
+    int numOfMotors = req.dxlIDs.size();
 
-        int numOfMotors = req.dxlIDs.size();
+    if (numOfMotors <= 0)
+    {
+        ROS_ERROR("No motors specified.");
+        res.rxSuccess = false;
+        return false;
+    }
+    else if (numOfMotors > 32)
+    {
+        ROS_ERROR("Maximum number of motors must be 32.");
+        res.rxSuccess = false;
+        return false;
+    }
 
-        if (numOfMotors <= 0)
+    res.values.resize(req.numOfValuesPerMotor*numOfMotors);
+
+    // Length of data for each motor
+    int dataLength = 0;
+    std::map<int, bool>::const_iterator it;
+    std::vector<bool> isWord(req.numOfValuesPerMotor, false);
+    for (int j = 0; j < req.numOfValuesPerMotor; ++j)
+    {
+        it = Ax12ControlTable::addressWordMap.find(req.startAddress + dataLength);
+        if (it == Ax12ControlTable::addressWordMap.end())
         {
-            ROS_ERROR("No motors specified.");
+            ROS_ERROR("Address lookup error.");
             res.rxSuccess = false;
             return false;
         }
-        else if (numOfMotors > 32)
+        if (it->second == true)
         {
-            ROS_ERROR("Maximum number of motors must be 32.");
-            res.rxSuccess = false;
-            return false;
-        }
-
-        res.values.resize(req.numOfValuesPerMotor*numOfMotors);
-
-        // Length of data for each motor
-        int dataLength = 0;
-        std::map<int, bool>::const_iterator it;
-        std::vector<bool> isWord(req.numOfValuesPerMotor, false);
-        for (int j = 0; j < req.numOfValuesPerMotor; ++j)
-        {
-            it = Ax12ControlTable::addressWordMap.find(req.startAddress + dataLength);
-            if (it == Ax12ControlTable::addressWordMap.end())
-            {
-                ROS_ERROR("Address lookup error.");
-                res.rxSuccess = false;
-                return false;
-            }
-            if (it->second == true)
-            {
-                dataLength = dataLength + 2;
-                isWord[j] = true;
-            }
-            else
-            {
-                ++dataLength;
-                isWord[j] = false;
-            }
-        }
-        if (dataLength > 6)
-        {
-            ROS_ERROR("Maximum data length must be 6 bytes.");
-            res.rxSuccess = false;
-            return false;
-        }
-
-        // Generate sync_read command
-        dxl_sync_read_start(req.startAddress, dataLength);
-        for (int i = 0; i < numOfMotors; ++i)
-            dxl_sync_read_push_id(req.dxlIDs[i]);
-        dxl_sync_read_send();
-
-        int CommStatus = dxl_get_result();
-        if (CommStatus == COMM_RXSUCCESS)
-        {
-            int r;
-            for (int i = 0; i < numOfMotors; ++i)
-            {
-                for (int j = 0; j < req.numOfValuesPerMotor; ++j)
-                {
-                    if (isWord[j])
-                        r = dxl_sync_read_pop_word();
-                    else
-                        r = dxl_sync_read_pop_byte();
-
-//                    ROS_DEBUG( "i = %d", i );
-//                    ROS_DEBUG( "j = %d", j );
-//                    ROS_DEBUG( "index = %d", i*req.numOfValuesPerMotor + j );
-//                    ROS_DEBUG( "ID %d = %d", req.dxlIDs[i], r );
-                    res.values[i*req.numOfValuesPerMotor + j] = r;
-                }
-            }
-            printErrorCode();
-            res.rxSuccess = true;
-            return true;
+            dataLength = dataLength + 2;
+            isWord[j] = true;
         }
         else
         {
-            printCommStatus(CommStatus);
-            res.rxSuccess = false;
-            return false;
+            ++dataLength;
+            isWord[j] = false;
         }
-
-
     }
-    catch (std::logic_error&)
+    if (dataLength > 6)
     {
-        std::cout << "Exception caught\n";
+        ROS_ERROR("Maximum data length must be 6 bytes.");
+        res.rxSuccess = false;
+        return false;
+    }
+
+    // Generate sync_read command
+    dxl_sync_read_start(req.startAddress, dataLength);
+    for (int i = 0; i < numOfMotors; ++i)
+        dxl_sync_read_push_id(req.dxlIDs[i]);
+    dxl_sync_read_send();
+
+    int CommStatus = dxl_get_result();
+    if (CommStatus == COMM_RXSUCCESS)
+    {
+        int r;
+        for (int i = 0; i < numOfMotors; ++i)
+        {
+            for (int j = 0; j < req.numOfValuesPerMotor; ++j)
+            {
+                if (isWord[j])
+                    r = dxl_sync_read_pop_word();
+                else
+                    r = dxl_sync_read_pop_byte();
+
+//                ROS_DEBUG( "i = %d", i );
+//                ROS_DEBUG( "j = %d", j );
+//                ROS_DEBUG( "index = %d", i*req.numOfValuesPerMotor + j );
+//                ROS_DEBUG( "ID %d = %d", req.dxlIDs[i], r );
+                res.values[i*req.numOfValuesPerMotor + j] = r;
+            }
+        }
+        printErrorCode();
+        res.rxSuccess = true;
+        return true;
+    }
+    else
+    {
+        printCommStatus(CommStatus);
+        res.rxSuccess = false;
+        return false;
     }
 }
 
@@ -782,110 +751,101 @@ bool JointController::sendSyncToAX(usb2ax_controller::SendSyncToAX::Request &req
     // rosservice command line example:
     // rosservice call /SendSyncToAX '[1, 3, 5]' 30 '[100, 300, 512, 100, 300, 512, 100, 300, 512]'
 
-    try {
-        std::lock_guard<std::mutex> lock (commsMutex);
+    int numOfMotors = req.dxlIDs.size();
 
-        int numOfMotors = req.dxlIDs.size();
+    if (numOfMotors <= 0)
+    {
+        ROS_ERROR("No motors specified.");
+        res.txSuccess = false;
+        return false;
+    }
 
-        if (numOfMotors <= 0)
+    int numOfValuesPerMotor = req.values.size()/numOfMotors;
+
+    // Length of data for each motor
+    int dataLength = 0;
+    std::map<int, bool>::const_iterator it;
+    std::vector<bool> isWord(numOfValuesPerMotor, false);
+    for (int j = 0; j < numOfValuesPerMotor; ++j)
+    {
+        it = Ax12ControlTable::addressWordMap.find(req.startAddress + dataLength);
+        if (it == Ax12ControlTable::addressWordMap.end())
         {
-            ROS_ERROR("No motors specified.");
+            ROS_ERROR("Address lookup error.");
             res.txSuccess = false;
             return false;
         }
-
-        int numOfValuesPerMotor = req.values.size()/numOfMotors;
-
-        // Length of data for each motor
-        int dataLength = 0;
-        std::map<int, bool>::const_iterator it;
-        std::vector<bool> isWord(numOfValuesPerMotor, false);
-        for (int j = 0; j < numOfValuesPerMotor; ++j)
+        if (it->second == true)
         {
-            it = Ax12ControlTable::addressWordMap.find(req.startAddress + dataLength);
-            if (it == Ax12ControlTable::addressWordMap.end())
-            {
-                ROS_ERROR("Address lookup error.");
-                res.txSuccess = false;
-                return false;
-            }
-            if (it->second == true)
-            {
-                dataLength = dataLength + 2;
-                isWord[j] = true;
-            }
-            else
-            {
-                ++dataLength;
-                isWord[j] = false;
-            }
-        }
-
-        // Make sync_write packet
-//        ROS_DEBUG( "Packet" );
-//        ROS_DEBUG( "ID:\t\t\t %d", BROADCAST_ID );
-//        ROS_DEBUG( "Instr:\t\t\t %d", INST_SYNC_WRITE );
-//        ROS_DEBUG( "Param 0 (start addr):\t %d", req.startAddress );
-//        ROS_DEBUG( "Param 1 (data length):\t %d", dataLength );
-        dxl_set_txpacket_id(BROADCAST_ID);
-        dxl_set_txpacket_instruction(INST_SYNC_WRITE);
-        dxl_set_txpacket_parameter(0, req.startAddress);
-        dxl_set_txpacket_parameter(1, dataLength);
-
-        int paramIndex = 2;
-        for (int i = 0; i < numOfMotors; ++i)
-        {
-//            ROS_DEBUG( "Param %d (dxl %d):\t %d", paramIndex, i, req.dxlIDs[i] );
-            dxl_set_txpacket_parameter( paramIndex++, req.dxlIDs[i] );
-            for (int j = 0; j < numOfValuesPerMotor; ++j)
-            {
-//                ROS_DEBUG( "Value: %d", req.values[i*numOfValuesPerMotor + j] );
-                if (isWord[j])
-                {
-                    // 2 bytes
-//                    ROS_DEBUG( "Param %d (data %dL):\t %d", paramIndex, j,
-//                               dxl_get_lowbyte((int)(req.values[i*numOfValuesPerMotor + j])) );
-//                    ROS_DEBUG( "Param %d (data %dH):\t %d", paramIndex + 1, j,
-//                               dxl_get_highbyte((int)(req.values[i*numOfValuesPerMotor + j])) );
-                    dxl_set_txpacket_parameter( paramIndex++,
-                                                dxl_get_lowbyte((int)(req.values[i*numOfValuesPerMotor + j])) );
-                    dxl_set_txpacket_parameter( paramIndex++,
-                                                dxl_get_highbyte((int)(req.values[i*numOfValuesPerMotor + j])) );
-                }
-                else
-                {
-                    // 1 byte
-//                    ROS_DEBUG( "Param %d (data %d):\t %d", paramIndex, j,
-//                               dxl_get_highbyte((int)(req.values[i*numOfValuesPerMotor + j])) );
-                    dxl_set_txpacket_parameter(paramIndex++, (int)(req.values[i*numOfValuesPerMotor + j]) );
-                }
-//                ROS_DEBUG("--");
-            }
-        }
-
-//        ROS_DEBUG( "Length:\t\t\t %d", (dataLength + 1)*numOfMotors + 4 );
-        dxl_set_txpacket_length( (dataLength + 1)*numOfMotors + 4 );
-
-        dxl_txrx_packet();
-
-        int CommStatus = dxl_get_result();
-        if (CommStatus == COMM_RXSUCCESS)
-        {
-            printErrorCode();
-            res.txSuccess = true;
-            return true;
+            dataLength = dataLength + 2;
+            isWord[j] = true;
         }
         else
         {
-            printCommStatus(CommStatus);
-            res.txSuccess = false;
-            return false;
+            ++dataLength;
+            isWord[j] = false;
         }
-
     }
-    catch (std::logic_error&)
+
+    // Make sync_write packet
+//    ROS_DEBUG( "Packet" );
+//    ROS_DEBUG( "ID:\t\t\t %d", BROADCAST_ID );
+//    ROS_DEBUG( "Instr:\t\t\t %d", INST_SYNC_WRITE );
+//    ROS_DEBUG( "Param 0 (start addr):\t %d", req.startAddress );
+//    ROS_DEBUG( "Param 1 (data length):\t %d", dataLength );
+    dxl_set_txpacket_id(BROADCAST_ID);
+    dxl_set_txpacket_instruction(INST_SYNC_WRITE);
+    dxl_set_txpacket_parameter(0, req.startAddress);
+    dxl_set_txpacket_parameter(1, dataLength);
+
+    int paramIndex = 2;
+    for (int i = 0; i < numOfMotors; ++i)
     {
-        std::cout << "Exception caught\n";
+//        ROS_DEBUG( "Param %d (dxl %d):\t %d", paramIndex, i, req.dxlIDs[i] );
+        dxl_set_txpacket_parameter( paramIndex++, req.dxlIDs[i] );
+        for (int j = 0; j < numOfValuesPerMotor; ++j)
+        {
+            //                ROS_DEBUG( "Value: %d", req.values[i*numOfValuesPerMotor + j] );
+            if (isWord[j])
+            {
+                // 2 bytes
+//                ROS_DEBUG( "Param %d (data %dL):\t %d", paramIndex, j,
+//                           dxl_get_lowbyte((int)(req.values[i*numOfValuesPerMotor + j])) );
+//                ROS_DEBUG( "Param %d (data %dH):\t %d", paramIndex + 1, j,
+//                           dxl_get_highbyte((int)(req.values[i*numOfValuesPerMotor + j])) );
+                dxl_set_txpacket_parameter( paramIndex++,
+                                            dxl_get_lowbyte((int)(req.values[i*numOfValuesPerMotor + j])) );
+                dxl_set_txpacket_parameter( paramIndex++,
+                                            dxl_get_highbyte((int)(req.values[i*numOfValuesPerMotor + j])) );
+            }
+            else
+            {
+                // 1 byte
+//                ROS_DEBUG( "Param %d (data %d):\t %d", paramIndex, j,
+//                           dxl_get_highbyte((int)(req.values[i*numOfValuesPerMotor + j])) );
+                dxl_set_txpacket_parameter(paramIndex++, (int)(req.values[i*numOfValuesPerMotor + j]) );
+            }
+//            ROS_DEBUG("--");
+        }
+    }
+
+//    ROS_DEBUG( "Length:\t\t\t %d", (dataLength + 1)*numOfMotors + 4 );
+    dxl_set_txpacket_length( (dataLength + 1)*numOfMotors + 4 );
+
+    dxl_txrx_packet();
+
+    int CommStatus = dxl_get_result();
+    if (CommStatus == COMM_RXSUCCESS)
+    {
+        printErrorCode();
+        res.txSuccess = true;
+        return true;
+    }
+    else
+    {
+        printCommStatus(CommStatus);
+        res.txSuccess = false;
+        return false;
     }
 }
 
