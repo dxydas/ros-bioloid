@@ -4,6 +4,8 @@
 #include <qt5/QtCore/Qt>
 #include <qt5/QtCore/QString>
 #include <qt5/QtCore/QMetaType>
+#include <qt5/QtCore/QTimer>
+#include <qt5/QtCore/QMutexLocker>
 #include <qt5/QtGui/QIcon>
 #include <qt5/QtWidgets/QApplication>
 #include <qt5/QtWidgets/QMenuBar>
@@ -18,9 +20,78 @@
 #include <qt5/QtWidgets/QDesktopWidget>
 #include <qt5/QtWidgets/QAbstractScrollArea>
 #include <qt5/QtWidgets/QMessageBox>
+#include <qt5/QtWidgets/QLayout>
+#include "../../usb2ax_controller/src/ax12ControlTableMacros.h"
 #include "commonvars.h"
 
 Q_DECLARE_METATYPE(sensor_msgs::JointState)
+
+
+PlanAndExecuteChainWorker::PlanAndExecuteChainWorker(QList<RobotPose> poses, RosWorker* rw, QMutex* mutex) :
+    poses(poses), rw(rw), mutex(mutex)
+{
+}
+
+
+void PlanAndExecuteChainWorker::doWork()
+{
+    QMutexLocker locker(mutex);
+
+    //std::cout << "Hello from worker with thread ID: " << thread()->currentThreadId() << std::endl;
+
+
+    for (int i = 0; i < poses.size(); ++i)
+    {
+        usb2ax_controller::SetMotorParams srv;
+        for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
+        {
+            srv.request.dxlIDs.push_back(dxlId);
+            srv.request.values.push_back( poses[i].jointState.position[dxlId - 1] );
+        }
+        //log->appendTimestamped("Pose " + QString::number(i));
+        rw->setMotorGoalPositionsInRadClient.call(srv);
+
+        // Wait until motion complete
+        usb2ax_controller::ReceiveSyncFromAX srv2;
+        for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
+            srv2.request.dxlIDs.push_back(dxlId);
+        srv2.request.startAddress = AX12_MOVING;
+        srv2.request.numOfValuesPerMotor = 1;
+        bool allMotorsStopped = false;
+
+
+        while (!allMotorsStopped)
+        {
+            // Wait 200 msec
+            double pauseTimeInSec = 0.2;
+//             QEventLoop loop;
+//             QTimer::singleShot(pauseTimeInSec*1000, &loop, SLOT(quit()));
+//             loop.exec();
+            QThread::msleep(pauseTimeInSec*1000);
+
+            // Check for movement
+            allMotorsStopped = true;
+            rw->receiveSyncFromAXClient.call(srv2);
+            for (int i = 0; i < srv2.response.values.size(); ++i)
+            {
+                if (srv2.response.values[i] == 1)
+                {
+                    //std::cout << "Still moving!" << std::endl;
+                    allMotorsStopped = false;
+                }
+            }
+        }
+        //std::cout << "Finished moving!" << std::endl;
+
+        // Wait for specified dwell time
+//         QEventLoop loop;
+//         QTimer::singleShot(robotPosesList[i].dwellTimeInSec*1000, &loop, SLOT(quit()));
+//         loop.exec();
+        QThread::msleep(poses[i].dwellTimeInSec*1000);
+    }
+
+    emit finished();
+}
 
 
 MainWindow::MainWindow(int argc, char* argv[], QWidget* parent) :
@@ -28,11 +99,12 @@ MainWindow::MainWindow(int argc, char* argv[], QWidget* parent) :
 {
     qRegisterMetaType<sensor_msgs::JointState>("JointState");
 
-    rosWorker = new RosWorker(argc, argv, "rosoloid_gui");
-    motorValueEditor = new MotorValueEditor(rosWorker);
-    motorDials = new MotorDials(rosWorker);
-    moveItHandler = new MoveItHandler;
-    outputLog = new OutputLog;
+    rosWorker = new RosWorker(argc, argv, "rosoloid_gui", this);
+    motorValueEditor = new MotorValueEditor(rosWorker, this);
+    motorAddressEditor = new MotorAddressEditor(rosWorker, this);
+    motorDials = new MotorDials(rosWorker, this);
+    moveItHandler = new MoveItHandler(this);
+    outputLog = new OutputLog(this);
 
     setUpLayout();
     customiseLayout();
@@ -53,17 +125,20 @@ void MainWindow::setUpLayout()
     int col = 0;
 
     QLabel* motorLabel = new QLabel("Motor");
+    QLabel* presentPositionAndSelectedPoseLabel = new QLabel("Present position\nand selected pose");
     QLabel* presentPositionLabel = new QLabel("Present\nposition");
     QLabel* goalPositionLabel = new QLabel("Goal\nposition");
     QLabel* presentSpeedLabel = new QLabel("Present\nspeed");
     QLabel* movingSpeedLabel = new QLabel("Moving\nspeed");
 
     motorLabel->setAlignment(Qt::AlignCenter);
+    presentPositionAndSelectedPoseLabel->setAlignment(Qt::AlignCenter);
     presentPositionLabel->setAlignment(Qt::AlignCenter);
     goalPositionLabel->setAlignment(Qt::AlignCenter);
     presentSpeedLabel->setAlignment(Qt::AlignCenter);
     movingSpeedLabel->setAlignment(Qt::AlignCenter);
 
+    presentPositionAndSelectedPoseLabel->setStyleSheet("QLabel { color: royalblue }");
     presentPositionLabel->setStyleSheet("QLabel { color: royalblue }");
     goalPositionLabel->setStyleSheet("QLabel { color: midnightblue }");
     presentSpeedLabel->setStyleSheet("QLabel { color: royalblue }");
@@ -72,8 +147,8 @@ void MainWindow::setUpLayout()
     QGridLayout* motorFeedbackSubLayout = new QGridLayout;
     motorFeedbackSubLayout->addWidget(motorLabel, row, col++);
     ++col;  // Leave a blank column in order to add vline spacer later
-    motorFeedbackSubLayout->addWidget(presentPositionLabel, row, col++, 1, 2);
-    ++col;  // presentPositionLabel covers two columns
+    motorFeedbackSubLayout->addWidget(presentPositionAndSelectedPoseLabel, row, col++);
+    motorFeedbackSubLayout->addWidget(presentPositionLabel, row, col++);
     ++col;  // For vline
     motorFeedbackSubLayout->addWidget(goalPositionLabel, row, col++);
     ++col;  // For vline
@@ -156,62 +231,78 @@ void MainWindow::setUpLayout()
     motorFeedbackSubLayout->addWidget(vlineFrames[0], 0, 1, motorFeedbackSubLayout->rowCount(), 1);
 
 
+    homeAllMotorsButton = new QPushButton("Home all motors");
     setAllMotorTorquesOffButton = new QPushButton("Set all motor torques OFF");
     setAllMotorTorquesOffButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setAllMotorTorquesOffButton->setStyleSheet("QPushButton { color: white; background-color: #AA0000 }");
 
     QGridLayout *motorCommandsSubLayout = new QGridLayout;
     row = 0;
     col = 0;
-    motorCommandsSubLayout->addWidget(setAllMotorTorquesOffButton, row, col++, -1, 1);
+    motorCommandsSubLayout->addWidget(homeAllMotorsButton, row, col++);
+    motorCommandsSubLayout->addWidget(setAllMotorTorquesOffButton, row++, col);
 
 
     saveAvailablePosesFileButton = new QPushButton("Save available poses file");
-    loadAvailablePosesFileButton = new QPushButton("Load available poses file");
     saveQueuedPosesFileButton = new QPushButton("Save queued poses file");
+    loadAvailablePosesFileButton = new QPushButton("Load available poses file");
     loadQueuedPosesFileButton = new QPushButton("Load queued poses file");
 
     QGridLayout* fileIoSubLayout = new QGridLayout;
     row = 0;
     col = 0;
     fileIoSubLayout->addWidget(saveAvailablePosesFileButton, row, col++);
-    fileIoSubLayout->addWidget(loadAvailablePosesFileButton, row++, col--);
-    fileIoSubLayout->addWidget(saveQueuedPosesFileButton, row, col++);
+    fileIoSubLayout->addWidget(saveQueuedPosesFileButton, row++, col--);
+    fileIoSubLayout->addWidget(loadAvailablePosesFileButton, row, col++);
     fileIoSubLayout->addWidget(loadQueuedPosesFileButton, row, col--);
+    fileIoSubLayout->setAlignment(Qt::AlignTop);
 
 
+    QLabel* rosButtonsLabel = new QLabel("ROS control");
     initRosNodeButton = new QPushButton("Initialise ROS node");
-    addPoseButton = new QPushButton("Add pose");
-    removePoseButton = new QPushButton("Remove pose");
+    initMoveItHandlerButton = new QPushButton("Initialise MoveIt! handler");
     setCurrentAsStartStateButton = new QPushButton("Set current as start state");
     setCurrentAsGoalStateButton = new QPushButton("Set current as goal state");
-    planMotionButton = new QPushButton("Run motion planner");
-    executeMotionButton = new QPushButton("Move to pose");
-    planAndExecuteChainButton = new QPushButton("Plan and execute chain");
+    planMotionButton = new QPushButton("Plan motion");
+    executeMotionButton = new QPushButton("Execute motion");
+
+    QLabel* poseButtonsLabel = new QLabel("Pose control");
+    addPoseButton = new QPushButton("Add pose");
+    removePoseButton = new QPushButton("Remove pose");
     addToQueueButton = new QPushButton("Add to queue -->");
     removeFromQueueButton = new QPushButton("<-- Remove from queue");
+    planAndExecuteChainButton = new QPushButton("Plan and execute chain");
+    testButton = new QPushButton("Test");
 
     disableMotionButtons();
+
+    QGridLayout* rosButtonsSubLayout = new QGridLayout;
+    row = 0;
+    col = 0;
+    rosButtonsSubLayout->addWidget(rosButtonsLabel, row++, col);
+    rosButtonsSubLayout->addWidget(initRosNodeButton, row++, col);
+    rosButtonsSubLayout->addWidget(initMoveItHandlerButton, row++, col);
+    rosButtonsSubLayout->addWidget(setCurrentAsStartStateButton, row++, col);
+    rosButtonsSubLayout->addWidget(setCurrentAsGoalStateButton, row++, col);
+    rosButtonsSubLayout->addWidget(planMotionButton, row++, col);
+    rosButtonsSubLayout->addWidget(executeMotionButton, row++, col);
+    rosButtonsSubLayout->setAlignment(Qt::AlignTop);
 
     QGridLayout* poseButtonsSubLayout = new QGridLayout;
     row = 0;
     col = 0;
-    poseButtonsSubLayout->addWidget(initRosNodeButton, row++, col);
+    poseButtonsSubLayout->addWidget(poseButtonsLabel, row++, col);
     poseButtonsSubLayout->addWidget(addPoseButton, row++, col);
     poseButtonsSubLayout->addWidget(removePoseButton, row++, col);
-    poseButtonsSubLayout->addWidget(setCurrentAsStartStateButton, row++, col);
-    poseButtonsSubLayout->addWidget(setCurrentAsGoalStateButton, row++, col);
-    poseButtonsSubLayout->addWidget(planMotionButton, row++, col);
-    poseButtonsSubLayout->addWidget(executeMotionButton, row++, col);
-    poseButtonsSubLayout->addWidget(planAndExecuteChainButton, row++, col);
     poseButtonsSubLayout->addWidget(addToQueueButton, row++, col);
     poseButtonsSubLayout->addWidget(removeFromQueueButton, row++, col);
+    poseButtonsSubLayout->addWidget(planAndExecuteChainButton, row++, col);
+    poseButtonsSubLayout->addWidget(testButton, row++, col);
+    poseButtonsSubLayout->setAlignment(Qt::AlignTop);
 
+    QList<RobotPose> availablePosesList;
+    QList<RobotPose> queuedPosesList;
 
-    QList<RobotPoseStruct> availablePosesList;
-    QList<RobotPoseStruct> queuedPosesList;
-
-    RobotPoseStruct poseStruct;
+    RobotPose robotPose;
     for (int i = 0; i < 5; ++i)
     {
         std::ostringstream oss;
@@ -219,27 +310,31 @@ void MainWindow::setUpLayout()
         oss.fill('0');
         oss.setf(std::ios::fixed, std::ios::floatfield);
         oss << i;
-        poseStruct.name = "test" + QString::fromStdString(oss.str());
+        robotPose.name = "test" + QString::fromStdString(oss.str());
+        robotPose.dwellTimeInSec = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 5.0;
 
         for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
         {
-            poseStruct.jointState.position[dxlId - 1] =
+            robotPose.jointState.position[dxlId - 1] =
                     static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (2.618 + 2.618) - 2.618;
-            poseStruct.jointState.velocity[dxlId - 1] =
+            robotPose.jointState.velocity[dxlId - 1] =
                     static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (11.8668 + 11.8668) - 11.8668;
-            poseStruct.jointState.effort[dxlId - 1] =
+            robotPose.jointState.effort[dxlId - 1] =
                     static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (1.0 + 1.0) - 1.0;
         }
 
-        availablePosesList.push_back(poseStruct);
+        availablePosesList.push_back(robotPose);
     }
 
 
-    availablePosesCustomListWidget = new CustomListWidget(availablePosesList, "Poses available", 0, this);
-    queuedPosesCustomListWidget = new CustomListWidget(queuedPosesList, "Poses queued", 1, this);
+    availablePosesCustomListWidget = new CustomListWidget(availablePosesList, "Available poses", 0, this);
+    queuedPosesCustomListWidget = new CustomListWidget(queuedPosesList, "Queued poses", 1, this);
 
     QWidget* motorFeedbackWidget = new QWidget(this);
     motorFeedbackWidget->setLayout(motorFeedbackSubLayout);
+
+    QWidget* rosButtonsWidget = new QWidget(this);
+    rosButtonsWidget->setLayout(rosButtonsSubLayout);
 
     QWidget* poseButtonsWidget = new QWidget(this);
     poseButtonsWidget->setLayout(poseButtonsSubLayout);
@@ -256,6 +351,7 @@ void MainWindow::setUpLayout()
         col = 0;
         QGridLayout* poseControlLayout = new QGridLayout;
 //        layout->addWidget(motorFeedbackWidget, row, col++);
+        poseControlLayout->addWidget(rosButtonsWidget, row, col++);
         poseControlLayout->addWidget(availablePosesCustomListWidget, row, col++);
         poseControlLayout->addWidget(poseButtonsWidget, row, col++);
         poseControlLayout->addWidget(queuedPosesCustomListWidget, row++, col++);
@@ -299,6 +395,11 @@ void MainWindow::setUpLayout()
     motorValueEditorDockWidget->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable |
                                             QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetVerticalTitleBar);
 
+    motorAddressEditorDockWidget = new QDockWidget("Motor address editor", this);
+    motorAddressEditorDockWidget->setWidget(motorAddressEditor);
+    motorAddressEditorDockWidget->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable |
+                                              QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetVerticalTitleBar);
+
     motorDialsDockWidget = new QDockWidget("Motor position dials", this);
     motorDialsDockWidget->setWidget(motorDials);
     motorDialsDockWidget->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable |
@@ -315,6 +416,11 @@ void MainWindow::setUpLayout()
     motorValueEditorDockWidget->move( QApplication::desktop()->screenGeometry().center() -
                                       motorValueEditorDockWidget->rect().center() );
     motorValueEditorDockWidget->hide();
+
+    motorAddressEditorDockWidget->setFloating(true);
+    motorAddressEditorDockWidget->move( QApplication::desktop()->screenGeometry().center() -
+                                        motorAddressEditorDockWidget->rect().center() );
+    motorAddressEditorDockWidget->hide();
 
     motorDialsDockWidget->setFloating(true);
     motorDialsDockWidget->move( QApplication::desktop()->screenGeometry().center() -
@@ -336,6 +442,7 @@ void MainWindow::setUpLayout()
     viewMenu->addAction(fileIoDockWidget->toggleViewAction());
     viewMenu->addAction(outputLogDockWidget->toggleViewAction());
     viewMenu->addAction(motorValueEditorDockWidget->toggleViewAction());
+    viewMenu->addAction(motorAddressEditorDockWidget->toggleViewAction());
     viewMenu->addAction(motorDialsDockWidget->toggleViewAction());
 
     aboutQtAct = new QAction("About &Qt", this);
@@ -414,6 +521,24 @@ void MainWindow::customiseLayout()
               "stop: 0 royalblue, stop: 1 dodgerblue);"
               "border-style: inset; }" );
 
+    QString redButtonStyleSheet =
+            ( "QPushButton {"
+              "color: white;"
+              "background-color: red;"
+              "border: solid white;"
+              "border-style: outset;"
+              "border-width: 4px;"
+              "border-radius: 4px; }"
+              "QPushButton:flat {"
+              "border: none;"  /* no border for a flat push button */
+              "}"
+              "QPushButton:default {"
+              "border-color: grey;"  /* make the default button prominent */
+              "}"
+              "QPushButton:pressed {"
+              "background-color: maroon;"
+              "border-style: inset; }" );
+
     QString editBoxStyleSheet =
             ( "background-color: lightslategrey;" );
 
@@ -426,20 +551,23 @@ void MainWindow::customiseLayout()
     menuBar()->setStyleSheet(menuBarStyleSheet);
     //
     saveAvailablePosesFileButton->setStyleSheet(buttonStyleSheet);
-    loadAvailablePosesFileButton->setStyleSheet(buttonStyleSheet);
     saveQueuedPosesFileButton->setStyleSheet(buttonStyleSheet);
+    loadAvailablePosesFileButton->setStyleSheet(buttonStyleSheet);
     loadQueuedPosesFileButton->setStyleSheet(buttonStyleSheet);
     //
     initRosNodeButton->setStyleSheet(buttonStyleSheet);
-    addPoseButton->setStyleSheet(buttonStyleSheet);
-    removePoseButton->setStyleSheet(buttonStyleSheet);
+    initMoveItHandlerButton->setStyleSheet(buttonStyleSheet);
     setCurrentAsStartStateButton->setStyleSheet(buttonStyleSheet);
     setCurrentAsGoalStateButton->setStyleSheet(buttonStyleSheet);
     planMotionButton->setStyleSheet(buttonStyleSheet);
     executeMotionButton->setStyleSheet(buttonStyleSheet);
-    planAndExecuteChainButton->setStyleSheet(buttonStyleSheet);
+    //
+    addPoseButton->setStyleSheet(buttonStyleSheet);
+    removePoseButton->setStyleSheet(buttonStyleSheet);
     addToQueueButton->setStyleSheet(buttonStyleSheet);
     removeFromQueueButton->setStyleSheet(buttonStyleSheet);
+    planAndExecuteChainButton->setStyleSheet(buttonStyleSheet);
+    testButton->setStyleSheet(buttonStyleSheet);
     //
     for (int i = 0; i < NUM_OF_MOTORS; ++i)
     {
@@ -450,6 +578,9 @@ void MainWindow::customiseLayout()
         movingSpeedLineEdits[i]->setStyleSheet(editBoxStyleSheet);
     }
     //
+    homeAllMotorsButton->setStyleSheet(buttonStyleSheet);
+    setAllMotorTorquesOffButton->setStyleSheet(redButtonStyleSheet);
+    //
     outputLog->setStyleSheet(editBoxStyleSheet);
     //
     motorFeedbackDockWidget->setStyleSheet(dockWidgetStyleSheet);
@@ -458,6 +589,7 @@ void MainWindow::customiseLayout()
     fileIoDockWidget->setStyleSheet(dockWidgetStyleSheet);
     outputLogDockWidget->setStyleSheet(dockWidgetStyleSheet);
     motorValueEditorDockWidget->setStyleSheet(dockWidgetStyleSheet);
+    motorAddressEditorDockWidget->setStyleSheet(dockWidgetStyleSheet);
     motorDialsDockWidget->setStyleSheet(dockWidgetStyleSheet);
 }
 
@@ -465,10 +597,11 @@ void MainWindow::customiseLayout()
 void MainWindow::connectSignalsAndSlots()
 {
     connect( initRosNodeButton, SIGNAL(clicked()), this, SLOT(initRosNode()) );
+    connect( initMoveItHandlerButton, SIGNAL(clicked()), this, SLOT(initMoveItHandler()) );
     connect( addPoseButton, SIGNAL(clicked()), this, SLOT(addPose()) );
     connect( removePoseButton, SIGNAL(clicked()), this, SLOT(removePose()) );
 
-    connect( setCurrentAsStartStateButton, SIGNAL(clicked()), moveItHandler, SLOT(setCurentAsStartState()) );
+    connect( setCurrentAsStartStateButton, SIGNAL(clicked()), moveItHandler, SLOT(setCurrentAsStartState()) );
     connect( setCurrentAsGoalStateButton, SIGNAL(clicked()), moveItHandler, SLOT(setCurrentAsGoalState()) );
     connect( planMotionButton, SIGNAL(clicked()), moveItHandler, SLOT(planMotion()) );
     connect( executeMotionButton, SIGNAL(clicked()), moveItHandler, SLOT(executeMotion()) );
@@ -483,8 +616,8 @@ void MainWindow::connectSignalsAndSlots()
              this, SLOT(updateJointStateValuesFromPose(const QModelIndex &)) );
 
     connect( saveAvailablePosesFileButton, SIGNAL(clicked()), availablePosesCustomListWidget, SLOT(savePosesFile()) );
-    connect( loadAvailablePosesFileButton, SIGNAL(clicked()), availablePosesCustomListWidget, SLOT(loadPosesFile()) );
     connect( saveQueuedPosesFileButton, SIGNAL(clicked()), queuedPosesCustomListWidget, SLOT(savePosesFile()) );
+    connect( loadAvailablePosesFileButton, SIGNAL(clicked()), availablePosesCustomListWidget, SLOT(loadPosesFile()) );
     connect( loadQueuedPosesFileButton, SIGNAL(clicked()), queuedPosesCustomListWidget, SLOT(loadPosesFile()) );
 
     connect( rosWorker, SIGNAL(connectedToRosMaster()), this, SLOT(nodeConnectedToRosMaster()) );
@@ -496,11 +629,12 @@ void MainWindow::connectSignalsAndSlots()
     connect( rosWorker, SIGNAL(secondaryDataUpdated(sensor_msgs::JointState)),
              this, SLOT(updateSecondaryRobotValues(sensor_msgs::JointState)) );
 
+    connect( homeAllMotorsButton, SIGNAL(clicked()), rosWorker, SLOT(homeAllMotors()) );
     connect( setAllMotorTorquesOffButton, SIGNAL(clicked()), rosWorker, SLOT(setAllMotorTorquesOff()) );
 
     connect( motorDialsDockWidget, SIGNAL(visibilityChanged(bool)), motorDials, SLOT(initialiseDials(bool)) );
 
-    connect( aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()) );
+    connect( aboutQtAct, SIGNAL(triggered()), this, SLOT(aboutQt()) );
     connect( aboutAct, SIGNAL(triggered()), this, SLOT(about()) );
     connect( exitAct, SIGNAL(triggered()), this, SLOT(quit()) );
 }
@@ -508,26 +642,46 @@ void MainWindow::connectSignalsAndSlots()
 
 void MainWindow::initRosNode()
 {
-    outputLog->appendTimestamped("ROS node initialised");
     rosWorker->init();
+    outputLog->appendTimestamped("ROS node initialised");
+}
+
+
+void MainWindow::initMoveItHandler()
+{
     moveItHandler->init();
+    outputLog->appendTimestamped("MoveIt! handler initialised");
 }
 
 
 void MainWindow::addPose()
 {
     bool ok;
-    QString text = QInputDialog::getText(this, "New pose",
-                                         "Enter new pose name:", QLineEdit::Normal,
-                                         "NewPose001", &ok);
-    if (ok && !text.isEmpty())
-    {
-        RobotPoseStruct poseStruct;
-        poseStruct.name = text;
 
-        poseStruct.jointState = rosWorker->getCurrentJointState();
-        availablePosesCustomListWidget->add(poseStruct);
+    // Get name from user
+    QString inputName = QInputDialog::getText(this, "New pose",
+                                              "Enter new pose name:", QLineEdit::Normal,
+                                              "NewPose001", &ok);
+    if (ok && !inputName.isEmpty())
+    {
+        // Get dwell time from user
+        double inputTime = QInputDialog::getDouble(this, "Dwell time",
+                                                   "Enter new pose dwell time (in secs):", 1.0,
+                                                   0.0, 999.999, 3, &ok);
+        if (ok)
+        {
+            RobotPose robotPose;
+            robotPose.name = inputName;
+            robotPose.jointState = rosWorker->getCurrentJointState();
+            robotPose.dwellTimeInSec = inputTime;
+            availablePosesCustomListWidget->add(robotPose);
+        }
+        else QMessageBox::warning(this, "Pose not added",
+                                  "Incorrect pose dwell time.");
     }
+    else QMessageBox::warning(this, "Pose not added",
+                              "Incorrect pose name.");
+
 }
 
 
@@ -539,7 +693,21 @@ void MainWindow::removePose()
 
 void MainWindow::planAndExecuteChain()
 {
-    moveItHandler->planAndExecuteChain(queuedPosesCustomListWidget->getRobotPosesListModel()->getRobotPosesList());
+    //moveItHandler->planAndExecuteChain(queuedPosesCustomListWidget->getRobotPosesListModel()->getRobotPosesList());
+
+
+    // Thread test
+    QList<RobotPose> robotPosesList = queuedPosesCustomListWidget->getRobotPosesListModel()->getRobotPosesList();
+
+    workerThread = new QThread;
+    PlanAndExecuteChainWorker* planAndExecuteChainWorker =
+            new PlanAndExecuteChainWorker(robotPosesList, rosWorker, &moveMutex);
+    planAndExecuteChainWorker->moveToThread(workerThread);
+    connect( workerThread, SIGNAL(started()), planAndExecuteChainWorker, SLOT(doWork()) );
+    connect( planAndExecuteChainWorker, SIGNAL(finished()), workerThread, SLOT(quit()) );
+    connect( planAndExecuteChainWorker, SIGNAL(finished()), planAndExecuteChainWorker, SLOT(deleteLater()) );
+    connect( workerThread, SIGNAL(finished()), workerThread, SLOT(deleteLater()) );
+    workerThread->start();
 }
 
 
@@ -569,6 +737,7 @@ void MainWindow::nodeDisconnectedFromRosMaster()
 
 void MainWindow::enableMotionButtons()
 {
+    initMoveItHandlerButton->setEnabled(true);
     addPoseButton->setEnabled(true);
     setCurrentAsStartStateButton->setEnabled(true);
     setCurrentAsGoalStateButton->setEnabled(true);
@@ -580,6 +749,7 @@ void MainWindow::enableMotionButtons()
 
 void MainWindow::disableMotionButtons()
 {
+    initMoveItHandlerButton->setEnabled(false);
     addPoseButton->setEnabled(false);
     setCurrentAsStartStateButton->setEnabled(false);
     setCurrentAsGoalStateButton->setEnabled(false);
@@ -647,6 +817,12 @@ void MainWindow::updateJointStateValuesFromPose(const QModelIndex &modelIndex)
     for (int i = 0; i < NUM_OF_MOTORS; ++i)
         presentPosSliders[i]->setSecondValue(js.position[i] * 1000);
     }
+}
+
+
+void MainWindow::aboutQt()
+{
+    QMessageBox::aboutQt(this);
 }
 
 

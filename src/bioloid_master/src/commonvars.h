@@ -3,21 +3,16 @@
 
 #include <qt5/QtCore/QString>
 #include "sensor_msgs/JointState.h"
-#include "../usb2ax_controller/src/ax12ControlTableMacros.h"
 
 #define NUM_OF_MOTORS 18
 
-struct RobotPoseStruct
+class RobotPose
 {
+public:
+    explicit RobotPose();
     QString name;
     sensor_msgs::JointState jointState;
-    RobotPoseStruct()
-    {
-        name = "";
-        jointState.position.resize(NUM_OF_MOTORS);
-        jointState.velocity.resize(NUM_OF_MOTORS);
-        jointState.effort.resize(NUM_OF_MOTORS);
-    }
+    float dwellTimeInSec;
 };
 
 #endif // COMMONVARS_H

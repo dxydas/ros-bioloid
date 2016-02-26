@@ -55,12 +55,15 @@ set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 set(HEADER_FILES
   src/mainwindow.h
+  src/commonvars.h
   src/rosworker.h
   src/customlistwidget.h
   src/robotposeslistmodel.h
   src/outputlog.h
   src/doubleslider.h
   src/motorvalueeditor.h
+  src/motoraddresseditor.h
+  src/controltablemodel.h
   src/motordials.h
   src/moveithandler.h
 )
@@ -68,12 +71,15 @@ set(HEADER_FILES
 set(SOURCE_FILES
   src/main.cpp
   src/mainwindow.cpp
+  src/commonvars.cpp
   src/rosworker.cpp
   src/customlistwidget.cpp
   src/robotposeslistmodel.cpp
   src/outputlog.cpp
   src/doubleslider.cpp
   src/motorvalueeditor.cpp
+  src/motoraddresseditor.cpp
+  src/controltablemodel.cpp
   src/motordials.cpp
   src/moveithandler.cpp
   ${MOC_FILES}

@@ -14,6 +14,7 @@
 class MotorValueEditor : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit MotorValueEditor(RosWorker* rosWorker, QWidget* parent = 0);
 
@@ -21,16 +22,17 @@ signals:
 
 public slots:
     void updateOption(const QString &text);
+    void getValue(int dxlId);
     void setValue(int dxlId);
 
 private:
     void populateMap(QMap<QString, int>* inputMap);
     void customiseLayout();
-
     QMap<QString, int> optionsMap;
     QComboBox* optionsComboBox;
     QVector<QLineEdit*> currentValueLineEdits;
     QVector<QDoubleSpinBox*> goalValueSpinBoxes;
+    QVector<QPushButton*> getValueButtons;
     QVector<QPushButton*> setValueButtons;
     RosWorker* mRosWorker;
     int mSelectedControlTableAddress;

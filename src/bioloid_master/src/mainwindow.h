@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <qt5/QtCore/QVector>
+#include <qt5/QtCore/QThread>
+#include <qt5/QtCore/QMutex>
 #include <qt5/QtWidgets/QMainWindow>
 #include <qt5/QtWidgets/QWidget>
 #include <qt5/QtWidgets/QDockWidget>
@@ -18,8 +20,28 @@
 #include "outputlog.h"
 #include "doubleslider.h"
 #include "motorvalueeditor.h"
+#include "motoraddresseditor.h"
 #include "motordials.h"
 #include "moveithandler.h"
+
+class PlanAndExecuteChainWorker : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit PlanAndExecuteChainWorker(QList<RobotPose> poses, RosWorker* rw, QMutex* mutex);
+
+public slots:
+    void doWork();
+
+signals:
+    void finished();
+
+private:
+    QList<RobotPose> poses;
+    RosWorker* rw;
+    QMutex* mutex;
+};
 
 class MainWindow : public QMainWindow
 {
@@ -33,6 +55,7 @@ signals:
 
 public slots:
     void initRosNode();
+    void initMoveItHandler();
     void addPose();
     void removePose();
 
@@ -51,6 +74,7 @@ public slots:
     void updateSecondaryRobotValues(sensor_msgs::JointState js);
     void updateJointStateValuesFromPose(const QModelIndex &modelIndex);
 
+    void aboutQt();
     void about();
     void quit();
 
@@ -61,6 +85,7 @@ private:
 
     RosWorker* rosWorker;
     MotorValueEditor* motorValueEditor;
+    MotorAddressEditor* motorAddressEditor;
     MotorDials* motorDials;
     MoveItHandler* moveItHandler;
     OutputLog* outputLog;
@@ -70,21 +95,25 @@ private:
     QAction* aboutAct;
 
     QPushButton* initRosNodeButton;
-    QPushButton* addPoseButton;
-    QPushButton* removePoseButton;
+    QPushButton* initMoveItHandlerButton;
     QPushButton* setCurrentAsStartStateButton;
     QPushButton* setCurrentAsGoalStateButton;
     QPushButton* planMotionButton;
     QPushButton* executeMotionButton;
-    QPushButton* planAndExecuteChainButton;
+
+    QPushButton* addPoseButton;
+    QPushButton* removePoseButton;
     QPushButton* addToQueueButton;
     QPushButton* removeFromQueueButton;
+    QPushButton* planAndExecuteChainButton;
+    QPushButton* testButton;
 
+    QPushButton* homeAllMotorsButton;
     QPushButton* setAllMotorTorquesOffButton;
 
     QPushButton* saveAvailablePosesFileButton;
-    QPushButton* loadAvailablePosesFileButton;
     QPushButton* saveQueuedPosesFileButton;
+    QPushButton* loadAvailablePosesFileButton;
     QPushButton* loadQueuedPosesFileButton;
 
     CustomListWidget* availablePosesCustomListWidget;
@@ -102,7 +131,11 @@ private:
     QDockWidget* fileIoDockWidget;
     QDockWidget* outputLogDockWidget;
     QDockWidget* motorValueEditorDockWidget;
-    QDockWidget* motorDialsDockWidget;
+    QDockWidget* motorAddressEditorDockWidget;
+    QDockWidget* motorDialsDockWidget;    
+
+    QThread* workerThread;
+    QMutex moveMutex;
 };
 
 #endif // MAINWINDOW_H

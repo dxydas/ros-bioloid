@@ -8,7 +8,7 @@
 #include <qt5/QtWidgets/QAbstractButton>
 
 
-CustomListWidget::CustomListWidget(QList<RobotPoseStruct> posesList, QString title,
+CustomListWidget::CustomListWidget(QList<RobotPose> posesList, QString title,
                                    bool allowDuplNames, QWidget *parent) :
     QWidget(parent)
 {
@@ -54,7 +54,8 @@ void CustomListWidget::customiseLayout()
               "stop: 0 lightsteelblue, stop: 1 steelblue); }"
               "QListView::item:selected:active {"
               "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-              "stop: 0 royalblue, stop: 1 dodgerblue); }"
+              //"stop: 0 royalblue, stop: 1 dodgerblue); }"
+              "stop: 0 darkorange, stop: 1 orange); }"
               "QListView::item:hover {"
               "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
               "stop: 0 rgb(218, 230, 240), stop: 1 rgb(144, 180, 210)); }" );
@@ -92,10 +93,10 @@ void CustomListWidget::customiseLayout()
 }
 
 
-void CustomListWidget::add(RobotPoseStruct robotPoseStruct)
+void CustomListWidget::add(RobotPose robotPose)
 {
     QModelIndex index = mListView->currentIndex();
-    int err = mRobotPosesListModel->add(robotPoseStruct, index);
+    int err = mRobotPosesListModel->add(robotPose, index);
     if (err == 1)
     {
         QMessageBox::warning(this, "Failed to add pose",

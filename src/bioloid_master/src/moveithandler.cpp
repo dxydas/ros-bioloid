@@ -62,7 +62,7 @@ void MoveItHandler::executeMotion()
 }
 
 
-void MoveItHandler::planAndExecuteChain(QList<RobotPoseStruct> robotPosesList)
+void MoveItHandler::planAndExecuteChain(QList<RobotPose> robotPosesList)
 {
     setCurrentAsStartState();
     for (int i = 0; i < robotPosesList.size(); ++i)

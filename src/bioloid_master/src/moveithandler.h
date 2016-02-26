@@ -10,6 +10,7 @@
 class MoveItHandler : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit MoveItHandler(QWidget* parent = 0);
     void init();
@@ -21,7 +22,7 @@ public slots:
     void setCurrentAsGoalState();
     void planMotion();
     void executeMotion();
-    void planAndExecuteChain(QList<RobotPoseStruct> robotPosesList);
+    void planAndExecuteChain(QList<RobotPose> robotPosesList);
 
 private:
     moveit::planning_interface::MoveGroup* group;

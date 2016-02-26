@@ -8,7 +8,7 @@
 #include <qt5/QtCore/QStringList>
 
 
-RobotPosesListModel::RobotPosesListModel(QList<RobotPoseStruct> robotPosesList, bool allowDuplNames,
+RobotPosesListModel::RobotPosesListModel(QList<RobotPose> robotPosesList, bool allowDuplNames,
                                          QObject* parent) :
     QAbstractListModel(parent),
     mAllowDuplNames(allowDuplNames)
@@ -52,18 +52,18 @@ QVariant RobotPosesListModel::data(const QModelIndex &index, int role) const
 }
 
 
-int RobotPosesListModel::add(RobotPoseStruct robotPoseStruct, QModelIndex &index)
+int RobotPosesListModel::add(RobotPose robotPose, QModelIndex &index)
 {
-    if (robotPoseStruct.name == "")
+    if (robotPose.name == "")
         return 1;
 
     // Check if duplicate
     if (!mAllowDuplNames)
         for (int i = 0; i < mRobotPosesList.size(); ++i)
-            if (mRobotPosesList[i].name == robotPoseStruct.name)
+            if (mRobotPosesList[i].name == robotPose.name)
                 return 2;
 
-    mRobotPosesList.insert(index.row(), robotPoseStruct);
+    mRobotPosesList.insert(index.row(), robotPose);
     QModelIndex endIndex = QAbstractListModel::index(mRobotPosesList.size() - 1);
     emit dataChanged(index, endIndex);
 
@@ -132,15 +132,17 @@ void RobotPosesListModel::savePosesFile(QString fileName)
         return;
 
     QTextStream out(&file);
-    out << QString("Pose name,").leftJustified(20);
+    out << QString("Pose name,").rightJustified(21);  // A name longer than 20 chars will mess up alignment
+    out << QString("Dwell t,").rightJustified(11);
     for (int dxlID = 1; dxlID <= NUM_OF_MOTORS; ++dxlID)
     {
-        out << QString("ID%1 pos,").arg(dxlID, 2, 10, QChar('0')).leftJustified(11);
-        out << QString("ID%1 vel,").arg(dxlID, 2, 10, QChar('0')).leftJustified(11);
+        out << QString("ID%1 pos,").arg(dxlID, 2, 10, QChar('0')).rightJustified(11);
+        out << QString("ID%1 vel,").arg(dxlID, 2, 10, QChar('0')).rightJustified(11);
+
         if (dxlID < NUM_OF_MOTORS)
-            out << QString("ID%1 eff,").arg(dxlID, 2, 10, QChar('0')).leftJustified(11);
+            out << QString("ID%1 eff,").arg(dxlID, 2, 10, QChar('0')).rightJustified(11);
         else
-            out << "ID" << QString("%1 eff\n").arg(dxlID, 2, 10, QChar('0'));
+            out << QString("ID%1 eff\n").arg(dxlID, 2, 10, QChar('0')).rightJustified(11);
     }
 
     std::ostringstream oss;
@@ -153,28 +155,32 @@ void RobotPosesListModel::savePosesFile(QString fileName)
              (mRobotPosesList[i].jointState.velocity.size() >= NUM_OF_MOTORS) &&
              (mRobotPosesList[i].jointState.effort.size() >= NUM_OF_MOTORS) )
         {
-            out << (mRobotPosesList[i].name + ",").leftJustified(20);
+            out << (mRobotPosesList[i].name + ",").rightJustified(21);
 
             oss.str("");
+            oss.width(10);  // Not 'sticky'
+            oss << mRobotPosesList[i].dwellTimeInSec;
+            oss << ",";
             for (int j = 0; j < mRobotPosesList[i].jointState.position.size(); ++j)
             {
                 // Position
-                oss.width(8);  // Not 'sticky'
+                oss.width(10);
                 oss << mRobotPosesList[i].jointState.position[j];
-                oss << ",  ";
+                oss << ",";
 
                 // Velocity
-                oss.width(8);  // Not 'sticky'
+                oss.width(10);
                 oss << mRobotPosesList[i].jointState.velocity[j];
-                oss << ",  ";
+                oss << ",";
 
                 // Effort
-                oss.width(8);  // Not 'sticky'
+                oss.width(10);
                 oss << mRobotPosesList[i].jointState.effort[j];
 
                 if (j < (mRobotPosesList[i].jointState.position.size() - 1))
-                    oss << ",  ";
+                    oss << ",";
             }
+
             out << QString::fromStdString(oss.str());
             out << "\n";
         }
@@ -197,18 +203,19 @@ void RobotPosesListModel::loadPosesFile(QString fileName, QModelIndex &index)
     while (!in.atEnd())
     {
         QString line = in.readLine();
-        QStringList field = line.split(",");
-        if ( field.size() > NUM_OF_MOTORS )
+        QStringList field = line.split(",", QString::SkipEmptyParts);
+        if ( field.size() >= (2 + NUM_OF_MOTORS*3) )  // Name, time and per-motor position/velocity/effort
         {
-            RobotPoseStruct poseStruct;
-            poseStruct.name = field[0];
-            for (int i = 1; i <= NUM_OF_MOTORS; ++i)
+            RobotPose robotPose;
+            robotPose.name = field[0];
+            robotPose.dwellTimeInSec = field[1].toDouble();
+            for (int j = 0; j < NUM_OF_MOTORS; ++j)
             {
-                poseStruct.jointState.position[i - 1] = field[(i - 1)*3 + 1].toDouble();
-                poseStruct.jointState.velocity[i - 1] = field[(i - 1)*3 + 2].toDouble();
-                poseStruct.jointState.effort  [i - 1] = field[(i - 1)*3 + 3].toDouble();
+                robotPose.jointState.position[j] = field[j*3 + 2].toDouble();
+                robotPose.jointState.velocity[j] = field[j*3 + 3].toDouble();
+                robotPose.jointState.effort  [j] = field[j*3 + 4].toDouble();
             }
-            mRobotPosesList.append(poseStruct);
+            mRobotPosesList.append(robotPose);
         }
     }
 
@@ -221,10 +228,10 @@ void RobotPosesListModel::loadPosesFile(QString fileName, QModelIndex &index)
 }
 
 
-RobotPoseStruct RobotPosesListModel::getCurrentPose(const QModelIndex &index) const
+RobotPose RobotPosesListModel::getCurrentPose(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return RobotPoseStruct();
+        return RobotPose();
     else
         return mRobotPosesList.at(index.row());
 

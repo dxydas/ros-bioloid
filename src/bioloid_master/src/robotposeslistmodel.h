@@ -13,24 +13,24 @@ class RobotPosesListModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    explicit RobotPosesListModel(QList<RobotPoseStruct> robotPosesList, bool allowDuplNames = true,
+    explicit RobotPosesListModel(QList<RobotPose> robotPosesList, bool allowDuplNames = true,
                                  QObject* parent = 0);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    int add(RobotPoseStruct robotPoseStruct, QModelIndex &index);
+    int add(RobotPose robotPose, QModelIndex &index);
     void remove(QModelIndex &index);
     void moveUp(QModelIndex &index);
     void moveDown(QModelIndex &index);
     void savePosesFile(QString fileName);
     void loadPosesFile(QString fileName, QModelIndex &index);
 
-    QList<RobotPoseStruct> getRobotPosesList() const { return mRobotPosesList; }
-    //void setRobotPosesList(const QList<RobotPoseStruct> &value) { mRobotPosesList = value; }
-    RobotPoseStruct getCurrentPose(const QModelIndex &index) const;
+    QList<RobotPose> getRobotPosesList() const { return mRobotPosesList; }
+    //void setRobotPosesList(const QList<RobotPose> &value) { mRobotPosesList = value; }
+    RobotPose getCurrentPose(const QModelIndex &index) const;
 
 private:
     bool mAllowDuplNames;
-    QList<RobotPoseStruct> mRobotPosesList;
+    QList<RobotPose> mRobotPosesList;
 
 signals:
 

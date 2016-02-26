@@ -12,7 +12,7 @@ class CustomListWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit CustomListWidget(QList<RobotPoseStruct> posesList, QString title = "List title",
+    explicit CustomListWidget(QList<RobotPose> posesList, QString title = "List title",
                               bool allowDuplNames = true, QWidget *parent = 0);
     RobotPosesListModel* getRobotPosesListModel() const { return mRobotPosesListModel; }
     QListView* getListView() const { return mListView; }
@@ -27,7 +27,7 @@ private:
 signals:
 
 public slots:
-    void add(RobotPoseStruct robotPoseStruct);
+    void add(RobotPose robotPose);
     void addFrom(CustomListWidget* customListWidget);
     void remove();
     void moveUp();
