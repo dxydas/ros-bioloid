@@ -59,11 +59,10 @@ void PlanAndExecuteChainWorker::doWork()
         srv2.request.numOfValuesPerMotor = 1;
         bool allMotorsStopped = false;
 
-
         while (!allMotorsStopped)
         {
-            // Wait 200 msec
-            double pauseTimeInSec = 0.2;
+            // Wait 100 msec
+            double pauseTimeInSec = 0.1;
 //             QEventLoop loop;
 //             QTimer::singleShot(pauseTimeInSec*1000, &loop, SLOT(quit()));
 //             loop.exec();
