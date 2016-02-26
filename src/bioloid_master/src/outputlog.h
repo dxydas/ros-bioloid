@@ -6,6 +6,7 @@
 class OutputLog : public QTextEdit
 {
     Q_OBJECT
+
 public:
     explicit OutputLog(QWidget *parent = 0);
 

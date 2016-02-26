@@ -12,6 +12,7 @@
 class MotorDials : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit MotorDials(RosWorker* rosWorker, QWidget* parent = 0);
 
