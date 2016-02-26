@@ -50,8 +50,8 @@ void DoubleSlider::paintEvent(QPaintEvent* ev)
     painter.drawRect(rect);
 
     // Draw second handle
-    painter.setPen(QColor("navy"));
-    painter.setBrush(QColor("midnightblue"));
+    painter.setPen(QColor("black"));
+    painter.setBrush(QColor("darkorange"));
     option->sliderPosition = style()->sliderPositionFromValue(minimum(), maximum(), secondSliderValue, size().width());;
     rect = style()->subControlRect(QStyle::CC_Slider, option, QStyle::SC_SliderHandle, this);
     rect.adjust(0, 0, -1, -1);
