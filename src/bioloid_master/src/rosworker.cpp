@@ -4,18 +4,6 @@
 #include "commonvars.h"
 
 
-void LoopWorker::doWork()
-{
-    ros::Rate loop_rate(1000);  // Hz
-    while ( ros::ok() )
-    {
-        ros::spinOnce();
-        loop_rate.sleep();
-    }
-    emit finished();
-}
-
-
 RosWorker::RosWorker(int argc, char* argv[], const char* nodeName, QWidget* parent) :
     argc(argc), argv(argv), mNodeName(nodeName), QObject(parent), mIsMasterRunning(false)
 {
@@ -115,20 +103,6 @@ void RosWorker::init()
         //
         homeAllMotorsClient =
                 n.serviceClient<std_srvs::Empty>("HomeAllMotors");
-
-//        WorkerThread* workerThread = new WorkerThread();
-//        connect( workerThread, SIGNAL(finished()), workerThread, SLOT(deleteLater()) );
-//        workerThread->start();
-
-        loopWorkerThread = NULL;
-//        loopWorkerThread = new QThread;
-//        LoopWorker* loopWorker = new LoopWorker;
-//        loopWorker->moveToThread(loopWorkerThread);
-//        connect( loopWorkerThread, SIGNAL(started()), loopWorker, SLOT(doWork()) );
-//        connect( loopWorker, SIGNAL(finished()), loopWorkerThread, SLOT(quit()) );
-//        connect( loopWorker, SIGNAL(finished()), loopWorker, SLOT(deleteLater()) );
-//        connect( loopWorkerThread, SIGNAL(finished()), loopWorkerThread, SLOT(deleteLater()) );
-//        loopWorkerThread->start();
 
         spinner = new ros::AsyncSpinner(0);
         spinner->start();

@@ -15,17 +15,6 @@
 #include "usb2ax_controller/GetMotorParams.h"
 #include "usb2ax_controller/SetMotorParams.h"
 
-class LoopWorker : public QObject
-{
-    Q_OBJECT
-
-public slots:
-    void doWork();
-
-signals:
-    void finished();
-};
-
 class RosWorker : public QObject
 {
     Q_OBJECT
@@ -85,7 +74,6 @@ private:
     const char* mNodeName;
     bool mIsMasterRunning;
     ros::AsyncSpinner* spinner;
-    QThread* loopWorkerThread;
     void jointStateCallback(const sensor_msgs::JointState::ConstPtr& msg);
     void goalJointStateCallback(const sensor_msgs::JointState::ConstPtr& msg);
     ros::Subscriber jointStateSub;
