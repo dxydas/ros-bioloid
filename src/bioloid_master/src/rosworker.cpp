@@ -1,9 +1,10 @@
 #include "rosworker.h"
 #include <qt5/QtCore/QTimer>
+#include "../../usb2ax_controller/src/ax12ControlTableMacros.h"
 #include "commonvars.h"
 
 
-void WorkerThread::run()
+void LoopWorker::doWork()
 {
     ros::Rate loop_rate(1000);  // Hz
     while ( ros::ok() )
@@ -11,30 +12,34 @@ void WorkerThread::run()
         ros::spinOnce();
         loop_rate.sleep();
     }
+    emit finished();
 }
 
 
 RosWorker::RosWorker(int argc, char* argv[], const char* nodeName, QWidget* parent) :
-    //RosCommonNode(argc, argv, nodeName),
     argc(argc), argv(argv), mNodeName(nodeName), QObject(parent), mIsMasterRunning(false)
 {
-    currentJointState.name.resize(NUM_OF_MOTORS + 1);
-    currentJointState.position.resize(NUM_OF_MOTORS + 1);
-    currentJointState.velocity.resize(NUM_OF_MOTORS + 1);
-    currentJointState.effort.resize(NUM_OF_MOTORS + 1);
-    goalJointState.name.resize(NUM_OF_MOTORS + 1);
-    goalJointState.position.resize(NUM_OF_MOTORS + 1);
-    goalJointState.velocity.resize(NUM_OF_MOTORS + 1);
-    goalJointState.effort.resize(NUM_OF_MOTORS + 1);
+    currentJointState.name.resize(NUM_OF_MOTORS);
+    currentJointState.position.resize(NUM_OF_MOTORS);
+    currentJointState.velocity.resize(NUM_OF_MOTORS);
+    currentJointState.effort.resize(NUM_OF_MOTORS);
+    goalJointState.name.resize(NUM_OF_MOTORS);
+    goalJointState.position.resize(NUM_OF_MOTORS);
+    goalJointState.velocity.resize(NUM_OF_MOTORS);
+    goalJointState.effort.resize(NUM_OF_MOTORS);
 }
 
 
 RosWorker::~RosWorker()
 {
-    ros::shutdown();
+    if (mIsMasterRunning)
+        ros::shutdown();
 
-    //workerThread->quit();
-    //workerThread->wait();
+    if (loopWorkerThread != NULL)
+    {
+        loopWorkerThread->quit();
+        loopWorkerThread->wait();
+    }
 }
 
 
@@ -42,9 +47,7 @@ void RosWorker::init()
 {
     ros::master::setRetryTimeout(ros::WallDuration(2.0));
     ros::init(argc, argv, mNodeName);
-    //ros::start();
-    //ros::AsyncSpinner spinner(1);
-    //spinner.start();
+
     if (ros::master::check())
     {
         mIsMasterRunning = true;
@@ -58,42 +61,77 @@ void RosWorker::init()
         connect( connectionHealthCheckTimer, SIGNAL(timeout()), this, SLOT(runConnectionHealthCheck()) );
         connectionHealthCheckTimer->start(5000);
 
-        getFromAXClient =
-                n.serviceClient<usb2ax_controller::GetFromAX>("GetFromAX");
+        receiveFromAXClient =
+                n.serviceClient<usb2ax_controller::ReceiveFromAX>("ReceiveFromAX");
         sendtoAXClient =
                 n.serviceClient<usb2ax_controller::SendToAX>("SendToAX");
-        getSyncFromAXClient =
-                n.serviceClient<usb2ax_controller::GetSyncFromAX>("GetSyncFromAX");
+        //
+        receiveSyncFromAXClient =
+                n.serviceClient<usb2ax_controller::ReceiveSyncFromAX>("ReceiveSyncFromAX");
         sendSyncToAXClient =
                 n.serviceClient<usb2ax_controller::SendSyncToAX>("SendSyncToAX");
+        //
         getMotorCurrentPositionInRadClient =
                 n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentPositionInRad");
         getMotorGoalPositionInRadClient =
                 n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorGoalPositionInRad");
         setMotorGoalPositionInRadClient =
                 n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalPositionInRad");
+        //
         getMotorCurrentSpeedInRadPerSecClient =
                 n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentSpeedInRadPerSec");
         getMotorGoalSpeedInRadPerSecClient =
                 n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorGoalSpeedInRadPerSec");
         setMotorGoalSpeedInRadPerSecClient =
                 n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalSpeedInRadPerSec");
+        //
         getMotorCurrentTorqueInDecimalClient =
                 n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentTorqueInDecimal");
+        getMotorMaxTorqueInDecimalClient =
+                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorMaxTorqueInDecimal");
         setMotorMaxTorqueInDecimalClient =
                 n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorMaxTorqueInDecimal");
-        getAllMotorGoalPositionsInRadClient =
-                n.serviceClient<usb2ax_controller::GetMotorParams>("GetAllMotorGoalPositionsInRad");
-        getAllMotorGoalSpeedsInRadPerSecClient =
-                n.serviceClient<usb2ax_controller::GetMotorParams>("GetAllMotorGoalSpeedsInRadPerSec");
-        getAllMotorMaxTorquesInDecimalClient =
-                n.serviceClient<usb2ax_controller::GetMotorParams>("GetAllMotorMaxTorquesInDecimal");
+        //
+        getMotorCurrentPositionsInRadClient =
+                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorCurrentPositionsInRad");
+        getMotorGoalPositionsInRadClient =
+                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorGoalPositionsInRad");
+        setMotorGoalPositionsInRadClient =
+                n.serviceClient<usb2ax_controller::SetMotorParams>("SetMotorGoalPositionsInRad");
+        //
+        getMotorCurrentSpeedsInRadPerSecClient =
+                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorCurrentSpeedsInRadPerSec");
+        getMotorGoalSpeedsInRadPerSecClient =
+                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorGoalSpeedsInRadPerSec");
+        setMotorGoalSpeedsInRadPerSecClient =
+                n.serviceClient<usb2ax_controller::SetMotorParams>("SetMotorGoalSpeedsInRadPerSec");
+        //
+        getMotorCurrentTorquesInDecimalClient =
+                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorCurrentTorquesInDecimal");
+        getMotorMaxTorquesInDecimalClient =
+                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorMaxTorquesInDecimal");
+        setMotorMaxTorquesInDecimalClient =
+                n.serviceClient<usb2ax_controller::SetMotorParams>("SetMotorMaxTorquesInDecimal");
+        //
         homeAllMotorsClient =
                 n.serviceClient<std_srvs::Empty>("HomeAllMotors");
 
-        WorkerThread* workerThread = new WorkerThread();
-        connect( workerThread, SIGNAL(finished()), workerThread, SLOT(deleteLater()) );
-        workerThread->start();
+//        WorkerThread* workerThread = new WorkerThread();
+//        connect( workerThread, SIGNAL(finished()), workerThread, SLOT(deleteLater()) );
+//        workerThread->start();
+
+        loopWorkerThread = NULL;
+//        loopWorkerThread = new QThread;
+//        LoopWorker* loopWorker = new LoopWorker;
+//        loopWorker->moveToThread(loopWorkerThread);
+//        connect( loopWorkerThread, SIGNAL(started()), loopWorker, SLOT(doWork()) );
+//        connect( loopWorker, SIGNAL(finished()), loopWorkerThread, SLOT(quit()) );
+//        connect( loopWorker, SIGNAL(finished()), loopWorker, SLOT(deleteLater()) );
+//        connect( loopWorkerThread, SIGNAL(finished()), loopWorkerThread, SLOT(deleteLater()) );
+//        loopWorkerThread->start();
+
+        spinner = new ros::AsyncSpinner(0);
+        spinner->start();
     }
     else
         mIsMasterRunning = false;
@@ -131,6 +169,13 @@ void RosWorker::runConnectionHealthCheck()
         emit disconnectedFromRosMaster();
         mIsMasterRunning = false;
     }
+}
+
+
+void RosWorker::homeAllMotors()
+{
+    std_srvs::Empty srv;
+    homeAllMotorsClient.call(srv);
 }
 
 
