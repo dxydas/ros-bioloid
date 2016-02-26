@@ -61,9 +61,9 @@ add_message_files(
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
-  GetFromAX.srv
+  ReceiveFromAX.srv
   SendToAX.srv
-  GetSyncFromAX.srv
+  ReceiveSyncFromAX.srv
   SendSyncToAX.srv
   GetMotorParam.srv
   SetMotorParam.srv

@@ -1,6 +1,6 @@
 uint16[] dxlIDs
 uint16 startAddress
-bool[] isWord
+uint16 numOfValuesPerMotor
 ---
 uint16[] values
 bool rxSuccess

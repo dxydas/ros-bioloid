@@ -47,4 +47,3 @@
 #define AX12_PUNCH_H 49
 
 #endif // AX12CONTROLTABLEMACROS_H
-
