@@ -22,12 +22,6 @@ RosWorker::~RosWorker()
 {
     if (mIsMasterRunning)
         ros::shutdown();
-
-    if (loopWorkerThread != NULL)
-    {
-        loopWorkerThread->quit();
-        loopWorkerThread->wait();
-    }
 }
 
 
