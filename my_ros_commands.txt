@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Using ROS Indigo
 
 # Single machine configuration (add to ~/.bashrc)
