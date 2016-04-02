@@ -61,6 +61,11 @@ roslaunch bioloid_master bioloid_pubs.launch dummy_imu:=true
 # Visualise robot using URDF, no IMU
 roslaunch bioloid_master bioloid_pubs.launch dummy_imu:=true
 roslaunch bioloid_master bioloid_rviz.launch                                    # Start RViz, publish robot/joint state, publish dummy IMU frame
+# Start Gazebo with empty world
+roslaunch bioloid_master bioloid_pubs.launch dummy_imu:=true
+roslaunch bioloid_master bioloid_gazebo.launch                                  # Loads bioloid.world from bioloid_master/worlds/
+# Start a previously saved Gazebo world
+gazebo bioloid_sandbox.world                                                    # Use as test only, all robot data is hard-coded in this file
 #####################
 
 ## Real robot ##
