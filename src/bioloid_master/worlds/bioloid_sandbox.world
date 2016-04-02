@@ -160,8 +160,8 @@
           <pose>0.01 0 0.054 1.57079 -1.20861e-16 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-CHEST-F_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-CHEST-F_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -169,8 +169,8 @@
           <pose>0.01 0 0.054 1.57079 -1.20861e-16 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-CHEST-B_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-CHEST-B_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -178,8 +178,8 @@
           <pose>-0.022 4.24574e-08 0.039 -3.14159 2.65359e-06 -1.5708</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/CM-5_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/CM-5_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -187,8 +187,8 @@
           <pose>0.01 0 0.079 -1.57079 -6.40763e-17 -1.5708</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-S1_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-S1_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -196,8 +196,8 @@
           <pose>0.00999996 -0.032 0.054 1.57079 6.30183e-17 -3.91757e-17</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -205,8 +205,8 @@
           <pose>0.01 0.032 0.054 1.57079 -6.30414e-17 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -214,8 +214,8 @@
           <pose>-0.0155 3.38333e-08 0.0075 -1.57079 6.30414e-17 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F8_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F8_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -223,8 +223,8 @@
           <pose>-0.0155 3.38333e-08 -0.0303 1.57079 -6.30414e-17 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F8_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F8_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -232,8 +232,8 @@
           <pose>-0.00600004 -0.033 -0.0115 -3.14159 2.65359e-06 -1.5708</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -241,8 +241,8 @@
           <pose>-0.00599996 0.033 -0.0115 -3.14159 2.65359e-06 -1.5708</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -290,8 +290,8 @@
           <pose>0 0 -0.05 0 -0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F5_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F5_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -353,8 +353,8 @@
           <pose>0 0 0 3.14159 -0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -362,8 +362,8 @@
           <pose>-0.019 0.0145 -0.016 3.14159 1.57079 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -371,8 +371,8 @@
           <pose>0.019 0.0145 -0.016 -3.14159 1.57079 -1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -380,8 +380,8 @@
           <pose>0 0 0.032 -2.65359e-06 -1.57079 -3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -389,8 +389,8 @@
           <pose>0 0 0.05 1.57079 -0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -398,8 +398,8 @@
           <pose>0 0.0145 0.051 -1.57079 -1.20861e-16 -1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F7_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F7_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -479,8 +479,8 @@
           <pose>0 0 0 -1.57079 1.57079 -3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F4_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F4_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -488,8 +488,8 @@
           <pose>-0.0145 -0.075 0 1.57079 -1.57079 -3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F1_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F1_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -569,8 +569,8 @@
           <pose>0 0 0 0 -0 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -578,8 +578,8 @@
           <pose>0.0145 -0.019 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -587,8 +587,8 @@
           <pose>0.0145 -0.071 0 1.57079 -1.57079 -3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F4_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F4_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -650,8 +650,8 @@
           <pose>0 0 0 0 -0 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -659,8 +659,8 @@
           <pose>0.019 0.0145 0 3.14159 2.21271e-23 -1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F7_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F7_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -668,8 +668,8 @@
           <pose>-0.032 0 0 -2.65359e-06 1.57079 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -677,8 +677,8 @@
           <pose>-0.048 0.0145 -0.019 1.57079 -2.21271e-23 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -686,8 +686,8 @@
           <pose>-0.048 0.0145 0.019 -1.57079 2.21271e-23 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -767,8 +767,8 @@
           <pose>0 0 0.05 1.57079 -0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -776,8 +776,8 @@
           <pose>0 0 0.0153 -1.5708 2.65359e-06 -3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F5_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F5_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -785,8 +785,8 @@
           <pose>0.008 -0.0235 0.016 -2.65359e-06 1.57079 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -848,8 +848,8 @@
           <pose>0.014 0 -0.044 0 -0 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F1_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F1_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -929,8 +929,8 @@
           <pose>0 0 0 0 -0 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -938,8 +938,8 @@
           <pose>0 0 -0.0185 -1.57079 0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -947,8 +947,8 @@
           <pose>0 0 -0.019 -1.57079 0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-WA_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-WA_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -956,8 +956,8 @@
           <pose>0.0415 0 0 0 -0 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -965,8 +965,8 @@
           <pose>0.0675 0 0 3.14159 -1.57079 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F2_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F2_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1064,8 +1064,8 @@
           <pose>0 0 0 0 -0 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1073,8 +1073,8 @@
           <pose>0 0 -0.0185 -1.57079 0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1082,8 +1082,8 @@
           <pose>0 0 -0.019 -1.57079 0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-WA_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-WA_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1091,8 +1091,8 @@
           <pose>0.0415 0 0 0 -0 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1100,8 +1100,8 @@
           <pose>0.0415 0 0 3.14159 1.57079 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F11_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F11_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1163,8 +1163,8 @@
           <pose>0 0 0.05 3.14159 -0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F5_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F5_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1226,8 +1226,8 @@
           <pose>0 0 0 0 -0 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1235,8 +1235,8 @@
           <pose>-0.019 0.0145 0.016 -3.14159 -1.57079 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1244,8 +1244,8 @@
           <pose>0.019 0.0145 0.016 3.14159 -1.57079 -1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1253,8 +1253,8 @@
           <pose>0 0 -0.032 -2.65359e-06 -1.57079 -3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1262,8 +1262,8 @@
           <pose>0 0 -0.05 -1.57079 0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1271,8 +1271,8 @@
           <pose>0 0.0145 -0.051 1.57079 1.20861e-16 -1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F7_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F7_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1352,8 +1352,8 @@
           <pose>0 0 0 1.57079 1.57079 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F4_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F4_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1361,8 +1361,8 @@
           <pose>0.0145 0.075 0 -1.57079 -1.57079 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F1_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F1_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1442,8 +1442,8 @@
           <pose>0 0 0 3.14159 2.65359e-06 1.5708</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1451,8 +1451,8 @@
           <pose>-0.0145 0.019 0 0 -0 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1460,8 +1460,8 @@
           <pose>-0.0145 0.071 0 -1.57079 -1.57079 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F4_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F4_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1523,8 +1523,8 @@
           <pose>0 0 0 3.14159 2.65359e-06 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1532,8 +1532,8 @@
           <pose>-0.019 -0.0145 0 3.14159 -2.21271e-23 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F7_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F7_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1541,8 +1541,8 @@
           <pose>0.032 0 0 3.14159 1.57079 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1550,8 +1550,8 @@
           <pose>0.048 -0.0145 0.019 -1.57079 0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1559,8 +1559,8 @@
           <pose>0.048 -0.0145 -0.019 1.57079 -0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F6_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1640,8 +1640,8 @@
           <pose>0 0 -0.05 -1.57079 0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1649,8 +1649,8 @@
           <pose>0 0 -0.0153 1.5708 2.65359e-06 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F5_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F5_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1658,8 +1658,8 @@
           <pose>-0.008 0.0235 -0.016 3.14159 -1.57079 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1721,8 +1721,8 @@
           <pose>-0.014 0 0.044 3.14159 2.65359e-06 1.5708</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F1_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F1_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1802,8 +1802,8 @@
           <pose>0 0 0 3.14159 -2.21271e-23 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1811,8 +1811,8 @@
           <pose>0 0 0.0185 1.57079 -0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1820,8 +1820,8 @@
           <pose>0 0 0.019 1.57079 -0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-WA_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-WA_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1829,8 +1829,8 @@
           <pose>-0.0415 0 0 0 0 -1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1838,8 +1838,8 @@
           <pose>-0.0675 0 0 3.14159 1.57079 3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F2_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F2_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1937,8 +1937,8 @@
           <pose>0 0 0 3.14159 -2.21271e-23 1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/AX-12_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/AX-12_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1946,8 +1946,8 @@
           <pose>0 0 0.0185 1.57079 -0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-BU_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1955,8 +1955,8 @@
           <pose>0 0 0.019 1.57079 -0 0</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/BPF-WA_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/BPF-WA_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1964,8 +1964,8 @@
           <pose>-0.0415 0 0 0 0 -1.57079</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F3_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1973,8 +1973,8 @@
           <pose>-0.0415 0 0 2.65359e-06 1.57079 -3.14159</pose>
           <geometry>
             <mesh>
-              <scale>0.1 0.1 0.1</scale>
-              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/CAD/FP04-F11_FCD-Conv_BDR-Col.dae</uri>
+              <scale>0.001 0.001 0.001</scale>
+              <uri>file:///mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS/catkin_ws/assets/cad/FP04-F11_FCD-Conv_BDR-Col.dae</uri>
             </mesh>
           </geometry>
         </visual>
