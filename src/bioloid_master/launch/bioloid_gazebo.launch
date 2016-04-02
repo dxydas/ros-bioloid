@@ -16,7 +16,7 @@
       <arg name="headless" value="$(arg headless)"/>
     </include>
 
-     <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+     <!-- Run a python script to send a service call to gazebo_ros to spawn a URDF robot -->
     <!-- <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-x 0 -y 0 -z 0 -urdf -param robot_description -model bioloid" /> -->
     <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-param robot_description -urdf -model bioloid -robot_namespace / -x 0 -y 0 -z 0"/>
 
