@@ -23,6 +23,7 @@
 #include "motoraddresseditor.h"
 #include "motordials.h"
 #include "moveithandler.h"
+#include "sensorgrapher.h"
 
 class PlanAndExecuteChainWorker : public QObject
 {
@@ -89,6 +90,7 @@ private:
     MotorDials* motorDials;
     MoveItHandler* moveItHandler;
     OutputLog* outputLog;
+    SensorGrapher* sensorGrapher;
 
     QAction* exitAct;
     QAction* aboutQtAct;
@@ -133,6 +135,7 @@ private:
     QDockWidget* motorValueEditorDockWidget;
     QDockWidget* motorAddressEditorDockWidget;
     QDockWidget* motorDialsDockWidget;    
+    QDockWidget* sensorGrapherDockWidget;
 
     QThread* workerThread;
     QMutex moveMutex;

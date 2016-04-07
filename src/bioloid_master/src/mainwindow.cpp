@@ -25,6 +25,9 @@
 #include "commonvars.h"
 
 Q_DECLARE_METATYPE(sensor_msgs::JointState)
+Q_DECLARE_METATYPE(geometry_msgs::Vector3)
+Q_DECLARE_METATYPE(std_msgs::Float32)
+Q_DECLARE_METATYPE(std_msgs::Int16MultiArray)
 
 
 PlanAndExecuteChainWorker::PlanAndExecuteChainWorker(QList<RobotPose> poses, RosWorker* rw, QMutex* mutex) :
@@ -97,6 +100,9 @@ MainWindow::MainWindow(int argc, char* argv[], QWidget* parent) :
     QMainWindow(parent)
 {
     qRegisterMetaType<sensor_msgs::JointState>("JointState");
+    qRegisterMetaType<geometry_msgs::Vector3>("Vector3");
+    qRegisterMetaType<std_msgs::Float32>("Float32");
+    qRegisterMetaType<std_msgs::Int16MultiArray>("Int16MultiArray");
 
     rosWorker = new RosWorker(argc, argv, "rosoloid_gui", this);
     motorValueEditor = new MotorValueEditor(rosWorker, this);
@@ -104,6 +110,7 @@ MainWindow::MainWindow(int argc, char* argv[], QWidget* parent) :
     motorDials = new MotorDials(rosWorker, this);
     moveItHandler = new MoveItHandler(this);
     outputLog = new OutputLog(this);
+    sensorGrapher = new SensorGrapher(rosWorker, this);
 
     setUpLayout();
     customiseLayout();
@@ -212,6 +219,7 @@ void MainWindow::setUpLayout()
         ++col;  // For vline
         motorFeedbackSubLayout->addWidget(movingSpeedLineEdits[i], row, col++);
     }
+    motorFeedbackSubLayout->setAlignment(Qt::AlignTop);
     motorFeedbackSubLayout->setColumnStretch(0, 0);
     motorFeedbackSubLayout->setColumnStretch(1, 2);
     motorFeedbackSubLayout->setColumnStretch(2, 1);
@@ -404,12 +412,20 @@ void MainWindow::setUpLayout()
     motorDialsDockWidget->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable |
                                       QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetVerticalTitleBar);
 
+    sensorGrapherDockWidget = new QDockWidget("Sensor Grapher", this);
+    sensorGrapherDockWidget->setWidget(sensorGrapher);
+    sensorGrapherDockWidget->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable |
+                                      QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetVerticalTitleBar);
+
     setDockNestingEnabled(true);
     addDockWidget(Qt::LeftDockWidgetArea, motorFeedbackDockWidget);
     addDockWidget(Qt::LeftDockWidgetArea, motorCommandsDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, poseControlDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, fileIoDockWidget);
     addDockWidget(Qt::BottomDockWidgetArea, outputLogDockWidget);
+    addDockWidget(Qt::LeftDockWidgetArea, sensorGrapherDockWidget);
+    tabifyDockWidget(motorFeedbackDockWidget, sensorGrapherDockWidget);
+    motorFeedbackDockWidget->raise();
 
     motorValueEditorDockWidget->setFloating(true);
     motorValueEditorDockWidget->move( QApplication::desktop()->screenGeometry().center() -
@@ -425,6 +441,11 @@ void MainWindow::setUpLayout()
     motorDialsDockWidget->move( QApplication::desktop()->screenGeometry().center() -
                                 motorDialsDockWidget->rect().center() );
     motorDialsDockWidget->hide();
+
+//    sensorGrapherDockWidget->setFloating(true);
+//    sensorGrapherDockWidget->move( QApplication::desktop()->screenGeometry().center() -
+//                                sensorGrapherDockWidget->rect().center() );
+//    sensorGrapherDockWidget->hide();
 
 
     exitAct = new QAction("E&xit", this);
@@ -443,6 +464,7 @@ void MainWindow::setUpLayout()
     viewMenu->addAction(motorValueEditorDockWidget->toggleViewAction());
     viewMenu->addAction(motorAddressEditorDockWidget->toggleViewAction());
     viewMenu->addAction(motorDialsDockWidget->toggleViewAction());
+    viewMenu->addAction(sensorGrapherDockWidget->toggleViewAction());
 
     aboutQtAct = new QAction("About &Qt", this);
     aboutAct = new QAction("&About", this);
@@ -590,6 +612,7 @@ void MainWindow::customiseLayout()
     motorValueEditorDockWidget->setStyleSheet(dockWidgetStyleSheet);
     motorAddressEditorDockWidget->setStyleSheet(dockWidgetStyleSheet);
     motorDialsDockWidget->setStyleSheet(dockWidgetStyleSheet);
+    sensorGrapherDockWidget->setStyleSheet(dockWidgetStyleSheet);
 }
 
 
