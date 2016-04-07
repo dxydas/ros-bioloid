@@ -53,6 +53,9 @@ add_definitions(${Qt5Widgets_DEFINITIONS})
 # without -fPIE. We add that here.
 set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
+# PrintSupport module is required for QCustomPlot
+find_package(Qt5PrintSupport REQUIRED)
+
 set(HEADER_FILES
   src/mainwindow.h
   src/commonvars.h
@@ -66,6 +69,9 @@ set(HEADER_FILES
   src/controltablemodel.h
   src/motordials.h
   src/moveithandler.h
+  src/qcustomplot/qcustomplot.h
+  src/sensorgrapher.h
+  src/sensorgraph.h
 )
 
 set(SOURCE_FILES
@@ -82,6 +88,9 @@ set(SOURCE_FILES
   src/controltablemodel.cpp
   src/motordials.cpp
   src/moveithandler.cpp
+  src/qcustomplot/qcustomplot.cpp
+  src/sensorgrapher.cpp
+  src/sensorgraph.cpp
   ${MOC_FILES}
 )
 
@@ -188,8 +197,7 @@ add_executable(rosoloid_gui ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H})
 # )
 target_link_libraries(moveit_api_test ${catkin_LIBRARIES})
 # The Qt5Widgets_LIBRARIES variable also includes QtGui and QtCore
-target_link_libraries(rosoloid_gui Qt5::Widgets ${catkin_LIBRARIES} ${Qt5Widgets_LIBRARIES})
-#qt5_use_modules(rosoloid_gui Widgets)
+target_link_libraries(rosoloid_gui Qt5::Widgets Qt5::PrintSupport ${catkin_LIBRARIES} ${Qt5Widgets_LIBRARIES})
 
 #############
 ## Install ##
