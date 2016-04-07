@@ -39,6 +39,12 @@ void RosWorker::init()
         jointStateSub = n.subscribe("ax_joint_states", 1000, &RosWorker::jointStateCallback, this);
         goalJointStateSub = n.subscribe("ax_goal_joint_states", 1000, &RosWorker::goalJointStateCallback, this);
 
+        accelSub = n.subscribe("accel", 1000, &RosWorker::accelCallback, this);
+        magnetSub = n.subscribe("magnet", 1000, &RosWorker::magnetCallback, this);
+        headingSub = n.subscribe("heading", 1000, &RosWorker::headingCallback, this);
+        gyroSub = n.subscribe("gyro", 1000, &RosWorker::gyroCallback, this);
+        fsrsSub = n.subscribe("fsrs", 1000, &RosWorker::fsrsCallback, this);
+
         QTimer* connectionHealthCheckTimer = new QTimer(this);
         connect( connectionHealthCheckTimer, SIGNAL(timeout()), this, SLOT(runConnectionHealthCheck()) );
         connectionHealthCheckTimer->start(5000);
@@ -123,6 +129,41 @@ void RosWorker::goalJointStateCallback(const sensor_msgs::JointState::ConstPtr &
     goalJointState.velocity = msg->velocity;
     goalJointState.effort = msg->effort;
     emit secondaryDataUpdated(goalJointState);
+}
+
+
+void RosWorker::accelCallback(const geometry_msgs::Vector3::ConstPtr& msg)
+{
+    accel = *msg;
+    emit accelDataUpdated(accel);
+}
+
+
+void RosWorker::magnetCallback(const geometry_msgs::Vector3::ConstPtr& msg)
+{
+    magnet = *msg;
+    emit magnetDataUpdated(magnet);
+}
+
+
+void RosWorker::headingCallback(const std_msgs::Float32::ConstPtr& msg)
+{
+    heading = *msg;
+    emit headingDataUpdated(heading);
+}
+
+
+void RosWorker::gyroCallback(const geometry_msgs::Vector3::ConstPtr& msg)
+{
+    gyro = *msg;
+    emit gyroDataUpdated(gyro);
+}
+
+
+void RosWorker::fsrsCallback(const std_msgs::Int16MultiArray::ConstPtr& msg)
+{
+    fsrs = *msg;
+    emit fsrsDataUpdated(fsrs);
 }
 
 

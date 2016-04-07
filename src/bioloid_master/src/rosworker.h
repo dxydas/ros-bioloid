@@ -5,6 +5,9 @@
 #include <qt5/QtWidgets/QWidget>
 #include "ros/ros.h"
 #include "sensor_msgs/JointState.h"
+#include "geometry_msgs/Vector3.h"
+#include "std_msgs/Float32.h"
+#include "std_msgs/Int16MultiArray.h"
 #include "std_srvs/Empty.h"
 #include "usb2ax_controller/ReceiveFromAX.h"
 #include "usb2ax_controller/SendToAX.h"
@@ -25,6 +28,12 @@ public:
     void init();
     bool getIsMasterRunning() const { return mIsMasterRunning; }
     sensor_msgs::JointState getCurrentJointState() const { return currentJointState; }
+//    geometry_msgs::Vector3 getAccel() const { return accel; }
+//    geometry_msgs::Vector3 getMagnet() const { return magnet; }
+//    std_msgs::Float32 getHeading() const { return heading; }
+//    geometry_msgs::Vector3 getGyro() const { return gyro; }
+//    std_msgs::Int16MultiArray getFsrs() const { return fsrs; }
+    //
     ros::ServiceClient receiveFromAXClient;
     ros::ServiceClient sendtoAXClient;
     //
@@ -62,6 +71,11 @@ signals:
     void disconnectedFromRosMaster();
     void jointStateUpdated(sensor_msgs::JointState js);
     void secondaryDataUpdated(sensor_msgs::JointState js);
+    void accelDataUpdated(geometry_msgs::Vector3 vec);
+    void magnetDataUpdated(geometry_msgs::Vector3 vec);
+    void headingDataUpdated(std_msgs::Float32 val);
+    void gyroDataUpdated(geometry_msgs::Vector3 vec);
+    void fsrsDataUpdated(std_msgs::Int16MultiArray arr);
 
 public slots:
     void runConnectionHealthCheck();
@@ -76,10 +90,25 @@ private:
     ros::AsyncSpinner* spinner;
     void jointStateCallback(const sensor_msgs::JointState::ConstPtr& msg);
     void goalJointStateCallback(const sensor_msgs::JointState::ConstPtr& msg);
+    void accelCallback(const geometry_msgs::Vector3::ConstPtr& msg);
+    void magnetCallback(const geometry_msgs::Vector3::ConstPtr& msg);
+    void headingCallback(const std_msgs::Float32::ConstPtr& msg);
+    void gyroCallback(const geometry_msgs::Vector3::ConstPtr& msg);
+    void fsrsCallback(const std_msgs::Int16MultiArray::ConstPtr& msg);
     ros::Subscriber jointStateSub;
     ros::Subscriber goalJointStateSub;
+    ros::Subscriber accelSub;
+    ros::Subscriber magnetSub;
+    ros::Subscriber headingSub;
+    ros::Subscriber gyroSub;
+    ros::Subscriber fsrsSub;
     sensor_msgs::JointState currentJointState;
     sensor_msgs::JointState goalJointState;
+    geometry_msgs::Vector3 accel;
+    geometry_msgs::Vector3 magnet;
+    std_msgs::Float32 heading;
+    geometry_msgs::Vector3 gyro;
+    std_msgs::Int16MultiArray fsrs;
 };
 
 #endif // ROSWORKER_H
