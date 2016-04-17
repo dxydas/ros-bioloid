@@ -21,8 +21,8 @@
 #include <qt5/QtWidgets/QAbstractScrollArea>
 #include <qt5/QtWidgets/QMessageBox>
 #include <qt5/QtWidgets/QLayout>
-#include "../../usb2ax_controller/src/ax12ControlTableMacros.h"
 #include "commonvars.h"
+#include "../../usb2ax_controller/src/ax12ControlTableMacros.h"
 
 Q_DECLARE_METATYPE(sensor_msgs::JointState)
 Q_DECLARE_METATYPE(geometry_msgs::Vector3)
@@ -172,14 +172,14 @@ void MainWindow::setUpLayout()
     {
         motorIdLabels[i] = new QLabel(QString::number(i + 1));
         presentPosSliders[i] = new DoubleSlider(Qt::Horizontal, this);
-        presentPosSliders[i]->setMinimum(-2606);
-        presentPosSliders[i]->setMaximum(2606);
+        presentPosSliders[i]->setMinimum(-2611);
+        presentPosSliders[i]->setMaximum(2611);
         presentPosSliders[i]->setValue(0);
         presentPosSliders[i]->setSecondValue(0);
 
         std::ostringstream oss;
-        oss.precision(4);
-        oss.width(8);
+        oss.precision(3);
+        oss.width(7);
         oss.fill(' ');
         oss.setf(std::ios::fixed, std::ios::floatfield);
         oss << 0.0;
@@ -323,11 +323,11 @@ void MainWindow::setUpLayout()
         for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
         {
             robotPose.jointState.position[dxlId - 1] =
-                    static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (2.618 + 2.618) - 2.618;
+                    static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (2.555 + 2.56) - 2.56;
             robotPose.jointState.velocity[dxlId - 1] =
-                    static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (11.8668 + 11.8668) - 11.8668;
+                    static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (12.276 + 12.276) - 12.276;
             robotPose.jointState.effort[dxlId - 1] =
-                    static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (1.0 + 1.0) - 1.0;
+                    static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (1.023 + 1.023) - 1.023;
         }
 
         availablePosesList.push_back(robotPose);
@@ -485,8 +485,8 @@ void MainWindow::customiseLayout()
               //"background-image: url(assets/images/carbon-fibre-patterns/carbon3.jpg); }" );
               //"background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
               //"stop: 0 lightsteelblue, stop: 1 steelblue); }" );
-              "background-color: qradialgradient(cx:0, cy:0, radius: 1,"
-              "fx:0.5, fy:0.5, stop:0 lightgrey, stop:1 grey); }" );
+              "background-color: qradialgradient(cx: 0, cy: 0, radius: 1,"
+              "fx: 0.5, fy: 0.5, stop: 0 lightgrey, stop: 1 grey); }" );
 
     QString menuBarStyleSheet =
             ( "QMenuBar {"
@@ -506,8 +506,8 @@ void MainWindow::customiseLayout()
               "titlebar-normal-icon: url(assets/images/ionicons-2.0.1/src/android-expand.svg);"
               "border: 2px solid steelblue;"
               //"background-color: grey; }"
-              "background: qradialgradient(cx:0, cy:0, radius: 1,"
-              "fx:0.5, fy:0.5, stop:0 lightgrey, stop:1 grey); }"
+              "background: qradialgradient(cx: 0, cy: 0, radius: 1,"
+              "fx: 0.5, fy: 0.5, stop: 0 lightgrey, stop: 1 grey); }"
               "QDockWidget::title {"
               "background: steelblue;"
               "padding-right: -200px; }"  // Negative padding stops the vertical title bar from being truncated
@@ -665,6 +665,7 @@ void MainWindow::connectSignalsAndSlots()
 void MainWindow::initRosNode()
 {
     rosWorker->init();
+    initRosNodeButton->setEnabled(false);
     outputLog->appendTimestamped("ROS node initialised");
 }
 
@@ -787,19 +788,19 @@ void MainWindow::updateJointStateValues(sensor_msgs::JointState js)
     {
         for (int i = 0; i < NUM_OF_MOTORS; ++i)
         {
-            // -2.606..2.606 rad, converted to -2606..2606 int range
+            // -2.611..2.611 rad, converted to -2611..2611 int range
             presentPosSliders[i]->setFirstValue(js.position[i] * 1000);
 
             std::ostringstream oss;
-            oss.precision(4);
-            oss.width(8);
+            oss.precision(3);
+            oss.width(7);
             oss.fill(' ');
             oss.setf(std::ios::fixed, std::ios::floatfield);
             oss << js.position[i];
             presentPosLineEdits[i]->setText( QString::fromStdString(oss.str()) );
 
             oss.str("");
-            oss.width(8);  // Not 'sticky'
+            oss.width(7);  // Not 'sticky'
             oss << js.velocity[i];
             presentSpeedLineEdits[i]->setText( QString::fromStdString(oss.str()) );
         }
@@ -814,15 +815,15 @@ void MainWindow::updateSecondaryRobotValues(sensor_msgs::JointState js)
         for (int i = 0; i < NUM_OF_MOTORS; ++i)
         {
             std::ostringstream oss;
-            oss.precision(4);
-            oss.width(8);
+            oss.precision(3);
+            oss.width(7);
             oss.fill(' ');
             oss.setf(std::ios::fixed, std::ios::floatfield);
             oss << js.position[i];
             goalPosLineEdits[i]->setText( QString::fromStdString(oss.str()) );
 
             oss.str("");
-            oss.width(8);  // Not 'sticky'
+            oss.width(7);  // Not 'sticky'
             oss << js.velocity[i];
             movingSpeedLineEdits[i]->setText( QString::fromStdString(oss.str()) );
         }
