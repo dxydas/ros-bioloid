@@ -73,10 +73,10 @@ public:
     //
     bool getMotorCurrentTorqueInDecimal(usb2ax_controller::GetMotorParam::Request &req,
                                         usb2ax_controller::GetMotorParam::Response &res);
-    bool getMotorMaxTorqueInDecimal(usb2ax_controller::GetMotorParam::Request &req,
-                                    usb2ax_controller::GetMotorParam::Response &res);
-    bool setMotorMaxTorqueInDecimal(usb2ax_controller::SetMotorParam::Request &req,
-                                    usb2ax_controller::SetMotorParam::Response &res);
+    bool getMotorTorqueLimitInDecimal(usb2ax_controller::GetMotorParam::Request &req,
+                                      usb2ax_controller::GetMotorParam::Response &res);
+    bool setMotorTorqueLimitInDecimal(usb2ax_controller::SetMotorParam::Request &req,
+                                      usb2ax_controller::SetMotorParam::Response &res);
     //
     bool getMotorCurrentPositionsInRad(usb2ax_controller::GetMotorParams::Request &req,
                                       usb2ax_controller::GetMotorParams::Response &res);
@@ -94,10 +94,10 @@ public:
     //
     bool getMotorCurrentTorquesInDecimal(usb2ax_controller::GetMotorParams::Request &req,
                                         usb2ax_controller::GetMotorParams::Response &res);
-    bool getMotorMaxTorquesInDecimal(usb2ax_controller::GetMotorParams::Request &req,
-                                     usb2ax_controller::GetMotorParams::Response &res);
-    bool setMotorMaxTorquesInDecimal(usb2ax_controller::SetMotorParams::Request &req,
-                                     usb2ax_controller::SetMotorParams::Response &res);
+    bool getMotorTorqueLimitsInDecimal(usb2ax_controller::GetMotorParams::Request &req,
+                                       usb2ax_controller::GetMotorParams::Response &res);
+    bool setMotorTorqueLimitsInDecimal(usb2ax_controller::SetMotorParams::Request &req,
+                                       usb2ax_controller::SetMotorParams::Response &res);
     //
     bool homeAllMotors(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
     //

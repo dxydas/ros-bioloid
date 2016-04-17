@@ -89,10 +89,10 @@ int main(int argc, char **argv)
     //
     ros::ServiceServer getMotorCurrentTorqueInDecimalService = n.advertiseService("GetMotorCurrentTorqueInDecimal",
         &JointController::getMotorCurrentTorqueInDecimal, &jointController);
-    ros::ServiceServer getMotorMaxTorqueInDecimalService = n.advertiseService("GetMotorMaxTorqueInDecimal",
-        &JointController::getMotorMaxTorqueInDecimal, &jointController);
-    ros::ServiceServer setMotorMaxTorqueInDecimalService = n.advertiseService("SetMotorMaxTorqueInDecimal",
-        &JointController::setMotorMaxTorqueInDecimal, &jointController);
+    ros::ServiceServer getMotorTorqueLimitInDecimalService = n.advertiseService("GetMotorTorqueLimitInDecimal",
+        &JointController::getMotorTorqueLimitInDecimal, &jointController);
+    ros::ServiceServer setMotorTorqueLimitInDecimalService = n.advertiseService("SetMotorTorqueLimitInDecimal",
+        &JointController::setMotorTorqueLimitInDecimal, &jointController);
     //
     ros::ServiceServer getMotorCurrentPositionsInRadService = n.advertiseService("GetMotorCurrentPositionsInRad",
         &JointController::getMotorCurrentPositionsInRad, &jointController);
@@ -110,10 +110,10 @@ int main(int argc, char **argv)
     //
     ros::ServiceServer getMotorCurrentTorquesInDecimalService = n.advertiseService("GetMotorCurrentTorquesInDecimal",
         &JointController::getMotorCurrentTorquesInDecimal, &jointController);
-    ros::ServiceServer getMotorMaxTorquesInDecimalService = n.advertiseService("GetMotorMaxTorquesInDecimal",
-        &JointController::getMotorMaxTorquesInDecimal, &jointController);
-    ros::ServiceServer setMotorMaxTorquesInDecimalService = n.advertiseService("SetMotorMaxTorquesInDecimal",
-        &JointController::setMotorMaxTorquesInDecimal, &jointController);
+    ros::ServiceServer getMotorTorqueLimitsInDecimalService = n.advertiseService("GetMotorTorqueLimitsInDecimal",
+        &JointController::getMotorTorqueLimitsInDecimal, &jointController);
+    ros::ServiceServer setMotorTorqueLimitsInDecimalService = n.advertiseService("SetMotorTorqueLimitsInDecimal",
+        &JointController::setMotorTorqueLimitsInDecimal, &jointController);
     //
     ros::ServiceServer homeMotorsService = n.advertiseService("HomeAllMotors",
         &JointController::homeAllMotors, &jointController);
@@ -151,9 +151,9 @@ int main(int argc, char **argv)
 //    // Set torque
 //    paramSet_req.dxlID = BROADCAST_ID;
 //    paramSet_req.value = 0.8;
-//    jointController.setMotorMaxTorqueInDecimal(paramSet_req, paramSet_res);
+//    jointController.setMotorTorqueLimitInDecimal(paramSet_req, paramSet_res);
 //    ros::Duration(0.5).sleep();
-    ROS_INFO_STREAM("All max. torques set to " << paramSet_req.value/100.0 << "%.");
+//    ROS_INFO_STREAM("All torque limits set to " << paramSet_req.value/100.0 << "%.");
 
     // Set slow speed
     paramSet_req.dxlID = BROADCAST_ID;
@@ -1000,8 +1000,8 @@ bool JointController::getMotorCurrentTorqueInDecimal(usb2ax_controller::GetMotor
 }
 
 
-bool JointController::getMotorMaxTorqueInDecimal(usb2ax_controller::GetMotorParam::Request &req,
-                                                 usb2ax_controller::GetMotorParam::Response &res)
+bool JointController::getMotorTorqueLimitInDecimal(usb2ax_controller::GetMotorParam::Request &req,
+                                                   usb2ax_controller::GetMotorParam::Response &res)
 {
     usb2ax_controller::ReceiveFromAX::Request req2;
     usb2ax_controller::ReceiveFromAX::Response res2;
@@ -1021,8 +1021,8 @@ bool JointController::getMotorMaxTorqueInDecimal(usb2ax_controller::GetMotorPara
 }
 
 
-bool JointController::setMotorMaxTorqueInDecimal(usb2ax_controller::SetMotorParam::Request &req,
-                                                 usb2ax_controller::SetMotorParam::Response &res)
+bool JointController::setMotorTorqueLimitInDecimal(usb2ax_controller::SetMotorParam::Request &req,
+                                                   usb2ax_controller::SetMotorParam::Response &res)
 {
     usb2ax_controller::SendToAX::Request req2;
     usb2ax_controller::SendToAX::Response res2;
@@ -1208,8 +1208,8 @@ bool JointController::getMotorCurrentTorquesInDecimal(usb2ax_controller::GetMoto
 }
 
 
-bool JointController::getMotorMaxTorquesInDecimal(usb2ax_controller::GetMotorParams::Request &req,
-                                                  usb2ax_controller::GetMotorParams::Response &res)
+bool JointController::getMotorTorqueLimitsInDecimal(usb2ax_controller::GetMotorParams::Request &req,
+                                                    usb2ax_controller::GetMotorParams::Response &res)
 {
     usb2ax_controller::ReceiveSyncFromAX::Request req2;
     usb2ax_controller::ReceiveSyncFromAX::Response res2;
@@ -1232,8 +1232,8 @@ bool JointController::getMotorMaxTorquesInDecimal(usb2ax_controller::GetMotorPar
 }
 
 
-bool JointController::setMotorMaxTorquesInDecimal(usb2ax_controller::SetMotorParams::Request &req,
-                                                  usb2ax_controller::SetMotorParams::Response &res)
+bool JointController::setMotorTorqueLimitsInDecimal(usb2ax_controller::SetMotorParams::Request &req,
+                                                    usb2ax_controller::SetMotorParams::Response &res)
 {
     if ( req.dxlIDs.size() != req.values.size() )
     {
@@ -1359,45 +1359,21 @@ void JointController::printErrorCode()
 float JointController::axPositionToRad(int oldValue)
 {
     // Convert AX-12 position to rads
-    // ~0.2933 degrees per unit -> ~0.0051 rads per unit
-    // Position range: 0..1023 -> 0..300 degrees -> 0..5.236 rad
-    // Convert to -150..150 degrees -> -2.618..2.618 rad
-    //
-    // 1 deg = pi/180 rad
-    //
-    //int oldMin = 0;
-    //int oldMax = 1023;
-    //float newMin = -150.0*M_PI/180.0;
-    //float newMax = 150.0*M_PI/180.0;
-    //float oldRange = oldMax - oldMin;
-    //float newRange = newMax - newMin;
-    //float newValue = ((oldValue & 0x3FF) - oldMin)*newRange/oldRange + newMin;  // Bits 0-9
-    //float newValue = (oldValue & 0x3FF)*0.0051 - 512*0.0051;  // Bits 0-9
-    float newValue = ((oldValue & 0x3FF) - 512)*0.0051;  // Bits 0-9
-    return newValue;
+    // 0.29 degrees per unit <=> ~0.005 rads per unit
+    // Position range: 0..1023 <=> 0..296.67 degrees <=> 0..5.115 rad
+    // If offset is added so that 0 is the midpoint (0 degrees), then range is:
+    // -512..511 <=> -148.48..148.19 degrees <=> -2.56..2.555 rad
+    return ((oldValue & 0x3FF) - 512)*0.005;  // Bits 0-9
 }
 
 
 int JointController::radToAxPosition(float oldValue)
 {
     // Convert rads to AX-12 position
-    //if ( ((-150.0*M_PI/180.0 - FLOAT_PRECISION_THRESH) <= oldValue) and
-    //     (oldValue <= (150.0*M_PI/180.0 + FLOAT_PRECISION_THRESH)) )
-    //{
-        //float oldMin = -150.0*M_PI/180.0;
-        //float oldMax = 150.0*M_PI/180.0;
-        //int newMin = 0;
-        //int newMax = 1023;
-        //float oldRange = oldMax - oldMin;
-        //float newRange = newMax - newMin;
-        //int newValue = round( (oldValue - oldMin)*newRange/oldRange + newMin );
-        //return newValue;
-    if ( ((-512*0.0051 - FLOAT_PRECISION_THRESH) <= oldValue) and
-         (oldValue <= (512*0.0051 + FLOAT_PRECISION_THRESH)) )
+    if ( ((-512*0.005 - FLOAT_PRECISION_THRESH) <= oldValue) and
+         (oldValue <= (511*0.005 + FLOAT_PRECISION_THRESH)) )
     {
-        //int newValue = round( (oldValue + 512*0.0051)/0.0051 );
-        int newValue = round( oldValue/0.0051 + 512 );
-        return newValue;
+        return round( oldValue/0.005 + 512 );
     }
     else
     {
@@ -1410,22 +1386,12 @@ int JointController::radToAxPosition(float oldValue)
 float JointController::axSpeedToRadPerSec(int oldValue)
 {
     // Convert AX-12 speed to rads per sec
-    // ~0.111 rpm per unit -> ~0.0116 rad/s per unit
-    // Speed range:    0..1023 -> 0..113.553 rpm CCW -> 0..11.8668 rad/s CCW
-    //              1024..2047 -> 0..113.553 rpm CW  -> 0..11.8668 rad/s CW
-    //
     // v (Hz) = w (rad/s) / 2*pi
-    // 1 rpm = 1/60 Hz ~= 0.1047 rad/s
-    // 1 rad/s = 60/(2*pi) rpm ~= 9.5493 rpm ~= 0.1592 Hz
-    //
-    //int oldMin = 0;
-    //int oldMax = 1023;
-    //float newMin = 0.0;
-    //float newMax = 1023*0.0116;
-    //float oldRange = oldMax - oldMin;
-    //float newRange = newMax - newMin;
-    //float newValue = ((oldValue & 0x3FF) - oldMin)*newRange/oldRange + newMin;  // Bits 0-9
-    float newValue = (oldValue & 0x3FF)*0.0116;  // Bits 0-9
+    // 1 rpm = 1/60 Hz ~= 0.105 rad/s
+    // ~0.111 rpm per unit <=> ~0.012 rad/s per unit
+    // Speed range:    0..1023 <=> 0..113.553 rpm (CCW) <=> 0..12.276 rad/s (CCW)
+    //              1024..2047 <=> 0..-113.553 rpm (CW)  <=> 0..-12.276 rad/s (CW)
+    float newValue = (oldValue & 0x3FF)*0.012;  // Bits 0-9
     if ( (oldValue & 0x400) == 0x0 )  // Check bit 10
         return newValue;
     else
@@ -1436,17 +1402,10 @@ float JointController::axSpeedToRadPerSec(int oldValue)
 int JointController::radPerSecToAxSpeed(float oldValue)
 {
     // Convert rads per sec to AX-12 speed
-    //float oldMin = 0.0;
-    //float oldMax = 1023*0.0116;
-    //int newMin = 0;
-    //int newMax = 1023;
-    //float oldRange = oldMax - oldMin;
-    //float newRange = newMax - newMin;
-    //int newValue = round( (fabs(oldValue) - oldMin)*newRange/oldRange + newMin );
-    int newValue = round( fabs(oldValue)/0.0116 );
-    if ( (0.0 <= oldValue) && (oldValue <= (1023*0.0116 + FLOAT_PRECISION_THRESH)) )
+    int newValue = round( fabs(oldValue)/0.012 );
+    if ( (0.0 <= oldValue) && (oldValue <= (1023*0.012 + FLOAT_PRECISION_THRESH)) )
         return newValue;
-    else if ( ((-1023*0.0116 - FLOAT_PRECISION_THRESH) <= oldValue) && (oldValue < 0.0) )
+    else if ( ((-1023*0.012 - FLOAT_PRECISION_THRESH) <= oldValue) && (oldValue < 0.0) )
         return newValue | 0x400;  // Set bit 10 to 1
     else
     {
@@ -1460,16 +1419,8 @@ float JointController::axTorqueToDecimal(int oldValue)
 {
     // Convert AX-12 torque to % torque
     // ~0.1% per unit
-    // Torque range:    0-1023 -> 100% CCW
-    //               1024-2047 -> 100% CW
-    //
-    //int oldMin = 0;
-    //int oldMax = 1023;
-    //float newMin = 0.0;
-    //float newMax = 1023*0.001;
-    //float oldRange = oldMax - oldMin;
-    //float newRange = newMax - newMin;
-    //float newValue = ((oldValue & 0x3FF) - oldMin)*newRange/oldRange + newMin;  // Bits 0-9
+    // Torque range:    0..1023 <=> 0.0..1.023 (CCW)
+    //               1024..2047 <=> 0.0..-1.023 (CW)
     float newValue = (oldValue & 0x3FF)*0.001;  // Bits 0-9
     if ( (oldValue & 0x400) == 0x0 )  // Check bit 10
         return newValue;
@@ -1481,13 +1432,6 @@ float JointController::axTorqueToDecimal(int oldValue)
 int JointController::decimalToAxTorque(float oldValue)
 {
     // Convert % torque to AX-12 torque
-    //float oldMin = 0.0;
-    //float oldMax = 1023*0.001;
-    //int newMin = 0;
-    //int newMax = 1023;
-    //float oldRange = oldMax - oldMin;
-    //float newRange = newMax - newMin;
-    //int newValue = round( (fabs(oldValue) - oldMin)*newRange/oldRange + newMin );
     int newValue = round( fabs(oldValue)/0.001 );
     if ( (0.0 <= oldValue) && (oldValue <= (1023*0.001 + FLOAT_PRECISION_THRESH)) )
         return newValue;
