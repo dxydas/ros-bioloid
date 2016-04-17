@@ -50,7 +50,7 @@ catkin_make
 
 
 # Custom rosconsole.config file (to avoid logging all INFO messages to file) (also add to ~/.bashrc)
-export ROSCONSOLE_CONFIG_FILE=$ROS_DIR/myrosconsole.config
+export ROSCONSOLE_CONFIG_FILE=$ROS_DIR/my_rosconsole.config
 
 
 # My roslaunch/rosrun files
