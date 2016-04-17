@@ -1,7 +1,7 @@
 #ifndef ROSWORKER_H
 #define ROSWORKER_H
 
-#include <qt5/QtCore/QThread>
+#include <qt5/QtCore/QTimer>
 #include <qt5/QtWidgets/QWidget>
 #include "ros/ros.h"
 #include "sensor_msgs/JointState.h"
@@ -26,8 +26,10 @@ public:
     RosWorker(int argc, char* argv[], const char* nodeName, QWidget* parent = 0);
     ~RosWorker();
     void init();
-    bool getIsMasterRunning() const { return mIsMasterRunning; }
+//    void stop();
+//    bool isMasterRunning() const { return mIsMasterRunning; }
     sensor_msgs::JointState getCurrentJointState() const { return currentJointState; }
+    sensor_msgs::JointState getGoalJointState() const { return goalJointState; }
 //    geometry_msgs::Vector3 getAccel() const { return accel; }
 //    geometry_msgs::Vector3 getMagnet() const { return magnet; }
 //    std_msgs::Float32 getHeading() const { return heading; }
@@ -49,8 +51,8 @@ public:
     ros::ServiceClient setMotorGoalSpeedInRadPerSecClient;
     //
     ros::ServiceClient getMotorCurrentTorqueInDecimalClient;
-    ros::ServiceClient getMotorMaxTorqueInDecimalClient;
-    ros::ServiceClient setMotorMaxTorqueInDecimalClient;
+    ros::ServiceClient getMotorTorqueLimitInDecimalClient;
+    ros::ServiceClient setMotorTorqueLimitInDecimalClient;
     //
     ros::ServiceClient getMotorCurrentPositionsInRadClient;
     ros::ServiceClient getMotorGoalPositionsInRadClient;
@@ -61,8 +63,8 @@ public:
     ros::ServiceClient setMotorGoalSpeedsInRadPerSecClient;
     //
     ros::ServiceClient getMotorCurrentTorquesInDecimalClient;
-    ros::ServiceClient getMotorMaxTorquesInDecimalClient;
-    ros::ServiceClient setMotorMaxTorquesInDecimalClient;
+    ros::ServiceClient getMotorTorqueLimitsInDecimalClient;
+    ros::ServiceClient setMotorTorqueLimitsInDecimalClient;
     //
     ros::ServiceClient homeAllMotorsClient;
 
@@ -86,8 +88,9 @@ private:
     int argc;
     char** argv;
     const char* mNodeName;
-    bool mIsMasterRunning;
+//    bool mIsMasterInitialised;
     ros::AsyncSpinner* spinner;
+    QTimer* connectionHealthCheckTimer;
     void jointStateCallback(const sensor_msgs::JointState::ConstPtr& msg);
     void goalJointStateCallback(const sensor_msgs::JointState::ConstPtr& msg);
     void accelCallback(const geometry_msgs::Vector3::ConstPtr& msg);

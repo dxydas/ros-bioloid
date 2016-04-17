@@ -1,12 +1,14 @@
 #include "rosworker.h"
-#include <qt5/QtCore/QTimer>
-#include "../../usb2ax_controller/src/ax12ControlTableMacros.h"
 #include "commonvars.h"
+#include "../../usb2ax_controller/src/ax12ControlTableMacros.h"
 
 
 RosWorker::RosWorker(int argc, char* argv[], const char* nodeName, QWidget* parent) :
-    argc(argc), argv(argv), mNodeName(nodeName), QObject(parent), mIsMasterRunning(false)
+    argc(argc), argv(argv), mNodeName(nodeName), QObject(parent)
 {
+    connectionHealthCheckTimer = new QTimer(this);
+    connect( connectionHealthCheckTimer, SIGNAL(timeout()), this, SLOT(runConnectionHealthCheck()) );
+
     currentJointState.name.resize(NUM_OF_MOTORS);
     currentJointState.position.resize(NUM_OF_MOTORS);
     currentJointState.velocity.resize(NUM_OF_MOTORS);
@@ -20,8 +22,6 @@ RosWorker::RosWorker(int argc, char* argv[], const char* nodeName, QWidget* pare
 
 RosWorker::~RosWorker()
 {
-    if (mIsMasterRunning)
-        ros::shutdown();
 }
 
 
@@ -32,9 +32,7 @@ void RosWorker::init()
 
     if (ros::master::check())
     {
-        mIsMasterRunning = true;
         ros::NodeHandle n;
-        emit connectedToRosMaster();
 
         jointStateSub = n.subscribe("ax_joint_states", 1000, &RosWorker::jointStateCallback, this);
         goalJointStateSub = n.subscribe("ax_goal_joint_states", 1000, &RosWorker::goalJointStateCallback, this);
@@ -44,10 +42,6 @@ void RosWorker::init()
         headingSub = n.subscribe("heading", 1000, &RosWorker::headingCallback, this);
         gyroSub = n.subscribe("gyro", 1000, &RosWorker::gyroCallback, this);
         fsrsSub = n.subscribe("fsrs", 1000, &RosWorker::fsrsCallback, this);
-
-        QTimer* connectionHealthCheckTimer = new QTimer(this);
-        connect( connectionHealthCheckTimer, SIGNAL(timeout()), this, SLOT(runConnectionHealthCheck()) );
-        connectionHealthCheckTimer->start(5000);
 
         receiveFromAXClient =
                 n.serviceClient<usb2ax_controller::ReceiveFromAX>("ReceiveFromAX");
@@ -75,10 +69,10 @@ void RosWorker::init()
         //
         getMotorCurrentTorqueInDecimalClient =
                 n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentTorqueInDecimal");
-        getMotorMaxTorqueInDecimalClient =
-                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorMaxTorqueInDecimal");
-        setMotorMaxTorqueInDecimalClient =
-                n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorMaxTorqueInDecimal");
+        getMotorTorqueLimitInDecimalClient =
+                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorTorqueLimitInDecimal");
+        setMotorTorqueLimitInDecimalClient =
+                n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorTorqueLimitInDecimal");
         //
         getMotorCurrentPositionsInRadClient =
                 n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorCurrentPositionsInRad");
@@ -96,19 +90,20 @@ void RosWorker::init()
         //
         getMotorCurrentTorquesInDecimalClient =
                 n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorCurrentTorquesInDecimal");
-        getMotorMaxTorquesInDecimalClient =
-                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorMaxTorquesInDecimal");
-        setMotorMaxTorquesInDecimalClient =
-                n.serviceClient<usb2ax_controller::SetMotorParams>("SetMotorMaxTorquesInDecimal");
+        getMotorTorqueLimitsInDecimalClient =
+                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorTorqueLimitsInDecimal");
+        setMotorTorqueLimitsInDecimalClient =
+                n.serviceClient<usb2ax_controller::SetMotorParams>("SetMotorTorqueLimitsInDecimal");
         //
         homeAllMotorsClient =
                 n.serviceClient<std_srvs::Empty>("HomeAllMotors");
 
         spinner = new ros::AsyncSpinner(0);
         spinner->start();
+
+        emit connectedToRosMaster();
+        connectionHealthCheckTimer->start(2000);
     }
-    else
-        mIsMasterRunning = false;
 }
 
 
@@ -169,14 +164,10 @@ void RosWorker::fsrsCallback(const std_msgs::Int16MultiArray::ConstPtr& msg)
 
 void RosWorker::runConnectionHealthCheck()
 {
-    if (ros::master::check())
-    {
-        mIsMasterRunning = true;
-    }
-    else
+    if (!ros::master::check())
     {
         emit disconnectedFromRosMaster();
-        mIsMasterRunning = false;
+        connectionHealthCheckTimer->stop();
     }
 }
 
