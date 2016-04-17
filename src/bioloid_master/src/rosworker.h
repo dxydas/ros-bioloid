@@ -25,7 +25,7 @@ class RosWorker : public QObject
 public:
     RosWorker(int argc, char* argv[], const char* nodeName, QWidget* parent = 0);
     ~RosWorker();
-    void init();
+    bool init();
 //    void stop();
 //    bool isMasterRunning() const { return mIsMasterRunning; }
     sensor_msgs::JointState getCurrentJointState() const { return currentJointState; }

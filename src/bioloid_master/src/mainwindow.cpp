@@ -664,8 +664,8 @@ void MainWindow::connectSignalsAndSlots()
 
 void MainWindow::initRosNode()
 {
-    rosWorker->init();
-    outputLog->appendTimestamped("ROS node initialised");
+    if (rosWorker->init())
+        outputLog->appendTimestamped("ROS node initialised");
 }
 
 

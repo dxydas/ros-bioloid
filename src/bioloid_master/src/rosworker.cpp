@@ -25,7 +25,7 @@ RosWorker::~RosWorker()
 }
 
 
-void RosWorker::init()
+bool RosWorker::init()
 {
     if (!mIsMasterInitialised)
     {
@@ -35,6 +35,7 @@ void RosWorker::init()
         if (ros::master::check())
         {
             ros::NodeHandle n;
+            emit connectedToRosMaster();
 
             jointStateSub = n.subscribe("ax_joint_states", 1000, &RosWorker::jointStateCallback, this);
             goalJointStateSub = n.subscribe("ax_goal_joint_states", 1000, &RosWorker::goalJointStateCallback, this);
@@ -103,11 +104,13 @@ void RosWorker::init()
             spinner = new ros::AsyncSpinner(0);
             spinner->start();
 
-            emit connectedToRosMaster();
             mIsMasterInitialised = true;
             connectionHealthCheckTimer->start(2000);
+
+            return true;
         }
     }
+    return false;
 }
 
 
