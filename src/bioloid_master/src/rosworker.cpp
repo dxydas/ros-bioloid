@@ -4,7 +4,7 @@
 
 
 RosWorker::RosWorker(int argc, char* argv[], const char* nodeName, QWidget* parent) :
-    argc(argc), argv(argv), mNodeName(nodeName), QObject(parent)
+    argc(argc), argv(argv), mNodeName(nodeName), QObject(parent), mIsMasterInitialised(false)
 {
     connectionHealthCheckTimer = new QTimer(this);
     connect( connectionHealthCheckTimer, SIGNAL(timeout()), this, SLOT(runConnectionHealthCheck()) );
@@ -27,82 +27,86 @@ RosWorker::~RosWorker()
 
 void RosWorker::init()
 {
-    ros::master::setRetryTimeout(ros::WallDuration(2.0));
-    ros::init(argc, argv, mNodeName);
-
-    if (ros::master::check())
+    if (!mIsMasterInitialised)
     {
-        ros::NodeHandle n;
+        ros::master::setRetryTimeout(ros::WallDuration(2.0));
+        ros::init(argc, argv, mNodeName);
 
-        jointStateSub = n.subscribe("ax_joint_states", 1000, &RosWorker::jointStateCallback, this);
-        goalJointStateSub = n.subscribe("ax_goal_joint_states", 1000, &RosWorker::goalJointStateCallback, this);
+        if (ros::master::check())
+        {
+            ros::NodeHandle n;
 
-        accelSub = n.subscribe("accel", 1000, &RosWorker::accelCallback, this);
-        magnetSub = n.subscribe("magnet", 1000, &RosWorker::magnetCallback, this);
-        headingSub = n.subscribe("heading", 1000, &RosWorker::headingCallback, this);
-        gyroSub = n.subscribe("gyro", 1000, &RosWorker::gyroCallback, this);
-        fsrsSub = n.subscribe("fsrs", 1000, &RosWorker::fsrsCallback, this);
+            jointStateSub = n.subscribe("ax_joint_states", 1000, &RosWorker::jointStateCallback, this);
+            goalJointStateSub = n.subscribe("ax_goal_joint_states", 1000, &RosWorker::goalJointStateCallback, this);
 
-        receiveFromAXClient =
-                n.serviceClient<usb2ax_controller::ReceiveFromAX>("ReceiveFromAX");
-        sendtoAXClient =
-                n.serviceClient<usb2ax_controller::SendToAX>("SendToAX");
-        //
-        receiveSyncFromAXClient =
-                n.serviceClient<usb2ax_controller::ReceiveSyncFromAX>("ReceiveSyncFromAX");
-        sendSyncToAXClient =
-                n.serviceClient<usb2ax_controller::SendSyncToAX>("SendSyncToAX");
-        //
-        getMotorCurrentPositionInRadClient =
-                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentPositionInRad");
-        getMotorGoalPositionInRadClient =
-                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorGoalPositionInRad");
-        setMotorGoalPositionInRadClient =
-                n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalPositionInRad");
-        //
-        getMotorCurrentSpeedInRadPerSecClient =
-                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentSpeedInRadPerSec");
-        getMotorGoalSpeedInRadPerSecClient =
-                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorGoalSpeedInRadPerSec");
-        setMotorGoalSpeedInRadPerSecClient =
-                n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalSpeedInRadPerSec");
-        //
-        getMotorCurrentTorqueInDecimalClient =
-                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentTorqueInDecimal");
-        getMotorTorqueLimitInDecimalClient =
-                n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorTorqueLimitInDecimal");
-        setMotorTorqueLimitInDecimalClient =
-                n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorTorqueLimitInDecimal");
-        //
-        getMotorCurrentPositionsInRadClient =
-                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorCurrentPositionsInRad");
-        getMotorGoalPositionsInRadClient =
-                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorGoalPositionsInRad");
-        setMotorGoalPositionsInRadClient =
-                n.serviceClient<usb2ax_controller::SetMotorParams>("SetMotorGoalPositionsInRad");
-        //
-        getMotorCurrentSpeedsInRadPerSecClient =
-                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorCurrentSpeedsInRadPerSec");
-        getMotorGoalSpeedsInRadPerSecClient =
-                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorGoalSpeedsInRadPerSec");
-        setMotorGoalSpeedsInRadPerSecClient =
-                n.serviceClient<usb2ax_controller::SetMotorParams>("SetMotorGoalSpeedsInRadPerSec");
-        //
-        getMotorCurrentTorquesInDecimalClient =
-                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorCurrentTorquesInDecimal");
-        getMotorTorqueLimitsInDecimalClient =
-                n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorTorqueLimitsInDecimal");
-        setMotorTorqueLimitsInDecimalClient =
-                n.serviceClient<usb2ax_controller::SetMotorParams>("SetMotorTorqueLimitsInDecimal");
-        //
-        homeAllMotorsClient =
-                n.serviceClient<std_srvs::Empty>("HomeAllMotors");
+            accelSub = n.subscribe("accel", 1000, &RosWorker::accelCallback, this);
+            magnetSub = n.subscribe("magnet", 1000, &RosWorker::magnetCallback, this);
+            headingSub = n.subscribe("heading", 1000, &RosWorker::headingCallback, this);
+            gyroSub = n.subscribe("gyro", 1000, &RosWorker::gyroCallback, this);
+            fsrsSub = n.subscribe("fsrs", 1000, &RosWorker::fsrsCallback, this);
 
-        spinner = new ros::AsyncSpinner(0);
-        spinner->start();
+            receiveFromAXClient =
+                    n.serviceClient<usb2ax_controller::ReceiveFromAX>("ReceiveFromAX");
+            sendtoAXClient =
+                    n.serviceClient<usb2ax_controller::SendToAX>("SendToAX");
+            //
+            receiveSyncFromAXClient =
+                    n.serviceClient<usb2ax_controller::ReceiveSyncFromAX>("ReceiveSyncFromAX");
+            sendSyncToAXClient =
+                    n.serviceClient<usb2ax_controller::SendSyncToAX>("SendSyncToAX");
+            //
+            getMotorCurrentPositionInRadClient =
+                    n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentPositionInRad");
+            getMotorGoalPositionInRadClient =
+                    n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorGoalPositionInRad");
+            setMotorGoalPositionInRadClient =
+                    n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalPositionInRad");
+            //
+            getMotorCurrentSpeedInRadPerSecClient =
+                    n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentSpeedInRadPerSec");
+            getMotorGoalSpeedInRadPerSecClient =
+                    n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorGoalSpeedInRadPerSec");
+            setMotorGoalSpeedInRadPerSecClient =
+                    n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalSpeedInRadPerSec");
+            //
+            getMotorCurrentTorqueInDecimalClient =
+                    n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentTorqueInDecimal");
+            getMotorTorqueLimitInDecimalClient =
+                    n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorTorqueLimitInDecimal");
+            setMotorTorqueLimitInDecimalClient =
+                    n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorTorqueLimitInDecimal");
+            //
+            getMotorCurrentPositionsInRadClient =
+                    n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorCurrentPositionsInRad");
+            getMotorGoalPositionsInRadClient =
+                    n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorGoalPositionsInRad");
+            setMotorGoalPositionsInRadClient =
+                    n.serviceClient<usb2ax_controller::SetMotorParams>("SetMotorGoalPositionsInRad");
+            //
+            getMotorCurrentSpeedsInRadPerSecClient =
+                    n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorCurrentSpeedsInRadPerSec");
+            getMotorGoalSpeedsInRadPerSecClient =
+                    n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorGoalSpeedsInRadPerSec");
+            setMotorGoalSpeedsInRadPerSecClient =
+                    n.serviceClient<usb2ax_controller::SetMotorParams>("SetMotorGoalSpeedsInRadPerSec");
+            //
+            getMotorCurrentTorquesInDecimalClient =
+                    n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorCurrentTorquesInDecimal");
+            getMotorTorqueLimitsInDecimalClient =
+                    n.serviceClient<usb2ax_controller::GetMotorParams>("GetMotorTorqueLimitsInDecimal");
+            setMotorTorqueLimitsInDecimalClient =
+                    n.serviceClient<usb2ax_controller::SetMotorParams>("SetMotorTorqueLimitsInDecimal");
+            //
+            homeAllMotorsClient =
+                    n.serviceClient<std_srvs::Empty>("HomeAllMotors");
 
-        emit connectedToRosMaster();
-        connectionHealthCheckTimer->start(2000);
+            spinner = new ros::AsyncSpinner(0);
+            spinner->start();
+
+            emit connectedToRosMaster();
+            mIsMasterInitialised = true;
+            connectionHealthCheckTimer->start(2000);
+        }
     }
 }
 

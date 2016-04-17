@@ -665,7 +665,6 @@ void MainWindow::connectSignalsAndSlots()
 void MainWindow::initRosNode()
 {
     rosWorker->init();
-    initRosNodeButton->setEnabled(false);
     outputLog->appendTimestamped("ROS node initialised");
 }
 

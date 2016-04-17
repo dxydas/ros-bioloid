@@ -88,7 +88,7 @@ private:
     int argc;
     char** argv;
     const char* mNodeName;
-//    bool mIsMasterInitialised;
+    bool mIsMasterInitialised;
     ros::AsyncSpinner* spinner;
     QTimer* connectionHealthCheckTimer;
     void jointStateCallback(const sensor_msgs::JointState::ConstPtr& msg);
