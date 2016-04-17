@@ -146,7 +146,7 @@ void RobotPosesListModel::savePosesFile(QString fileName)
     }
 
     std::ostringstream oss;
-    oss.precision(4);
+    oss.precision(3);
     oss.fill(' ');
     oss.setf(std::ios::fixed, std::ios::floatfield);
     for (int i = 0; i < mRobotPosesList.size(); ++i)

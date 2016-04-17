@@ -10,8 +10,8 @@
 #include <qt5/QtWidgets/QAbstractSpinBox>
 #include <qt5/QtWidgets/QFrame>
 #include <qt5/QtWidgets/QMessageBox>
-#include "../../usb2ax_controller/src/ax12ControlTableMacros.h"
 #include "commonvars.h"
+#include "../../usb2ax_controller/src/ax12ControlTableMacros.h"
 
 
 MotorValueEditor::MotorValueEditor(RosWorker* rosWorker, QWidget* parent) :
@@ -73,19 +73,19 @@ MotorValueEditor::MotorValueEditor(RosWorker* rosWorker, QWidget* parent) :
     for (int i = 0; i <= NUM_OF_MOTORS; ++i)
     {
         std::ostringstream oss;
-        oss.precision(4);
-        oss.width(8);
+        oss.precision(3);
+        oss.width(7);
         oss.fill(' ');
         oss.setf(std::ios::fixed, std::ios::floatfield);
         oss << 0.0;
         QString str = QString::fromStdString(oss.str());
 
-        motorIdLabels[i] = new QLabel;//QString::number(i+1));
-        currentValueLineEdits[i] = new QLineEdit;//(str);
+        motorIdLabels[i] = new QLabel;
+        currentValueLineEdits[i] = new QLineEdit;
         goalValueSpinBoxes[i] = new QDoubleSpinBox;
-        goalValueSpinBoxes[i]->setRange(-11.9, 11.9);
-        goalValueSpinBoxes[i]->setDecimals(4);
-        goalValueSpinBoxes[i]->setSingleStep(0.001);
+        goalValueSpinBoxes[i]->setRange(-2.56, 2.555);
+        goalValueSpinBoxes[i]->setDecimals(3);
+        goalValueSpinBoxes[i]->setSingleStep(0.01);
         getValueButtons[i] = new QPushButton("Get");
         setValueButtons[i] = new QPushButton("Set");
 
@@ -153,8 +153,8 @@ void MotorValueEditor::updateOption(const QString &text)
     {
         for (int i = 0; i < goalValueSpinBoxes.size(); ++i)
         {
-            goalValueSpinBoxes[i]->setRange(-2.618, 2.618);
-            goalValueSpinBoxes[i]->setDecimals(4);
+            goalValueSpinBoxes[i]->setRange(-2.56, 2.555);
+            goalValueSpinBoxes[i]->setDecimals(3);
             goalValueSpinBoxes[i]->setSingleStep(0.01);
         }
         break;
@@ -163,19 +163,19 @@ void MotorValueEditor::updateOption(const QString &text)
     {
         for (int i = 0; i < goalValueSpinBoxes.size(); ++i)
         {
-            goalValueSpinBoxes[i]->setRange(-11.8668, 11.8668);
-            goalValueSpinBoxes[i]->setDecimals(4);
+            goalValueSpinBoxes[i]->setRange(-12.276, 12.276);
+            goalValueSpinBoxes[i]->setDecimals(3);
             goalValueSpinBoxes[i]->setSingleStep(0.01);
         }
         break;
     }
-    case 1002:  // Set max torque in %
+    case 1002:  // Set max torque in decimal
     {
         for (int i = 0; i < goalValueSpinBoxes.size(); ++i)
         {
-            goalValueSpinBoxes[i]->setRange(0.0, 100.0);
-            goalValueSpinBoxes[i]->setDecimals(4);
-            goalValueSpinBoxes[i]->setSingleStep(1.0);
+            goalValueSpinBoxes[i]->setRange(-1.023, 1.023);
+            goalValueSpinBoxes[i]->setDecimals(3);
+            goalValueSpinBoxes[i]->setSingleStep(0.01);
         }
         break;
     }
@@ -196,8 +196,8 @@ void MotorValueEditor::updateOption(const QString &text)
 void MotorValueEditor::getValue(int dxlId)
 {
     std::ostringstream oss;
-    oss.precision(4);
-    oss.width(8);
+    oss.precision(3);
+    oss.width(7);
     oss.fill(' ');
     oss.setf(std::ios::fixed, std::ios::floatfield);
     QString str;
@@ -224,7 +224,7 @@ void MotorValueEditor::getValue(int dxlId)
             for (int i = 0; i < NUM_OF_MOTORS; ++i)
             {
                 oss.str("");
-                oss.width(8);  // Not 'sticky'
+                oss.width(7);  // Not 'sticky'
                 oss << srv.response.values[i];
                 str = QString::fromStdString(oss.str());
                 currentValueLineEdits[i]->setText(str);
@@ -255,7 +255,7 @@ void MotorValueEditor::getValue(int dxlId)
             for (int i = 0; i < NUM_OF_MOTORS; ++i)
             {
                 oss.str("");
-                oss.width(8);  // Not 'sticky'
+                oss.width(7);  // Not 'sticky'
                 oss << srv.response.values[i];
                 str = QString::fromStdString(oss.str());
                 currentValueLineEdits[i]->setText(str);
@@ -266,13 +266,13 @@ void MotorValueEditor::getValue(int dxlId)
 
         break;
     }
-    case 1002:  // Get max torque in %
+    case 1002:  // Get max torque in decimal
     {
         if ( (1 <= dxlId) && (dxlId <= 18) )
         {
             usb2ax_controller::GetMotorParam srv;
             srv.request.dxlID = dxlId;
-            mRosWorker->getMotorMaxTorqueInDecimalClient.call(srv);
+            mRosWorker->getMotorTorqueLimitInDecimalClient.call(srv);
             oss << srv.response.value;
             str = QString::fromStdString(oss.str());
             currentValueLineEdits[dxlId - 1]->setText(str);
@@ -282,11 +282,11 @@ void MotorValueEditor::getValue(int dxlId)
             usb2ax_controller::GetMotorParams srv;
             for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
                 srv.request.dxlIDs.push_back(dxlId);
-            mRosWorker->getMotorMaxTorquesInDecimalClient.call(srv);
+            mRosWorker->getMotorTorqueLimitsInDecimalClient.call(srv);
             for (int i = 0; i < NUM_OF_MOTORS; ++i)
             {
                 oss.str("");
-                oss.width(8);  // Not 'sticky'
+                oss.width(7);  // Not 'sticky'
                 oss << srv.response.values[i];
                 str = QString::fromStdString(oss.str());
                 currentValueLineEdits[i]->setText(str);
@@ -342,7 +342,7 @@ void MotorValueEditor::getValue(int dxlId)
             for (int i = 0; i < NUM_OF_MOTORS; ++i)
             {
                 oss.str("");
-                oss.width(8);  // Not 'sticky'
+                oss.width(7);  // Not 'sticky'
                 oss << srv.response.values[i];
                 str = QString::fromStdString(oss.str());
                 currentValueLineEdits[i]->setText(str);
@@ -397,17 +397,17 @@ void MotorValueEditor::setValue(int dxlId)
 
         break;
     }
-    case 1002:  // Set max torque in %
+    case 1002:  // Set max torque in decimal
     {
         usb2ax_controller::SetMotorParam srv;
         srv.request.dxlID = dxlId;
         if ( (1 <= dxlId) && (dxlId <= 18) )
-            srv.request.value = goalValueSpinBoxes[dxlId - 1]->value() / 100.0;  // Convert % to decimal
+            srv.request.value = goalValueSpinBoxes[dxlId - 1]->value();
         else if (dxlId == 254)
-            srv.request.value = goalValueSpinBoxes[18]->value() / 100.0;  // Convert % to decimal
+            srv.request.value = goalValueSpinBoxes[18]->value();
         else
             return;
-        mRosWorker->setMotorMaxTorqueInDecimalClient.call(srv);
+        mRosWorker->setMotorTorqueLimitInDecimalClient.call(srv);
 
         break;
     }
@@ -480,7 +480,7 @@ void MotorValueEditor::populateMap(QMap<QString, int>* inputMap)
 {
     inputMap->insert("Goal position in rad", 1000);
     inputMap->insert("Goal speed in rad/sec", 1001);
-    inputMap->insert("Max torque in %", 1002);
+    inputMap->insert("Max torque in decimal", 1002);
     inputMap->insert("AX12_ID", AX12_ID);
     inputMap->insert("AX12_BAUD_RATE", AX12_BAUD_RATE);
     inputMap->insert("AX12_RETURN_DELAY_TIME", AX12_RETURN_DELAY_TIME);
