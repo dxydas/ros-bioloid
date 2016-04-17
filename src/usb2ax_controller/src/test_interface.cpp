@@ -110,8 +110,8 @@ int main(int argc, char **argv)
             n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalPositionInRad");
     ros::ServiceClient setMotorGoalSpeedInRadPerSecClient =
             n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalSpeedInRadPerSec");
-    ros::ServiceClient setMotorMaxTorqueInDecimalClient =
-            n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorMaxTorqueInDecimal");
+    ros::ServiceClient setMotorTorqueLimitInDecimalClient =
+            n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorTorqueLimitInDecimal");
     ros::ServiceClient homeAllMotorsClient =
             n.serviceClient<std_srvs::Empty>("HomeAllMotors");
 
@@ -120,10 +120,11 @@ int main(int argc, char **argv)
     std_srvs::Empty emptySrv;
 
 //    // Set max torque
-//    SetMotorParamSrv.request.dxlID = 254;
-//    SetMotorParamSrv.request.value = 0.8;
-//    if (setMotorMaxTorqueInDecimalClient.call(SetMotorParamSrv))
-//        ROS_INFO("TX success: %d", SetMotorParamSrv.response.txSuccess);
+//    setMotorParamSrv.request.dxlID = 254;
+//    setMotorParamSrv.request.value = 0.8;
+//    setMotorParamSrv.response.txSuccess = false;
+//    if (setMotorTorqueLimitInDecimalClient.call(setMotorParamSrv))
+//        ROS_INFO("TX success: %d", setMotorParamSrv.response.txSuccess);
 //    else
 //    {
 //        ROS_ERROR("Failed to call service.");
@@ -134,6 +135,7 @@ int main(int argc, char **argv)
     // Set slow speed
     setMotorParamSrv.request.dxlID = 254;
     setMotorParamSrv.request.value = 1.0;
+    setMotorParamSrv.response.txSuccess = false;
     if (setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv))
         ROS_INFO("TX success: %d", setMotorParamSrv.response.txSuccess);
     else
@@ -159,6 +161,7 @@ int main(int argc, char **argv)
     sendToAXSrv.request.dxlID = 254;
     sendToAXSrv.request.address = AX12_TORQUE_ENABLE;
     sendToAXSrv.request.value = 0;
+    sendToAXSrv.response.txSuccess = false;
     if (sendToAXClient.call(sendToAXSrv))
         ROS_INFO("TX success: %d", sendToAXSrv.response.txSuccess);
     else
@@ -189,7 +192,7 @@ int main(int argc, char **argv)
 //    // Set torque
 //    paramSet_req.dxlID = 254;
 //    paramSet_req.value = 0.8;
-//    jointController.setMotorMaxTorqueInDecimal(paramSet_req, paramSet_res);
+//    jointController.setMotorTorqueLimitInDecimal(paramSet_req, paramSet_res);
 //    ros::Duration(0.5).sleep();
 
 //    // Set slow speed
