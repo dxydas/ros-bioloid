@@ -22,6 +22,8 @@ RosWorker::RosWorker(int argc, char* argv[], const char* nodeName, QWidget* pare
 
 RosWorker::~RosWorker()
 {
+    if (ros::ok())
+        ros::shutdown();
 }
 
 
@@ -173,8 +175,48 @@ void RosWorker::runConnectionHealthCheck()
 {
     if (!ros::master::check())
     {
-        emit disconnectedFromRosMaster();
+        spinner->stop();
+        delete spinner;
         connectionHealthCheckTimer->stop();
+
+        // Shutdown all Subscribers
+        jointStateSub.shutdown();
+        goalJointStateSub.shutdown();
+        accelSub.shutdown();
+        magnetSub.shutdown();
+        headingSub.shutdown();
+        gyroSub.shutdown();
+        fsrsSub.shutdown();
+
+        // Shutdown all Service Clients
+        receiveFromAXClient.shutdown();
+        sendtoAXClient.shutdown();
+        receiveSyncFromAXClient.shutdown();
+        sendSyncToAXClient.shutdown();
+        getMotorCurrentPositionInRadClient.shutdown();
+        getMotorGoalPositionInRadClient.shutdown();
+        setMotorGoalPositionInRadClient.shutdown();
+        getMotorCurrentSpeedInRadPerSecClient.shutdown();
+        getMotorGoalSpeedInRadPerSecClient.shutdown();
+        setMotorGoalSpeedInRadPerSecClient.shutdown();
+        getMotorCurrentTorqueInDecimalClient.shutdown();
+        getMotorTorqueLimitInDecimalClient.shutdown();
+        setMotorTorqueLimitInDecimalClient.shutdown();
+        getMotorCurrentPositionsInRadClient.shutdown();
+        getMotorGoalPositionsInRadClient.shutdown();
+        setMotorGoalPositionsInRadClient.shutdown();
+        getMotorCurrentSpeedsInRadPerSecClient.shutdown();
+        getMotorGoalSpeedsInRadPerSecClient.shutdown();
+        setMotorGoalSpeedsInRadPerSecClient.shutdown();
+        getMotorCurrentTorquesInDecimalClient.shutdown();
+        getMotorTorqueLimitsInDecimalClient.shutdown();
+        setMotorTorqueLimitsInDecimalClient.shutdown();
+        homeAllMotorsClient.shutdown();
+
+        // Allow the ROS setup procedures of the RosWorker::init() function to be run again
+        mIsMasterInitialised = false;
+
+        emit disconnectedFromRosMaster();
     }
 }
 
