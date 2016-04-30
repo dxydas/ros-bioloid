@@ -72,6 +72,11 @@ set(HEADER_FILES
   src/qcustomplot/qcustomplot.h
   src/sensorgrapher.h
   src/sensorgraph.h
+  src/fileiocontroller.h
+  src/motorfeedbackwidget.h
+  src/robotcontroller.h
+  src/motorcommandswidget.h
+  src/stylesheetmanager.h
 )
 
 set(SOURCE_FILES
@@ -91,6 +96,11 @@ set(SOURCE_FILES
   src/qcustomplot/qcustomplot.cpp
   src/sensorgrapher.cpp
   src/sensorgraph.cpp
+  src/fileiocontroller.cpp
+  src/motorfeedbackwidget.cpp
+  src/robotcontroller.cpp
+  src/motorcommandswidget.cpp
+  src/stylesheetmanager.cpp
   ${MOC_FILES}
 )
 
