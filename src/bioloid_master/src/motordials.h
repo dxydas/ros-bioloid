@@ -32,6 +32,7 @@ private:
     void customiseLayout();
     QVector<QGroupBox*> groupBoxes;
     QVector<QDial*> dials;
+    QVector<QComboBox*> dialOptionComboBoxes;
     QVector<QLineEdit*> presentPosLineEdits;
     QVector<QLineEdit*> presentSpeedLineEdits;
     QVector<QLineEdit*> presentLoadLineEdits;
@@ -41,7 +42,6 @@ private:
     QVector<QLineEdit*> torqueEnableLineEdits;
     QVector<QLineEdit*> ledLineEdits;
     QVector<QLineEdit*> alarmLedLineEdits;
-    QVector<QComboBox*> dialOptionComboBoxes;
     QVector< QVector<QLineEdit*> > alarmLedVectors;
     RosWorker* mRosWorker;
     int mSelectedMotor;
@@ -49,15 +49,10 @@ private:
     QTime callTime;
     QTimer* feedbackTimer;
     bool dialsInitialised;
-    QString groupBoxStyleSheet;
-    //QString dialStyleSheet;
-    QString presentValueLineEditStyleSheet;
     QString ledOffLineEditStyleSheet;
     QString ledOnLineEditStyleSheet;
     QString ledArrayOffLineEditStyleSheet;
     QString ledArrayOnLineEditStyleSheet;
-    QString VoltageTempLineEditStyleSheet;
-    QString goalValueLineEditStyleSheet;
 };
 
 #endif // MOTORDIALS_H

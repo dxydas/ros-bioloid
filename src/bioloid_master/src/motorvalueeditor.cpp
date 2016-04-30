@@ -509,37 +509,62 @@ void MotorValueEditor::populateMap(QMap<QString, int>* inputMap)
 
 void MotorValueEditor::customiseLayout()
 {
-    QString buttonStyleSheet =
-            ( "QPushButton {"
-              "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-              "stop: 0 lightsteelblue, stop: 1 steelblue);"
-              "border: solid #8F8F91;"
-              "border-style: outset;"
-              "border-width: 4px;"
-              "border-radius: 10px; }"
-              //"border-color: beige; }"
-              //"font: bold 14px; }"
-              //"min-width: 10em;"
-              //"padding: 6px; }"
-              "QPushButton:flat {"
-              "border: none;"  /* no border for a flat push button */
-              "}"
-              "QPushButton:default {"
-              "border-color: navy;"  /* make the default button prominent */
-              "}"
-              "QPushButton:pressed {"
-              "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-              "stop: 0 royalblue, stop: 1 dodgerblue);"
-              "border-style: inset; }" );
+    QString comboBoxStyleSheet =
+            "QComboBox {"
+            "border: 2px solid steelblue;"
+            "color: black;"
+            "background-color: lightslategrey;"
+            "selection-color: white;"
+            "selection-background-color: lightslategrey; }";
 
     QString editBoxStyleSheet =
-            ( "background-color: lightslategrey;" );
+            "QLineEdit {"
+            "border: 2px solid steelblue;"
+            "color: black;"
+            "background-color: lightslategrey;"
+            "selection-color: white;"
+            "selection-background-color: lightsteelblue; }";
 
-    optionsComboBox->setStyleSheet(editBoxStyleSheet);
+    QString spinBoxStyleSheet =
+            "QDoubleSpinBox {"
+            "border: 2px solid steelblue;"
+            "color: black;"
+            "background-color: lightslategrey;"
+            "selection-color: white;"
+            "selection-background-color: lightsteelblue; }"
+            "QDoubleSpinBox:up-arrow {"
+            "image: url(assets/images/ionicons-2.0.1/src/arrow-up-b.svg); }"
+            "QDoubleSpinBox:down-arrow {"
+            "image: url(assets/images/ionicons-2.0.1/src/arrow-down-b.svg); }";
+
+    QString buttonStyleSheet =
+            "QPushButton {"
+            "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
+            "stop: 0 lightsteelblue, stop: 1 steelblue);"
+            "border-color: #8F8F91;"
+            "border-style: outset;"
+            "border-width: 4px;"
+            "border-radius: 10px; }"
+            //"border-color: beige; }"
+            //"font: bold 14px; }"
+            //"min-width: 10em;"
+            //"padding: 6px; }"
+            "QPushButton:flat {"
+            "border: none;"  /* no border for a flat push button */
+            "}"
+            "QPushButton:default {"
+            "border-color: navy;"  /* make the default button prominent */
+            "}"
+            "QPushButton:pressed {"
+            "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
+            "stop: 0 royalblue, stop: 1 dodgerblue);"
+            "border-style: inset; }";
+
+    optionsComboBox->setStyleSheet(comboBoxStyleSheet);
     for (int i = 0; i <= NUM_OF_MOTORS; ++i)
     {
         currentValueLineEdits[i]->setStyleSheet(editBoxStyleSheet);
-        goalValueSpinBoxes[i]->setStyleSheet(editBoxStyleSheet);
+        goalValueSpinBoxes[i]->setStyleSheet(spinBoxStyleSheet);
         getValueButtons[i]->setStyleSheet(buttonStyleSheet);
         setValueButtons[i]->setStyleSheet(buttonStyleSheet);
     }

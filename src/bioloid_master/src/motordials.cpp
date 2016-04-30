@@ -28,7 +28,6 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
     QVector<QGridLayout*> subGridLayouts4;
     QVector<QGridLayout*> subGridLayouts5;
 
-    mSelectedDialOption.resize(NUM_OF_MOTORS);
     groupBoxes.resize(NUM_OF_MOTORS);
     gridLayouts.resize(NUM_OF_MOTORS);
     subGridLayouts1.resize(NUM_OF_MOTORS);
@@ -36,12 +35,13 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
     subGridLayouts3.resize(NUM_OF_MOTORS);
     subGridLayouts4.resize(NUM_OF_MOTORS);
     subGridLayouts5.resize(NUM_OF_MOTORS);
+    dials.resize(NUM_OF_MOTORS);
+    dialOptionComboBoxes.resize(NUM_OF_MOTORS);
+    mSelectedDialOption.resize(NUM_OF_MOTORS);
     presentPosLineEdits.resize(NUM_OF_MOTORS);
     presentSpeedLineEdits.resize(NUM_OF_MOTORS);
     presentLoadLineEdits.resize(NUM_OF_MOTORS);
     goalValueLineEdits.resize(NUM_OF_MOTORS);
-    dialOptionComboBoxes.resize(NUM_OF_MOTORS);
-    dials.resize(NUM_OF_MOTORS);
     torqueEnableLineEdits.resize(NUM_OF_MOTORS);
     ledLineEdits.resize(NUM_OF_MOTORS);
     presentVoltageLineEdits.resize(NUM_OF_MOTORS);
@@ -165,14 +165,14 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
         //QLabel* presentVoltageLabel = new QLabel("Volt.:");
         //QLabel* presentTempLabel = new QLabel("Temp.:");
 
-        dialOptionComboBoxes[i]->setMinimumWidth(110);
-        dials[i]->setMinimumSize(110, 100);
+        dials[i]->setMinimumSize(120, 100);
+        dialOptionComboBoxes[i]->setMinimumWidth(120);
         presentPosLineEdits[i]->setMinimumWidth(55);
         goalValueLineEdits[i]->setMaximumWidth(70);
         torqueEnableLineEdits[i]->setMaximumWidth(65);
         ledLineEdits[i]->setMaximumWidth(65);
-        presentVoltageLineEdits[i]->setMaximumWidth(55);
-        presentTempLineEdits[i]->setMaximumWidth(55);
+        presentVoltageLineEdits[i]->setMinimumWidth(55);
+        presentTempLineEdits[i]->setMinimumWidth(55);
 
         row = 0;
         col = 0;
@@ -585,87 +585,99 @@ void MotorDials::updateLineEdits()
 
 void MotorDials::customiseLayout()
 {
-    groupBoxStyleSheet =
-            ( "QGroupBox {"
-              //"background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 silver, stop: 1 white);"
-              "border: 2px solid gray;"
-              "border-radius: 5px;"
-              "padding: 10px 0px;"
-              "margin-top: 0.5em; }"
-              "QGroupBox::title {"
-              "subcontrol-origin: margin;"
-              "subcontrol-position: top center;"
-              "padding: 0px 10px;"
-              "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 silver, stop: 1 white);"
-              "border: 2px solid gray;"
-              "border-radius: 5px; }" );
+    QString groupBoxStyleSheet =
+            "QGroupBox {"
+            //"background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 silver, stop: 1 white);"
+            "border: 2px solid gray;"
+            "border-radius: 5px;"
+            "padding: 10px 0px;"
+            "margin-top: 0.5em; }"
+            "QGroupBox::title {"
+            "subcontrol-origin: margin;"
+            "subcontrol-position: top center;"
+            "padding: 0px 10px;"
+            "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 silver, stop: 1 white);"
+            "border: 2px solid gray;"
+            "border-radius: 5px; }";
 
 //    QString dialStyleSheet =
-//            ( "QDial {"
-//              "background-color: slategrey; }" );
+//            "QDial {"
+//              "background-color: slategrey; }";
 
-    presentValueLineEditStyleSheet =
-            ( "QLineEdit {"
-              "background-color: lightslategrey; }"
-              "QLineEdit:disabled {"
-              "color: black; }" );
+    QString comboBoxStyleSheet =
+            "QComboBox {"
+            "border: 2px solid steelblue;"
+            "color: black;"
+            "background-color: lightslategrey;"
+            "selection-color: white;"
+            "selection-background-color: lightslategrey; }";
+
+    QString presentValueLineEditStyleSheet =
+            "QLineEdit {"
+            "border: 2px solid steelblue;"
+            "background-color: lightslategrey; }"
+            "QLineEdit:disabled {"
+            "color: black; }";
 
     ledOffLineEditStyleSheet =
-            ( "QLineEdit {"
-              "border: 2px solid goldenrod;"
-              "background-color: darkred; }"
-              "QLineEdit:disabled {"
-              "color: black; }" );
+            "QLineEdit {"
+            "border: 2px solid goldenrod;"
+            "background-color: darkred; }"
+            "QLineEdit:disabled {"
+            "color: black; }";
 
     ledOnLineEditStyleSheet =
-            ( "QLineEdit {"
-              "border: 2px solid goldenrod;"
-              "background-color: red; }"
-              "QLineEdit:disabled {"
-              "color: white; }" );
+            "QLineEdit {"
+            "border: 2px solid goldenrod;"
+            "background-color: red; }"
+            "QLineEdit:disabled {"
+            "color: white; }";
 
     ledArrayOffLineEditStyleSheet =
-            ( "QLineEdit {"
-              "font: 10px;"
-              "margin: 0px;"
-              "border: 2px solid black;"
-              "background-color: darkred; }"
-              "QLineEdit:disabled {"
-              "color: black; }" );
+            "QLineEdit {"
+            "font: 10px;"
+            "margin: 0px;"
+            "border: 2px solid black;"
+            "background-color: darkred; }"
+            "QLineEdit:disabled {"
+            "color: black; }";
 
     ledArrayOnLineEditStyleSheet =
-            ( "QLineEdit {"
-              "font: 10px;"
-              "margin: 0px;"
-              "border: 2px solid black;"
-              "background-color: red; }"
-              "QLineEdit:disabled {"
-              "color: white; }" );
+            "QLineEdit {"
+            "font: 10px;"
+            "margin: 0px;"
+            "border: 2px solid black;"
+            "background-color: red; }"
+            "QLineEdit:disabled {"
+            "color: white; }";
 
-    VoltageTempLineEditStyleSheet =
-            ( "QLineEdit {"
-              "background-color: darkgreen; }"
-              "QLineEdit:disabled {"
-              "color: lime; }" );
+    QString voltageTempLineEditStyleSheet =
+            "QLineEdit {"
+            "border: 2px solid green;"
+            "background-color: darkgreen; }"
+            "QLineEdit:disabled {"
+            "color: lime; }";
 
-    goalValueLineEditStyleSheet =
-            ( "QLineEdit {"
-              "background-color: silver; }"
-              "QLineEdit:disabled {"
-              "color: black; }" );
+    QString goalValueLineEditStyleSheet =
+            "QLineEdit {"
+            "border: 2px solid grey;"
+            "background-color: silver; }"
+            "QLineEdit:disabled {"
+            "color: black; }";
 
     for (int i = 0; i < NUM_OF_MOTORS; ++i)
     {
         groupBoxes[i]->setStyleSheet(groupBoxStyleSheet);
         //dials[i]->setStyleSheet(dialStyleSheet);
+        dialOptionComboBoxes[i]->setStyleSheet(comboBoxStyleSheet);
         presentPosLineEdits[i]->setStyleSheet(presentValueLineEditStyleSheet);
         presentSpeedLineEdits[i]->setStyleSheet(presentValueLineEditStyleSheet);
         presentLoadLineEdits[i]->setStyleSheet(presentValueLineEditStyleSheet);
         goalValueLineEdits[i]->setStyleSheet(goalValueLineEditStyleSheet);
         torqueEnableLineEdits[i]->setStyleSheet(ledOffLineEditStyleSheet);
         ledLineEdits[i]->setStyleSheet(ledOffLineEditStyleSheet);
-        presentVoltageLineEdits[i]->setStyleSheet(VoltageTempLineEditStyleSheet);
-        presentTempLineEdits[i]->setStyleSheet(VoltageTempLineEditStyleSheet);
+        presentVoltageLineEdits[i]->setStyleSheet(voltageTempLineEditStyleSheet);
+        presentTempLineEdits[i]->setStyleSheet(voltageTempLineEditStyleSheet);
         for (int j = 0; j < alarmLedVectors[i].size(); ++j)
             alarmLedVectors[i][j]->setStyleSheet(ledArrayOffLineEditStyleSheet);
     }

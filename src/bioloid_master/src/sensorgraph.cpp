@@ -45,7 +45,7 @@ SensorGraph::SensorGraph(QWidget* parent, QStringList lineNames, QString yLabel)
     customPlot->yAxis->setLabel(yLabel);
 
 
-    pauseCheckBox = new QCheckBox("Pause");
+    pauseCheckBox = new QCheckBox("Paused");
 
 
     QHBoxLayout* hBoxLayout = new QHBoxLayout;
@@ -114,5 +114,15 @@ void SensorGraph::togglePause(bool checked)
 
 void SensorGraph::customiseLayout()
 {
+
+    QString checkBoxStyleSheet =
+            "QCheckBox:indicator {"
+            "width: 10px;"
+            "height: 10px;"
+            "border: 2px solid steelblue; }"
+            "QCheckBox:indicator:checked {"
+            "image: url(assets/images/ionicons-2.0.1/src/checkmark.svg); }";
+
     customPlot->setBackground(QColor("lightgrey"));
+    pauseCheckBox->setStyleSheet(checkBoxStyleSheet);
 }

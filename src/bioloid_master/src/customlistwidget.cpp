@@ -64,7 +64,7 @@ void CustomListWidget::customiseLayout()
             ( "QPushButton {"
               "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
               "stop: 0 lightsteelblue, stop: 1 steelblue);"
-              "border: solid #8F8F91;"
+              "border-color: #8F8F91;"
               "border-style: outset;"
               "border-width: 4px;"
               "border-radius: 10px; }"
