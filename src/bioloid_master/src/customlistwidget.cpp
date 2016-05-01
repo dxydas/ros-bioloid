@@ -1,5 +1,7 @@
 #include "customlistwidget.h"
 #include <qt5/QtCore/QDir>
+#include <qt5/QtCore/QFile>
+#include <qt5/QtCore/QString>
 #include <qt5/QtWidgets/QGridLayout>
 #include <qt5/QtWidgets/QLabel>
 #include <qt5/QtWidgets/QAbstractItemView>
@@ -36,60 +38,6 @@ CustomListWidget::CustomListWidget(QList<RobotPose> posesList, QString title,
 
     connect( moveUpButton, SIGNAL(clicked()), this, SLOT(moveUp()) );
     connect( moveDownButton, SIGNAL(clicked()), this, SLOT(moveDown()) );
-}
-
-
-void CustomListWidget::customiseLayout()
-{
-    QString listViewStyleSheet =
-            ( "QListView {"
-              "background-color: grey;"
-              "show-decoration-selected: 1; }"  // make the selection span the entire width of the view
-              "QListView::item:alternate {"
-              "background: lightslategrey; }"
-              "QListView::item:selected {"
-              "border: 1px solid rgb(50, 110, 160); }"
-              "QListView::item:selected:!active {"
-              "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-              "stop: 0 lightsteelblue, stop: 1 steelblue); }"
-              "QListView::item:selected:active {"
-              "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-              //"stop: 0 royalblue, stop: 1 dodgerblue); }"
-              "stop: 0 darkorange, stop: 1 orange); }"
-              "QListView::item:hover {"
-              "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-              "stop: 0 rgb(218, 230, 240), stop: 1 rgb(144, 180, 210)); }" );
-
-    QString buttonStyleSheet =
-            ( "QPushButton {"
-              "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-              "stop: 0 lightsteelblue, stop: 1 steelblue);"
-              "border-color: #8F8F91;"
-              "border-style: outset;"
-              "border-width: 4px;"
-              "border-radius: 10px; }"
-              //"border-color: beige; }"
-              //"font: bold 14px; }"
-              //"min-width: 10em;"
-              //"padding: 6px; }"
-              "QPushButton:flat {"
-              "border: none;"  /* no border for a flat push button */
-              "}"
-              "QPushButton:default {"
-              "border-color: navy;"  /* make the default button prominent */
-              "}"
-              "QPushButton:pressed {"
-              "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-              "stop: 0 royalblue, stop: 1 dodgerblue);"
-              "border-style: inset; }" );
-
-    mListView->setAlternatingRowColors(true);
-    moveUpButton->setIcon( QIcon("assets/images/ionicons-2.0.1/src/arrow-up-b.svg") );
-    moveDownButton->setIcon( QIcon("assets/images/ionicons-2.0.1/src/arrow-down-b.svg") );
-
-    mListView->setStyleSheet(listViewStyleSheet);
-    moveUpButton->setStyleSheet(buttonStyleSheet);
-    moveDownButton->setStyleSheet(buttonStyleSheet);
 }
 
 
@@ -178,4 +126,30 @@ void CustomListWidget::loadPosesFile()
     QModelIndex index;
     mRobotPosesListModel->loadPosesFile(fileName, index);
     mListView->setCurrentIndex(index);
+}
+
+
+void CustomListWidget::customiseLayout()
+{
+    moveUpButton->setIcon( QIcon("assets/images/ionicons-2.0.1/src/arrow-up-b.svg") );
+    moveDownButton->setIcon( QIcon("assets/images/ionicons-2.0.1/src/arrow-down-b.svg") );
+
+//    QFile file;
+//    QString customPushButtonUpIconStyleSheet;
+//    QString customPushButtonDownIconStyleSheet;
+
+//    file.setFileName("assets/qss/custompushbuttonupicon.qss");
+//    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+//        return;
+//    customPushButtonUpIconStyleSheet.append( QLatin1String(file.readAll()) );
+//    file.close();
+
+//    file.setFileName("assets/qss/custompushbuttondownicon.qss");
+//    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+//        return;
+//    customPushButtonDownIconStyleSheet.append( QLatin1String(file.readAll()) );
+//    file.close();
+
+//    moveUpButton->setStyleSheet(customPushButtonUpIconStyleSheet);
+//    moveDownButton->setStyleSheet(customPushButtonDownIconStyleSheet);
 }

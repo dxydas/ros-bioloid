@@ -17,13 +17,6 @@ public:
     RobotPosesListModel* getRobotPosesListModel() const { return mRobotPosesListModel; }
     QListView* getListView() const { return mListView; }
 
-private:
-    void customiseLayout();
-    QPushButton* moveUpButton;
-    QPushButton* moveDownButton;
-    RobotPosesListModel* mRobotPosesListModel;
-    QListView* mListView;
-
 signals:
 
 public slots:
@@ -34,6 +27,13 @@ public slots:
     void moveDown();
     void savePosesFile();
     void loadPosesFile();
+
+private:
+    void customiseLayout();
+    QPushButton* moveUpButton;
+    QPushButton* moveDownButton;
+    RobotPosesListModel* mRobotPosesListModel;
+    QListView* mListView;
 };
 
 #endif // CUSTOMLISTWIDGET_H

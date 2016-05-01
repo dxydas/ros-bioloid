@@ -126,5 +126,4 @@ void SensorGrapher::updateFsrsGraphData(std_msgs::Int16MultiArray arr)
 
 void SensorGrapher::customiseLayout()
 {
-
 }

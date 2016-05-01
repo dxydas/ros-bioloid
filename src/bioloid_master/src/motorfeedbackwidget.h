@@ -2,6 +2,7 @@
 #define MOTORFEEDBACKWIDGET_H
 
 #include <qt5/QtWidgets/QWidget>
+#include <qt5/QtWidgets/QLabel>
 #include <qt5/QtWidgets/QLineEdit>
 #include "sensor_msgs/JointState.h"
 #include "doubleslider.h"
@@ -22,6 +23,11 @@ public slots:
 
 private:
     void customiseLayout();
+    QLabel* presentPositionAndSelectedPoseLabel;
+    QLabel* presentPositionLabel;
+    QLabel* goalPositionLabel;
+    QLabel* presentSpeedLabel;
+    QLabel* movingSpeedLabel;
     QVector<DoubleSlider*> presentPosSliders;
     QVector<QLineEdit*> presentPosLineEdits;
     QVector<QLineEdit*> goalPosLineEdits;

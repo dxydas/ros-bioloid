@@ -76,7 +76,6 @@ set(HEADER_FILES
   src/motorfeedbackwidget.h
   src/robotcontroller.h
   src/motorcommandswidget.h
-  src/stylesheetmanager.h
 )
 
 set(SOURCE_FILES
@@ -100,7 +99,6 @@ set(SOURCE_FILES
   src/motorfeedbackwidget.cpp
   src/robotcontroller.cpp
   src/motorcommandswidget.cpp
-  src/stylesheetmanager.cpp
   ${MOC_FILES}
 )
 

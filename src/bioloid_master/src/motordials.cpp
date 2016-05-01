@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <qt5/QtCore/Qt>
+#include <qt5/QtCore/QFile>
 #include <qt5/QtCore/QString>
 #include <qt5/QtCore/QSignalMapper>
 #include <qt5/QtWidgets/QGridLayout>
@@ -585,99 +586,53 @@ void MotorDials::updateLineEdits()
 
 void MotorDials::customiseLayout()
 {
-    QString groupBoxStyleSheet =
-            "QGroupBox {"
-            //"background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 silver, stop: 1 white);"
-            "border: 2px solid gray;"
-            "border-radius: 5px;"
-            "padding: 10px 0px;"
-            "margin-top: 0.5em; }"
-            "QGroupBox::title {"
-            "subcontrol-origin: margin;"
-            "subcontrol-position: top center;"
-            "padding: 0px 10px;"
-            "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 silver, stop: 1 white);"
-            "border: 2px solid gray;"
-            "border-radius: 5px; }";
+    QFile file;
+    QString silverLineEditStyleSheet;
+    QString greenLineEditStyleSheet;
 
-//    QString dialStyleSheet =
-//            "QDial {"
-//              "background-color: slategrey; }";
+    file.setFileName("assets/qss/customsilverlineedit.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    silverLineEditStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
 
-    QString comboBoxStyleSheet =
-            "QComboBox {"
-            "border: 2px solid steelblue;"
-            "color: black;"
-            "background-color: lightslategrey;"
-            "selection-color: white;"
-            "selection-background-color: lightslategrey; }";
+    file.setFileName("assets/qss/customgreenlineedit.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    greenLineEditStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
 
-    QString presentValueLineEditStyleSheet =
-            "QLineEdit {"
-            "border: 2px solid steelblue;"
-            "background-color: lightslategrey; }"
-            "QLineEdit:disabled {"
-            "color: black; }";
+    file.setFileName("assets/qss/customledofflineedit.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    ledOffLineEditStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
 
-    ledOffLineEditStyleSheet =
-            "QLineEdit {"
-            "border: 2px solid goldenrod;"
-            "background-color: darkred; }"
-            "QLineEdit:disabled {"
-            "color: black; }";
+    file.setFileName("assets/qss/customledonlineedit.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    ledOnLineEditStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
 
-    ledOnLineEditStyleSheet =
-            "QLineEdit {"
-            "border: 2px solid goldenrod;"
-            "background-color: red; }"
-            "QLineEdit:disabled {"
-            "color: white; }";
+    file.setFileName("assets/qss/customledarrayofflineedit.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    ledArrayOffLineEditStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
 
-    ledArrayOffLineEditStyleSheet =
-            "QLineEdit {"
-            "font: 10px;"
-            "margin: 0px;"
-            "border: 2px solid black;"
-            "background-color: darkred; }"
-            "QLineEdit:disabled {"
-            "color: black; }";
-
-    ledArrayOnLineEditStyleSheet =
-            "QLineEdit {"
-            "font: 10px;"
-            "margin: 0px;"
-            "border: 2px solid black;"
-            "background-color: red; }"
-            "QLineEdit:disabled {"
-            "color: white; }";
-
-    QString voltageTempLineEditStyleSheet =
-            "QLineEdit {"
-            "border: 2px solid green;"
-            "background-color: darkgreen; }"
-            "QLineEdit:disabled {"
-            "color: lime; }";
-
-    QString goalValueLineEditStyleSheet =
-            "QLineEdit {"
-            "border: 2px solid grey;"
-            "background-color: silver; }"
-            "QLineEdit:disabled {"
-            "color: black; }";
+    file.setFileName("assets/qss/customledarrayonlineedit.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    ledArrayOnLineEditStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
 
     for (int i = 0; i < NUM_OF_MOTORS; ++i)
     {
-        groupBoxes[i]->setStyleSheet(groupBoxStyleSheet);
-        //dials[i]->setStyleSheet(dialStyleSheet);
-        dialOptionComboBoxes[i]->setStyleSheet(comboBoxStyleSheet);
-        presentPosLineEdits[i]->setStyleSheet(presentValueLineEditStyleSheet);
-        presentSpeedLineEdits[i]->setStyleSheet(presentValueLineEditStyleSheet);
-        presentLoadLineEdits[i]->setStyleSheet(presentValueLineEditStyleSheet);
-        goalValueLineEdits[i]->setStyleSheet(goalValueLineEditStyleSheet);
+        goalValueLineEdits[i]->setStyleSheet(silverLineEditStyleSheet);
+        presentVoltageLineEdits[i]->setStyleSheet(greenLineEditStyleSheet);
+        presentTempLineEdits[i]->setStyleSheet(greenLineEditStyleSheet);
         torqueEnableLineEdits[i]->setStyleSheet(ledOffLineEditStyleSheet);
         ledLineEdits[i]->setStyleSheet(ledOffLineEditStyleSheet);
-        presentVoltageLineEdits[i]->setStyleSheet(voltageTempLineEditStyleSheet);
-        presentTempLineEdits[i]->setStyleSheet(voltageTempLineEditStyleSheet);
         for (int j = 0; j < alarmLedVectors[i].size(); ++j)
             alarmLedVectors[i][j]->setStyleSheet(ledArrayOffLineEditStyleSheet);
     }

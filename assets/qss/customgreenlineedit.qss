@@ -1,0 +1,7 @@
+QLineEdit {
+    border: 2px solid green;
+    background-color: darkgreen;
+}
+QLineEdit:disabled {
+    color: lime;
+}

@@ -1,0 +1,10 @@
+QLineEdit {
+    border: 2px solid steelblue;
+    color: black;
+    background-color: lightslategrey;
+    selection-color: white;
+    selection-background-color: lightsteelblue;
+}
+QLineEdit:disabled {
+    color: black;
+}

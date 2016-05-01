@@ -1,4 +1,6 @@
 #include "fileiocontroller.h"
+#include <qt5/QtCore/QFile>
+#include <qt5/QtCore/QString>
 #include <qt5/QtWidgets/QGridLayout>
 
 
@@ -29,27 +31,14 @@ FileIoController::FileIoController(QWidget* parent) :
 
 void FileIoController::customiseLayout()
 {
-    QString buttonStyleSheet =
-            "QPushButton {"
-            "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-            "stop: 0 lightsteelblue, stop: 1 steelblue);"
-            "border-color: #8F8F91;"
-            "border-style: outset;"
-            "border-width: 4px;"
-            "border-radius: 10px; }"
-            "QPushButton:flat {"
-            "border: none;"  /* no border for a flat push button */
-            "}"
-            "QPushButton:default {"
-            "border-color: navy;"  /* make the default button prominent */
-            "}"
-            "QPushButton:pressed {"
-            "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-            "stop: 0 royalblue, stop: 1 dodgerblue);"
-            "border-style: inset; }";
+    QFile file;
+    QString fileIoControllerStyleSheet;
 
-    saveAvailablePosesFileButton->setStyleSheet(buttonStyleSheet);
-    saveQueuedPosesFileButton->setStyleSheet(buttonStyleSheet);
-    loadAvailablePosesFileButton->setStyleSheet(buttonStyleSheet);
-    loadQueuedPosesFileButton->setStyleSheet(buttonStyleSheet);
+    file.setFileName("assets/qss/custompushbutton.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    fileIoControllerStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
+
+    setStyleSheet(fileIoControllerStyleSheet);
 }

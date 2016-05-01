@@ -281,40 +281,4 @@ void RobotController::updateJointStateValuesFromPoseHelper(const QModelIndex &mo
 
 void RobotController::customiseLayout()
 {
-    QString buttonStyleSheet =
-            "QPushButton {"
-            "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-            "stop: 0 lightsteelblue, stop: 1 steelblue);"
-            "border-color: #8F8F91;"
-            "border-style: outset;"
-            "border-width: 4px;"
-            "border-radius: 10px; }"
-            //"border-color: beige; }"
-            //"font: bold 14px; }"
-            //"min-width: 10em;"
-            //"padding: 6px; }"
-            "QPushButton:flat {"
-            "border: none;"  /* no border for a flat push button */
-            "}"
-            "QPushButton:default {"
-            "border-color: navy;"  /* make the default button prominent */
-            "}"
-            "QPushButton:pressed {"
-            "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-            "stop: 0 royalblue, stop: 1 dodgerblue);"
-            "border-style: inset; }";
-
-    initRosNodeButton->setStyleSheet(buttonStyleSheet);
-    initMoveItHandlerButton->setStyleSheet(buttonStyleSheet);
-    setCurrentAsStartStateButton->setStyleSheet(buttonStyleSheet);
-    setCurrentAsGoalStateButton->setStyleSheet(buttonStyleSheet);
-    planMotionButton->setStyleSheet(buttonStyleSheet);
-    executeMotionButton->setStyleSheet(buttonStyleSheet);
-
-    addPoseButton->setStyleSheet(buttonStyleSheet);
-    removePoseButton->setStyleSheet(buttonStyleSheet);
-    addToQueueButton->setStyleSheet(buttonStyleSheet);
-    removeFromQueueButton->setStyleSheet(buttonStyleSheet);
-    planAndExecuteChainButton->setStyleSheet(buttonStyleSheet);
-    testButton->setStyleSheet(buttonStyleSheet);
 }

@@ -1,8 +1,8 @@
 #include "motorfeedbackwidget.h"
 #include <iostream>
 #include <sstream>
+#include <qt5/QtCore/QString>
 #include <qt5/QtCore/QVector>
-#include <qt5/QtWidgets/QLabel>
 #include <qt5/QtWidgets/QGridLayout>
 #include <qt5/QtWidgets/QFrame>
 #include "commonvars.h"
@@ -12,11 +12,11 @@ MotorFeedbackWidget::MotorFeedbackWidget(QWidget* parent) :
     QWidget(parent)
 {
     QLabel* motorLabel = new QLabel("Motor");
-    QLabel* presentPositionAndSelectedPoseLabel = new QLabel("Present position\nand selected pose");
-    QLabel* presentPositionLabel = new QLabel("Present\nposition");
-    QLabel* goalPositionLabel = new QLabel("Goal\nposition");
-    QLabel* presentSpeedLabel = new QLabel("Present\nspeed");
-    QLabel* movingSpeedLabel = new QLabel("Moving\nspeed");
+    presentPositionAndSelectedPoseLabel = new QLabel("Present position\nand selected pose");
+    presentPositionLabel = new QLabel("Present\nposition");
+    goalPositionLabel = new QLabel("Goal\nposition");
+    presentSpeedLabel = new QLabel("Present\nspeed");
+    movingSpeedLabel = new QLabel("Moving\nspeed");
 
     motorLabel->setAlignment(Qt::AlignCenter);
     presentPositionAndSelectedPoseLabel->setAlignment(Qt::AlignCenter);
@@ -24,12 +24,6 @@ MotorFeedbackWidget::MotorFeedbackWidget(QWidget* parent) :
     goalPositionLabel->setAlignment(Qt::AlignCenter);
     presentSpeedLabel->setAlignment(Qt::AlignCenter);
     movingSpeedLabel->setAlignment(Qt::AlignCenter);
-
-    presentPositionAndSelectedPoseLabel->setStyleSheet("QLabel { color: royalblue }");
-    presentPositionLabel->setStyleSheet("QLabel { color: royalblue }");
-    goalPositionLabel->setStyleSheet("QLabel { color: midnightblue }");
-    presentSpeedLabel->setStyleSheet("QLabel { color: royalblue }");
-    movingSpeedLabel->setStyleSheet("QLabel { color: midnightblue }");
 
     QGridLayout* motorFeedbackSubLayout = new QGridLayout;
     int row = 0;
@@ -72,7 +66,7 @@ MotorFeedbackWidget::MotorFeedbackWidget(QWidget* parent) :
         goalPosLineEdits[i] = new QLineEdit(str);
         presentSpeedLineEdits[i] = new QLineEdit(str);
         movingSpeedLineEdits[i] = new QLineEdit(str);
-        int maxLineEditWidth = 80;
+        int maxLineEditWidth = 60;
         int maxLineEditHeight = 16;
         presentPosLineEdits[i]->setMaximumSize(maxLineEditWidth, maxLineEditHeight);
         goalPosLineEdits[i]->setMaximumSize(maxLineEditWidth, maxLineEditHeight);
@@ -120,6 +114,7 @@ MotorFeedbackWidget::MotorFeedbackWidget(QWidget* parent) :
     motorFeedbackSubLayout->addWidget(vlineFrames[1], 0, 4, motorFeedbackSubLayout->rowCount(), 1);
     motorFeedbackSubLayout->addWidget(vlineFrames[0], 0, 1, motorFeedbackSubLayout->rowCount(), 1);
 
+    customiseLayout();
 
     //QWidget* motorFeedbackWidget = new QWidget(this);
     //motorFeedbackWidget->setLayout(motorFeedbackSubLayout);
@@ -189,19 +184,9 @@ void MotorFeedbackWidget::updateJointStateValuesFromPose(sensor_msgs::JointState
 
 void MotorFeedbackWidget::customiseLayout()
 {
-    QString editBoxStyleSheet =
-            "QLineEdit {"
-            "border: 2px solid steelblue;"
-            "color: black;"
-            "background-color: lightslategrey;"
-            "selection-color: white;"
-            "selection-background-color: lightsteelblue; }";
-
-    for (int i = 0; i < NUM_OF_MOTORS; ++i)
-    {
-        presentPosLineEdits[i]->setStyleSheet(editBoxStyleSheet);
-        goalPosLineEdits[i]->setStyleSheet(editBoxStyleSheet);
-        presentSpeedLineEdits[i]->setStyleSheet(editBoxStyleSheet);
-        movingSpeedLineEdits[i]->setStyleSheet(editBoxStyleSheet);
-    }
+    presentPositionAndSelectedPoseLabel->setStyleSheet("QLabel { color: royalblue }");
+    presentPositionLabel->setStyleSheet("QLabel { color: royalblue }");
+    goalPositionLabel->setStyleSheet("QLabel { color: midnightblue }");
+    presentSpeedLabel->setStyleSheet("QLabel { color: royalblue }");
+    movingSpeedLabel->setStyleSheet("QLabel { color: midnightblue }");
 }

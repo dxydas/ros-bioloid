@@ -17,7 +17,6 @@
 #include "motordials.h"
 #include "moveithandler.h"
 #include "sensorgrapher.h"
-#include "stylesheetmanager.h"
 
 class MainWindow : public QMainWindow
 {
@@ -42,7 +41,6 @@ public slots:
 
 private:
     void setUpLayout();
-    void customiseAllLayouts();
     void customiseLayout();
     void connectSignalsAndSlots();
 
@@ -57,7 +55,6 @@ private:
     MoveItHandler* moveItHandler;
     OutputLog* outputLog;
     SensorGrapher* sensorGrapher;
-    StyleSheetManager* styleSheetManager;
 
     QAction* exitAct;
     QAction* aboutQtAct;

@@ -2,6 +2,7 @@
 #include <qt5/QtCore/Qt>
 #include <qt5/QtCore/QMetaType>
 #include <qt5/QtCore/QString>
+#include <qt5/QtCore/QFile>
 #include <qt5/QtGui/QIcon>
 #include <qt5/QtWidgets/QApplication>
 #include <qt5/QtWidgets/QMenuBar>
@@ -35,10 +36,8 @@ MainWindow::MainWindow(int argc, char* argv[], QWidget* parent) :
     moveItHandler = new MoveItHandler(this);
     outputLog = new OutputLog(this);
     sensorGrapher = new SensorGrapher(rosWorker, this);
-    styleSheetManager = new StyleSheetManager(this);
 
     setUpLayout();
-    customiseAllLayouts();
     customiseLayout();
     connectSignalsAndSlots();
 
@@ -158,79 +157,99 @@ void MainWindow::setUpLayout()
 }
 
 
-void MainWindow::customiseAllLayouts()
-{
-    //styleSheetManager->
-}
-
-
 void MainWindow::customiseLayout()
 {
-    QString mainWindowStyleSheet =
-            "QMainWindow {"
-            "border: 2px solid steelblue;"
-            //"background-color: grey;"
-            //"border-image: url(assets/images/carbon-fibre-patterns/carbon3.jpg) 0 0 0 0 stretch stretch; }" );
-            //"background-image: url(assets/images/carbon-fibre-patterns/carbon3.jpg); }" );
-            //"background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-            //"stop: 0 lightsteelblue, stop: 1 steelblue); }" );
-            "background-color: qradialgradient(cx: 0, cy: 0, radius: 1,"
-            "fx: 0.5, fy: 0.5, stop: 0 lightgrey, stop: 1 grey); }";
+    QFile file;
+    QString mainWindowStyleSheet;
 
-    QString menuBarStyleSheet =
-            "QMenuBar {"
-            "background-color: grey; }";
+    file.setFileName("assets/qss/custommainwindow.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
 
-    QString dockWidgetStyleSheet =
-            "QDockWidget {"
-//              "titlebar-close-icon: url(assets/images/pixicus/icons/minus_light_alt.png);"
-//              "titlebar-normal-icon: url(assets/images/pixicus/icons/export_box.png); }"
-//              "titlebar-close-icon: url(assets/images/pp-icon-set/PP Icon Set - PNG Files/Cross.png);"
-//              "titlebar-normal-icon: url(assets/images/pp-icon-set/PP Icon Set - PNG Files/Images.png);" );
-//              "titlebar-close-icon: url(assets/images/WindowsIcons-master/WindowsPhone/svg/appbar.close.svg);"
-//              "titlebar-normal-icon: url(assets/images/WindowsIcons-master/WindowsPhone/svg/appbar.door.leave.svg);"
-            //"titlebar-close-icon: url(assets/images/open-iconic-master/svg/x.svg);"
-            //"titlebar-normal-icon: url(assets/images/open-iconic-master/svg/external-link.svg);"
-            "titlebar-close-icon: url(assets/images/ionicons-2.0.1/src/close.svg);"
-            "titlebar-normal-icon: url(assets/images/ionicons-2.0.1/src/android-expand.svg);"
-            "border: 2px solid steelblue;"
-            //"background-color: grey; }"
-            "background: qradialgradient(cx: 0, cy: 0, radius: 1,"
-            "fx: 0.5, fy: 0.5, stop: 0 lightgrey, stop: 1 grey); }"
-            "QDockWidget::title {"
-            "background: steelblue;"
-            "padding-right: -200px; }"  // Negative padding stops the vertical title bar from being truncated
-            "QDockWidget::close-button, QDockWidget::float-button {"
-            "border: 2px solid steelblue;"
-            "background: steelblue; }"
-            "QDockWidget::close-button:hover, QDockWidget::float-button:hover {"
-            "background: lightsteelblue; }"
-            "QDockWidget::close-button:pressed, QDockWidget::float-button:pressed {"
-            "background: rgb(50, 110, 160); }";
+    file.setFileName("assets/qss/custommenubar.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
 
-    QString textEditStyleSheet =
-            "QTextEdit {"
-            "background-color: grey; }";
+    file.setFileName("assets/qss/customtextedit.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
+
+    file.setFileName("assets/qss/customdockwidget.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
+
+    file.setFileName("assets/qss/customlineedit.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
+
+    file.setFileName("assets/qss/customtableview.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
+
+    file.setFileName("assets/qss/customcombobox.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
+
+    file.setFileName("assets/qss/custompushbutton.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
+
+    file.setFileName("assets/qss/customlabel.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
+
+    file.setFileName("assets/qss/customgroupbox.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
+
+    file.setFileName("assets/qss/customdoublespinbox.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
+
+    file.setFileName("assets/qss/customcheckbox.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
+
+    file.setFileName("assets/qss/customlistview.qss");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+    file.close();
+
+//    file.setFileName("assets/qss/customdial.qss");
+//    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+//        return;
+//    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
+//    file.close();
+
+    setStyleSheet(mainWindowStyleSheet);
 
     setWindowTitle("ROSoloid Control GUI");
     setWindowIcon( QIcon("assets/images/ionicons-2.0.1/src/gear-a.svg") );
-    //setWindowFlags(Qt::CustomizeWindowHint);
-    //setWindowFlags(Qt::FramelessWindowHint);
-
-    setStyleSheet(mainWindowStyleSheet);
-    menuBar()->setStyleSheet(menuBarStyleSheet);
-    //
-    outputLog->setStyleSheet(textEditStyleSheet);
-    //
-    motorFeedbackDockWidget->setStyleSheet(dockWidgetStyleSheet);
-    motorCommandsDockWidget->setStyleSheet(dockWidgetStyleSheet);
-    poseControlDockWidget->setStyleSheet(dockWidgetStyleSheet);
-    fileIoDockWidget->setStyleSheet(dockWidgetStyleSheet);
-    outputLogDockWidget->setStyleSheet(dockWidgetStyleSheet);
-    motorValueEditorDockWidget->setStyleSheet(dockWidgetStyleSheet);
-    motorAddressEditorDockWidget->setStyleSheet(dockWidgetStyleSheet);
-    motorDialsDockWidget->setStyleSheet(dockWidgetStyleSheet);
-    sensorGrapherDockWidget->setStyleSheet(dockWidgetStyleSheet);
 }
 
 

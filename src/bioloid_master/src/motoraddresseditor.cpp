@@ -2,6 +2,7 @@
 #include <qt5/QtCore/Qt>
 #include <qt5/QtCore/QVariant>
 #include <qt5/QtCore/QTimer>
+#include <qt5/QtCore/QString>
 #include <qt5/QtWidgets/QGridLayout>
 #include <qt5/QtWidgets/QFormLayout>
 #include <qt5/QtWidgets/QHBoxLayout>
@@ -203,54 +204,5 @@ void MotorAddressEditor::setValuePrompt(QString name, int address, int value)
 
 void MotorAddressEditor::customiseLayout()
 {
-    QString tableViewStyleSheet =
-            "QTableView {"
-            "border: 2px solid steelblue;"
-            "color: black;"
-            "background-color: lightgrey; }"
-            // item:selected must be declared before item:focus
-            "QTableView:item:selected {"
-            "background: steelblue; }"
-            "QTableView:item:focus {"
-            "background: dodgerblue; }";
-
-    QString comboBoxStyleSheet =
-            "QComboBox {"
-            "border: 2px solid steelblue;"
-            "color: black;"
-            "background-color: lightslategrey;"
-            "selection-color: white;"
-            "selection-background-color: lightslategrey; }" ;
-
-    QString buttonStyleSheet =
-            "QPushButton {"
-            "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-            "stop: 0 lightsteelblue, stop: 1 steelblue);"
-            "border-color: #8F8F91;"
-            "border-style: outset;"
-            "border-width: 4px;"
-            "border-radius: 10px; }"
-            //"border-color: beige; }"
-            //"font: bold 14px; }"
-            //"min-width: 10em;"
-            //"padding: 6px; }"
-            "QPushButton:flat {"
-            "border: none;"  /* no border for a flat push button */
-            "}"
-            "QPushButton:default {"
-            "border-color: navy;"  /* make the default button prominent */
-            "}"
-            "QPushButton:pressed {"
-            "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-            "stop: 0 royalblue, stop: 1 dodgerblue);"
-            "border-style: inset; }" ;
-
-    QString labelStyleSheet =
-            "QLabel {"
-            "color: blue; }" ;
-
-    tableView->setStyleSheet(tableViewStyleSheet);
-    motorComboBox->setStyleSheet(comboBoxStyleSheet);
-    refreshButton->setStyleSheet(buttonStyleSheet);
-    refreshLabel->setStyleSheet(labelStyleSheet);
+    refreshLabel->setStyleSheet("QLabel { color: blue }");
 }

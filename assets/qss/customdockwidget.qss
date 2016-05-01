@@ -1,0 +1,29 @@
+QDockWidget {
+    /*titlebar-close-icon: url(assets/images/pixicus/icons/minus_light_alt.png);
+    titlebar-normal-icon: url(assets/images/pixicus/icons/export_box.png); }
+    titlebar-close-icon: url(assets/images/pp-icon-set/PP Icon Set - PNG Files/Cross.png);
+    titlebar-normal-icon: url(assets/images/pp-icon-set/PP Icon Set - PNG Files/Images.png); );
+    titlebar-close-icon: url(assets/images/WindowsIcons-master/WindowsPhone/svg/appbar.close.svg);
+    titlebar-normal-icon: url(assets/images/WindowsIcons-master/WindowsPhone/svg/appbar.door.leave.svg);
+    titlebar-close-icon: url(assets/images/open-iconic-master/svg/x.svg);
+    titlebar-normal-icon: url(assets/images/open-iconic-master/svg/external-link.svg);*/
+    titlebar-close-icon: url(assets/images/ionicons-2.0.1/src/close.svg);
+    titlebar-normal-icon: url(assets/images/ionicons-2.0.1/src/android-expand.svg);
+    border: 2px solid steelblue;
+    /*background-color: grey; }*/
+    background: qradialgradient(cx: 0, cy: 0, radius: 1, fx: 0.5, fy: 0.5, stop: 0 lightgrey, stop: 1 grey);
+}
+QDockWidget::title {
+      background: steelblue;
+      padding-right: -200px;  /* Negative padding stops the vertical title bar from being truncated */
+}
+QDockWidget::close-button, QDockWidget::float-button {
+      border: 2px solid steelblue;
+      background: steelblue;
+}
+QDockWidget::close-button:hover, QDockWidget::float-button:hover {
+      background: lightsteelblue;
+}
+QDockWidget::close-button:pressed, QDockWidget::float-button:pressed {
+      background: rgb(50, 110, 160);
+}

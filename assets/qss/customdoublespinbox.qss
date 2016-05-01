@@ -1,0 +1,13 @@
+QDoubleSpinBox {
+    border: 2px solid steelblue;
+    color: black;
+    background-color: lightslategrey;
+    selection-color: white;
+    selection-background-color: lightsteelblue;
+}
+QDoubleSpinBox:up-arrow {
+    image: url(assets/images/ionicons-2.0.1/src/arrow-up-b.svg);
+}
+QDoubleSpinBox:down-arrow {
+    image: url(assets/images/ionicons-2.0.1/src/arrow-down-b.svg);
+}

@@ -1,0 +1,12 @@
+QTableView {
+    border: 2px solid steelblue;
+    color: black;
+    background-color: lightgrey;
+}
+/* item:selected must be declared before item:focus */
+QTableView:item:selected {
+    background: steelblue;
+}
+QTableView:item:focus {
+    background: dodgerblue;
+}
