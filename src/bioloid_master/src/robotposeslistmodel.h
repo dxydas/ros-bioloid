@@ -28,14 +28,13 @@ public:
     //void setRobotPosesList(const QList<RobotPose> &value) { mRobotPosesList = value; }
     RobotPose getCurrentPose(const QModelIndex &index) const;
 
-private:
-    bool mAllowDuplNames;
-    QList<RobotPose> mRobotPosesList;
-
 signals:
 
 public slots:
 
+private:
+    bool mAllowDuplNames;
+    QList<RobotPose> mRobotPosesList;
 };
 
 #endif // ROBOTPOSESLISTMODEL_H

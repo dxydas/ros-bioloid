@@ -10,13 +10,12 @@ class OutputLog : public QTextEdit
 public:
     explicit OutputLog(QWidget *parent = 0);
 
-private:
-
 signals:
 
 public slots:
     void appendTimestamped(const QString & text);
 
+private:
 };
 
 #endif // OUTPUTLOG_H
