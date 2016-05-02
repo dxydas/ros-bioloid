@@ -16,7 +16,7 @@ QComboBox {
     color: black;
     background-color: lightslategrey;
     selection-color: white;
-    selection-background-color: lightslategrey;
+    selection-background-color: steelblue;
 }
 
 
