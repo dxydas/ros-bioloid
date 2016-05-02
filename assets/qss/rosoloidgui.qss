@@ -237,7 +237,7 @@ QPushButton:flat {
     border: none;  /* no border for a flat push button */
 }
 QPushButton:default {
-    border-color: navy;  /* make the default button prominent */
+    border-color: royalblue;  /* make the default button prominent */
 }
 QPushButton:pressed {
     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 royalblue, stop: 1 dodgerblue);
