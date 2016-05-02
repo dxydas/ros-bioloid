@@ -27,7 +27,6 @@ public slots:
     void updateFsrsGraphData(std_msgs::Int16MultiArray arr);
 
 private:
-    void customiseLayout();
     RosWorker* mRosWorker;
     int numOfGraphs;
     QVector<SensorGraph*> sensorGraphs;

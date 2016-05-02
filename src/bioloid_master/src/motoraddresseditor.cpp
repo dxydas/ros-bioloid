@@ -64,8 +64,6 @@ MotorAddressEditor::MotorAddressEditor(RosWorker* rosWorker, QWidget* parent) :
 {
     setWindowTitle("Motor Address Editor");
 
-
-
     motorComboBox = new QComboBox;
     for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
         motorComboBox->addItem(QString::number(dxlId));
@@ -79,7 +77,7 @@ MotorAddressEditor::MotorAddressEditor(RosWorker* rosWorker, QWidget* parent) :
 
     refreshLabel = new QLabel("Refreshing ...");
     refreshLabel->setVisible(false);
-
+    refreshLabel->setObjectName("blueLabel");
 
 
     controlTableModel = new ControlTableModel(this);
@@ -91,10 +89,6 @@ MotorAddressEditor::MotorAddressEditor(RosWorker* rosWorker, QWidget* parent) :
     // Spin box delegate for editable values (column 4)
     SpinBoxDelegate* spinBoxDelegate = new SpinBoxDelegate;
     tableView->setItemDelegateForColumn(4, spinBoxDelegate);
-
-
-
-
 
 
     int row = 0;
@@ -111,14 +105,9 @@ MotorAddressEditor::MotorAddressEditor(RosWorker* rosWorker, QWidget* parent) :
     hBoxLayout->addLayout(gridLayout);
 
 
-
-
-
     setMinimumSize(800, 600);
 
     setLayout(hBoxLayout);
-
-    customiseLayout();
 
     connect( motorComboBox, SIGNAL(currentIndexChanged(int)),
              this, SLOT(updateSelectedMotor(int)) );
@@ -160,14 +149,6 @@ void MotorAddressEditor::setValuePrompt(QString name, int address, int value)
         return;
     }
 
-
-    //int address = controlTableModel->getAddress(topLeft.row());
-    //int targetValue = controlTableModel->getTargetValue(topLeft.row());
-
-    //int address = controlTableModel->index(index.row(), 1).data().toUInt();
-    //int targetValue = index.data().toUInt();
-
-
     QMessageBox::StandardButton reply = QMessageBox::warning(
                 this, "Set value?",
                 "Set " + name + " of motor with ID " + QString::number(selectedMotor) +
@@ -178,7 +159,6 @@ void MotorAddressEditor::setValuePrompt(QString name, int address, int value)
         refreshData();
         return;
     }
-
 
     if ( (address == AX12_ID) || (address == AX12_BAUD_RATE) )
     {
@@ -199,10 +179,4 @@ void MotorAddressEditor::setValuePrompt(QString name, int address, int value)
     srv.request.value = value;
     rosWorker->sendtoAXClient.call(srv);
     refreshData();
-}
-
-
-void MotorAddressEditor::customiseLayout()
-{
-    refreshLabel->setStyleSheet("QLabel { color: blue }");
 }

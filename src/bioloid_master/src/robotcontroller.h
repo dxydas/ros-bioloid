@@ -69,7 +69,6 @@ public slots:
     void updateJointStateValuesFromPoseHelper(const QModelIndex &modelIndex);
 
 private:
-    void customiseLayout();
     RosWorker* mRosWorker;
     QThread* workerThread;
     QMutex moveMutex;

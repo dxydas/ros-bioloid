@@ -2,7 +2,6 @@
 #include <iostream>
 #include <sstream>
 #include <qt5/QtCore/Qt>
-#include <qt5/QtCore/QFile>
 #include <qt5/QtCore/QString>
 #include <qt5/QtCore/QMapIterator>
 #include <qt5/QtCore/QSignalMapper>
@@ -108,6 +107,7 @@ MotorValueEditor::MotorValueEditor(RosWorker* rosWorker, QWidget* parent) :
         {
             motorIdLabels[i]->setText(QString::number(i + 1));
             currentValueLineEdits[i]->setText(str);
+            currentValueLineEdits[i]->setEnabled(false);
 
             getSignalMapper->setMapping(getValueButtons[i], i + 1);
             setSignalMapper->setMapping(setValueButtons[i], i + 1);
@@ -133,8 +133,6 @@ MotorValueEditor::MotorValueEditor(RosWorker* rosWorker, QWidget* parent) :
     }
 
     setLayout(layout);
-
-    customiseLayout();
 
     connect( optionsComboBox, SIGNAL(currentIndexChanged(const QString &)),
              this, SLOT(updateOption(const QString &)) );
@@ -506,9 +504,4 @@ void MotorValueEditor::populateMap(QMap<QString, int>* inputMap)
     inputMap->insert("AX12_TORQUE_LIMIT_L", AX12_TORQUE_LIMIT_L);
     inputMap->insert("AX12_LOCK", AX12_LOCK);
     inputMap->insert("AX12_PUNCH_L", AX12_PUNCH_L);
-}
-
-
-void MotorValueEditor::customiseLayout()
-{
 }

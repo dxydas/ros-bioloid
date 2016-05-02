@@ -1,6 +1,4 @@
 #include "fileiocontroller.h"
-#include <qt5/QtCore/QFile>
-#include <qt5/QtCore/QString>
 #include <qt5/QtWidgets/QGridLayout>
 
 
@@ -24,21 +22,4 @@ FileIoController::FileIoController(QWidget* parent) :
 //    QWidget* fileIoWidget =  new QWidget(this);
 //    fileIoWidget->setLayout(fileIoSubLayout);
     setLayout(fileIoSubLayout);
-
-    customiseLayout();
-}
-
-
-void FileIoController::customiseLayout()
-{
-    QFile file;
-    QString fileIoControllerStyleSheet;
-
-    file.setFileName("assets/qss/custompushbutton.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    fileIoControllerStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    setStyleSheet(fileIoControllerStyleSheet);
 }

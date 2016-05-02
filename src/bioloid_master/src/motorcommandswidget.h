@@ -18,7 +18,6 @@ signals:
 public slots:
 
 private:
-    void customiseLayout();
 };
 
 #endif // MOTORCOMMANDSWIDGET_H

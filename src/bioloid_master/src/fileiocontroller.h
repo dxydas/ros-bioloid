@@ -20,7 +20,6 @@ signals:
 public slots:
 
 private:
-    void customiseLayout();
 };
 
 #endif // FILEIOCONTROLLER_H

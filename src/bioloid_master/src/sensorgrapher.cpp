@@ -7,8 +7,6 @@ SensorGrapher::SensorGrapher(RosWorker* rosWorker, QWidget* parent) :
 {
     setWindowTitle("Sensor Grapher");
 
-
-
     int row = 0;
     int col = 0;
     QGridLayout* gridLayout = new QGridLayout;
@@ -44,29 +42,11 @@ SensorGrapher::SensorGrapher(RosWorker* rosWorker, QWidget* parent) :
         gridLayout->addWidget(sensorGraphs[i], row++, col);
     }
 
-
-
     setMinimumSize(800, 600);
 
     setLayout(gridLayout);
 
-    customiseLayout();
-
-
-
     elapsedTimer = new QElapsedTimer();
-
-
-    //QTimer* dataUpdateTimer = new QTimer(this);
-
-
-
-
-    //connect( dataUpdateTimer, SIGNAL(timeout()), this, SLOT(update()) );
-
-    //dataUpdateTimer->start(100);
-
-
 
     connect( mRosWorker, SIGNAL(accelDataUpdated(geometry_msgs::Vector3)),
                                 this, SLOT(updateAccelGraphData(geometry_msgs::Vector3)) );
@@ -121,9 +101,4 @@ void SensorGrapher::updateFsrsGraphData(std_msgs::Int16MultiArray arr)
     int t = elapsedTimer->elapsed();
     for (int i = 0; i < arr.data.size(); ++i)
         sensorGraphs[4]->appendData(i, t, arr.data[i]);
-}
-
-
-void SensorGrapher::customiseLayout()
-{
 }

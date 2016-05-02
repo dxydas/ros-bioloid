@@ -2,7 +2,6 @@
 #include <iostream>
 #include <sstream>
 #include <qt5/QtCore/Qt>
-#include <qt5/QtCore/QFile>
 #include <qt5/QtCore/QString>
 #include <qt5/QtCore/QSignalMapper>
 #include <qt5/QtWidgets/QGridLayout>
@@ -229,9 +228,18 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
         mainGridLayout->addWidget(groupBoxes[i], row, col);
     }
 
-    setLayout(mainGridLayout);
+    for (int i = 0; i < NUM_OF_MOTORS; ++i)
+    {
+        goalValueLineEdits[i]->setObjectName("silverLineEdit");
+        presentVoltageLineEdits[i]->setObjectName("greenLineEdit");
+        presentTempLineEdits[i]->setObjectName("greenLineEdit");
+        torqueEnableLineEdits[i]->setObjectName("ledOffLineEdit");
+        ledLineEdits[i]->setObjectName("ledOffLineEdit");
+        for (int j = 0; j < alarmLedVectors[i].size(); ++j)
+            alarmLedVectors[i][j]->setObjectName("ledArrayOffLineEdit");
+    }
 
-    customiseLayout();
+    setLayout(mainGridLayout);
 
     callTime.start();
 
@@ -534,9 +542,9 @@ void MotorDials::updateLineEdits()
             for (int i = 0; i < torqueEnableLineEdits.size(); ++i)
             {
                 if (srv.response.values[i])
-                    torqueEnableLineEdits[i]->setStyleSheet(ledOnLineEditStyleSheet);
+                    torqueEnableLineEdits[i]->setObjectName("ledOnLineEdit");
                 else
-                    torqueEnableLineEdits[i]->setStyleSheet(ledOffLineEditStyleSheet);
+                    torqueEnableLineEdits[i]->setObjectName("ledOffLineEdit");
             }
         }
     }
@@ -551,9 +559,9 @@ void MotorDials::updateLineEdits()
             for (int i = 0; i < ledLineEdits.size(); ++i)
             {
                 if (srv.response.values[i])
-                    ledLineEdits[i]->setStyleSheet(ledOnLineEditStyleSheet);
+                    ledLineEdits[i]->setObjectName("ledOnLineEdit");
                 else
-                    ledLineEdits[i]->setStyleSheet(ledOffLineEditStyleSheet);
+                    ledLineEdits[i]->setObjectName("ledOffLineEdit");
             }
         }
     }
@@ -573,67 +581,12 @@ void MotorDials::updateLineEdits()
 //                    std::cout << srv.response.values[i] << " AND " << (int)pow(2, j) << " = "
 //                              << (srv.response.values[i] & (int)pow(2, j)) << std::endl;
                     if ( srv.response.values[i] & (int)pow(2, j) )  // Extract bit value
-                        alarmLedVectors[i][j]->setStyleSheet(ledArrayOnLineEditStyleSheet);
+                        alarmLedVectors[i][j]->setObjectName("ledArrayOnLineEdit");
                     else
-                        alarmLedVectors[i][j]->setStyleSheet(ledArrayOffLineEditStyleSheet);
+                        alarmLedVectors[i][j]->setObjectName("ledArrayOffLineEdit");
                 }
             }
         }
     }
 
-}
-
-
-void MotorDials::customiseLayout()
-{
-    QFile file;
-    QString silverLineEditStyleSheet;
-    QString greenLineEditStyleSheet;
-
-    file.setFileName("assets/qss/customsilverlineedit.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    silverLineEditStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customgreenlineedit.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    greenLineEditStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customledofflineedit.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    ledOffLineEditStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customledonlineedit.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    ledOnLineEditStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customledarrayofflineedit.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    ledArrayOffLineEditStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customledarrayonlineedit.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    ledArrayOnLineEditStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    for (int i = 0; i < NUM_OF_MOTORS; ++i)
-    {
-        goalValueLineEdits[i]->setStyleSheet(silverLineEditStyleSheet);
-        presentVoltageLineEdits[i]->setStyleSheet(greenLineEditStyleSheet);
-        presentTempLineEdits[i]->setStyleSheet(greenLineEditStyleSheet);
-        torqueEnableLineEdits[i]->setStyleSheet(ledOffLineEditStyleSheet);
-        ledLineEdits[i]->setStyleSheet(ledOffLineEditStyleSheet);
-        for (int j = 0; j < alarmLedVectors[i].size(); ++j)
-            alarmLedVectors[i][j]->setStyleSheet(ledArrayOffLineEditStyleSheet);
-    }
 }

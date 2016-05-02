@@ -171,9 +171,6 @@ RobotController::RobotController(RosWorker* rosWorker, QWidget* parent) :
     //QWidget* poseControlWidget =  new QWidget(this);
     //poseControlWidget->setLayout(poseControlLayout);
     setLayout(poseControlLayout);
-
-
-    customiseLayout();
 }
 
 
@@ -276,9 +273,4 @@ void RobotController::updateJointStateValuesFromPoseHelper(const QModelIndex &mo
     sensor_msgs::JointState js = availablePosesCustomListWidget->
             getRobotPosesListModel()->getCurrentPose(modelIndex).jointState;
     emit jointStateValuesFromPoseReady(js);
-}
-
-
-void RobotController::customiseLayout()
-{
 }

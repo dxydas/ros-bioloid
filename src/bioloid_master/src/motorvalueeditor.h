@@ -27,7 +27,6 @@ public slots:
 
 private:
     void populateMap(QMap<QString, int>* inputMap);
-    void customiseLayout();
     QMap<QString, int> optionsMap;
     QComboBox* optionsComboBox;
     QVector<QLineEdit*> currentValueLineEdits;

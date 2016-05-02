@@ -1,3 +1,0 @@
-QPushButton {
-    qproperty-icon: url(assets/images/ionicons-2.0.1/src/arrow-up-b.svg);
-}

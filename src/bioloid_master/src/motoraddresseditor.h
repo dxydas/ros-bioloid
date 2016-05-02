@@ -43,7 +43,6 @@ public slots:
     void setValuePrompt(QString name, int address, int value);
 
 private:
-    void customiseLayout();
     QPushButton* refreshButton;
     QLabel* refreshLabel;
     QTableView* tableView;

@@ -19,6 +19,8 @@ Q_DECLARE_METATYPE(std_msgs::Int16MultiArray)
 MainWindow::MainWindow(int argc, char* argv[], QWidget* parent) :
     QMainWindow(parent)
 {
+    setWindowTitle("ROSoloid Control GUI");
+
     qRegisterMetaType<sensor_msgs::JointState>("JointState");
     qRegisterMetaType<geometry_msgs::Vector3>("Vector3");
     qRegisterMetaType<std_msgs::Float32>("Float32");
@@ -162,94 +164,13 @@ void MainWindow::customiseLayout()
     QFile file;
     QString mainWindowStyleSheet;
 
-    file.setFileName("assets/qss/custommainwindow.qss");
+    file.setFileName("assets/qss/rosoloidgui.qss");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
     mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
     file.close();
-
-    file.setFileName("assets/qss/custommenubar.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customtextedit.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customdockwidget.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customlineedit.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customtableview.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customcombobox.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/custompushbutton.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customlabel.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customgroupbox.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customdoublespinbox.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customcheckbox.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-    file.setFileName("assets/qss/customlistview.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-    file.close();
-
-//    file.setFileName("assets/qss/customdial.qss");
-//    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-//        return;
-//    mainWindowStyleSheet.append( QLatin1String(file.readAll()) );
-//    file.close();
 
     setStyleSheet(mainWindowStyleSheet);
-
-    setWindowTitle("ROSoloid Control GUI");
-    setWindowIcon( QIcon("assets/images/ionicons-2.0.1/src/gear-a.svg") );
 }
 
 

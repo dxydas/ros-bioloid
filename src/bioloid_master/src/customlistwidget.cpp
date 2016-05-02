@@ -1,6 +1,5 @@
 #include "customlistwidget.h"
 #include <qt5/QtCore/QDir>
-#include <qt5/QtCore/QFile>
 #include <qt5/QtCore/QString>
 #include <qt5/QtWidgets/QGridLayout>
 #include <qt5/QtWidgets/QLabel>
@@ -28,13 +27,14 @@ CustomListWidget::CustomListWidget(QList<RobotPose> posesList, QString title,
     moveUpButton = new QPushButton("Move up");
     moveDownButton = new QPushButton("Move down");
 
+    moveUpButton->setObjectName("upIconPushButton");
+    moveDownButton->setObjectName("downIconPushButton");
+
     int row = 0;
     layout->addWidget(label, row++, 0, 1, -1);
     layout->addWidget(mListView, row++, 0, 1, -1);
     layout->addWidget(moveUpButton, row, 0);
     layout->addWidget(moveDownButton, row++, 1);
-
-    customiseLayout();
 
     connect( moveUpButton, SIGNAL(clicked()), this, SLOT(moveUp()) );
     connect( moveDownButton, SIGNAL(clicked()), this, SLOT(moveDown()) );
@@ -126,30 +126,4 @@ void CustomListWidget::loadPosesFile()
     QModelIndex index;
     mRobotPosesListModel->loadPosesFile(fileName, index);
     mListView->setCurrentIndex(index);
-}
-
-
-void CustomListWidget::customiseLayout()
-{
-    moveUpButton->setIcon( QIcon("assets/images/ionicons-2.0.1/src/arrow-up-b.svg") );
-    moveDownButton->setIcon( QIcon("assets/images/ionicons-2.0.1/src/arrow-down-b.svg") );
-
-//    QFile file;
-//    QString customPushButtonUpIconStyleSheet;
-//    QString customPushButtonDownIconStyleSheet;
-
-//    file.setFileName("assets/qss/custompushbuttonupicon.qss");
-//    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-//        return;
-//    customPushButtonUpIconStyleSheet.append( QLatin1String(file.readAll()) );
-//    file.close();
-
-//    file.setFileName("assets/qss/custompushbuttondownicon.qss");
-//    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-//        return;
-//    customPushButtonDownIconStyleSheet.append( QLatin1String(file.readAll()) );
-//    file.close();
-
-//    moveUpButton->setStyleSheet(customPushButtonUpIconStyleSheet);
-//    moveDownButton->setStyleSheet(customPushButtonDownIconStyleSheet);
 }

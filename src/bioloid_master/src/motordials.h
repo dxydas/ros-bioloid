@@ -29,7 +29,6 @@ public slots:
     void updateLineEdits();
 
 private:
-    void customiseLayout();
     QVector<QGroupBox*> groupBoxes;
     QVector<QDial*> dials;
     QVector<QComboBox*> dialOptionComboBoxes;
@@ -49,10 +48,6 @@ private:
     QTime callTime;
     QTimer* feedbackTimer;
     bool dialsInitialised;
-    QString ledOffLineEditStyleSheet;
-    QString ledOnLineEditStyleSheet;
-    QString ledArrayOffLineEditStyleSheet;
-    QString ledArrayOnLineEditStyleSheet;
 };
 
 #endif // MOTORDIALS_H

@@ -29,7 +29,6 @@ public slots:
     void loadPosesFile();
 
 private:
-    void customiseLayout();
     QPushButton* moveUpButton;
     QPushButton* moveDownButton;
     RobotPosesListModel* mRobotPosesListModel;
