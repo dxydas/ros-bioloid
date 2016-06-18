@@ -1,6 +1,7 @@
 #ifndef MOTORADDRESSEDITOR_H
 #define MOTORADDRESSEDITOR_H
 
+#include <qt5/QtCore/QtCore>
 #include <qt5/QtCore/QVector>
 #include <qt5/QtCore/QModelIndex>
 #include <qt5/QtWidgets/QWidget>

@@ -2,6 +2,7 @@
 #define CONTROLTABLEMODEL_H
 
 #include <qt5/QtCore/Qt>
+#include <qt5/QtCore/QtCore>
 #include <qt5/QtCore/QtGlobal>
 #include <qt5/QtCore/QVariant>
 #include <qt5/QtCore/QModelIndex>
