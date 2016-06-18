@@ -8,6 +8,10 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  sensor_msgs
+  std_srvs
+  tf
+  message_generation
   moveit_ros_planning_interface
 )
 
@@ -27,34 +31,9 @@ find_package(catkin REQUIRED COMPONENTS
 
 # References:
 # http://doc.qt.io/qt-5/cmake-manual.html
-# http://www.cmake.org/cmake/help/v3.0/manual/cmake-qt.7.html
-# http://www.kdab.com/using-cmake-with-qt-5/
 # http://rdu.im/ros/programming/2014/03/25/using-qt-in-ros-catkin-packages.html
 
-#set(CMAKE_MODULE_PATH /usr/lib/i386-linux-gnu/qt5)
-
-# Tell CMake to run moc when necessary:
-set(CMAKE_AUTOMOC ON)
-# As moc files are generated in the binary dir, tell CMake
-# to always look for includes there:
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-# Widgets finds its own dependencies (QtGui and QtCore)
-find_package(Qt5Widgets REQUIRED)
-
-# The Qt5Widgets_INCLUDES also includes the include directories for
-# dependencies QtCore and QtGui
-include_directories(${Qt5Widgets_INCLUDE_DIRS})
-
-# We need to add -DQT_WIDGETS_LIB when using QtWidgets in Qt 5
-add_definitions(${Qt5Widgets_DEFINITIONS})
-
-# Executables fail to build with Qt 5 in the default configuration
-# without -fPIE. We add that here.
-set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
-
-# PrintSupport module is required for QCustomPlot
-find_package(Qt5PrintSupport REQUIRED)
+# Header and source files
 
 set(HEADER_FILES
   src/mainwindow.h
@@ -106,9 +85,37 @@ set(SOURCE_FILES
   ${MOC_FILES}
 )
 
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# Instruct CMake to run moc automatically when needed.
+set(CMAKE_AUTOMOC ON)
+
+# Find the QtWidgets library
+find_package(Qt5Widgets REQUIRED)
+
+# PrintSupport module is required for QCustomPlot
+find_package(Qt5PrintSupport REQUIRED)
+
+
+# Using Qt 5 with CMake older than 3.1.0
 
 # Enable C++ 11
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+
+# Using Qt 5 with CMake older than 2.8.9
+
+# Add the include directories for the Qt 5 Widgets module to the compile lines.
+#include_directories(${Qt5Widgets_INCLUDE_DIRS})
+
+# Use the compile definitions defined in the Qt 5 Widgets module
+#add_definitions(${Qt5Widgets_DEFINITIONS})
+
+# Add compiler flags for building executables (-fPIE)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+
+# Create moc code
+#qt5_wrap_cpp(MOC_SRC_H ${HEADER_FILES})
 
 
 ################################################
@@ -197,7 +204,8 @@ include_directories(
 ## Declare a cpp executable
 # add_executable(bioloid_master_node src/bioloid_master_node.cpp)
 add_executable(moveit_api_test src/moveit_api_test.cpp)
-add_executable(rosoloid_gui ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H})
+#add_executable(rosoloid_gui ${SOURCE_FILES} ${MOC_SRC_H})  # For CMake older than 2.8.9
+add_executable(rosoloid_gui ${SOURCE_FILES})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
@@ -209,7 +217,7 @@ add_executable(rosoloid_gui ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H})
 # )
 target_link_libraries(moveit_api_test ${catkin_LIBRARIES})
 # The Qt5Widgets_LIBRARIES variable also includes QtGui and QtCore
-target_link_libraries(rosoloid_gui Qt5::Widgets Qt5::PrintSupport ${catkin_LIBRARIES} ${Qt5Widgets_LIBRARIES})
+target_link_libraries(rosoloid_gui Qt5::Widgets Qt5::PrintSupport ${catkin_LIBRARIES})
 
 #############
 ## Install ##
