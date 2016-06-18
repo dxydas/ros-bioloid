@@ -123,7 +123,7 @@ include_directories(
 # add_executable(usb2ax_controller_node src/usb2ax_controller_node.cpp)
 add_executable(ax_joint_controller src/ax_joint_controller.cpp src/usb2ax/dynamixel_syncread.c src/usb2ax/dxl_hal.c src/bioloidhw.cpp)
 add_executable(test_interface src/test_interface.cpp)
-add_executable(test_balancer src/test_balancer.cpp src/simplePID.cpp)
+add_executable(test_balancer src/test_balancer.cpp ../bioloid_master/src/simplepid.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes

@@ -1,55 +1,38 @@
-//#include <curses.h>
-#include "ros/ros.h"
-#include <tf/transform_listener.h>
-#include "std_srvs/Empty.h"
-#include "usb2ax_controller/SetMotorParam.h"
-#include "../../bioloid_master/src/simplepid.h"
-#include <deque>
+#include "pidbalancerwidget.h"
+#include "simplepid.h"
 
 
-int main(int argc, char **argv)
+PidBalancerWidget::PidBalancerWidget(RosWorker* rosWorker, QWidget* parent) :
+    mRosWorker(rosWorker), QWidget(parent)
 {
-    //initscr();  // ncurses
-    //timeout(0);
 
-    ros::init(argc, argv, "test_balancer");
 
-    ros::NodeHandle n;
 
-    //ros::ServiceClient getMotorCurrentPositionInRadClient =
-    //        n.serviceClient<usb2ax_controller::GetMotorParam>("GetMotorCurrentPositionInRad");
-    ros::ServiceClient setMotorGoalPositionInRadClient =
-            n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalPositionInRad");
-    ros::ServiceClient setMotorGoalSpeedInRadPerSecClient =
-            n.serviceClient<usb2ax_controller::SetMotorParam>("SetMotorGoalSpeedInRadPerSec");
-    ros::ServiceClient homeAllMotorsClient =
-            n.serviceClient<std_srvs::Empty>("HomeAllMotors");
 
-    //usb2ax_controller::GetMotorParam getMotorParamSrv;
     usb2ax_controller::SetMotorParam setMotorParamSrv;
     std_srvs::Empty emptySrv;
 
     // Set slow speed
     setMotorParamSrv.request.dxlID = 254;
     setMotorParamSrv.request.value = 1.0;
-    setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv);
-    ros::Duration(0.5).sleep();
+    mRosWorker->setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv);
+//    ros::Duration(0.5).sleep();
 
     // Home all motors
-    homeAllMotorsClient.call(emptySrv);
+    mRosWorker->homeAllMotorsClient.call(emptySrv);
     // Temp fix for left_hip_swing_joint
     setMotorParamSrv.request.dxlID = 12;
     setMotorParamSrv.request.value = 0.1173;
-    setMotorGoalPositionInRadClient.call(setMotorParamSrv);
-    ros::Duration(3).sleep();
+    mRosWorker->setMotorGoalPositionInRadClient.call(setMotorParamSrv);
+//    ros::Duration(3).sleep();
 
     // Set full speed
     setMotorParamSrv.request.dxlID = 254;
     setMotorParamSrv.request.value = 0.0;
-    setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv);
-    ros::Duration(0.5).sleep();
+    mRosWorker->setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv);
+//    ros::Duration(0.5).sleep();
 
-    tf::TransformListener listener;
+//    tf::TransformListener listener;
     tf::StampedTransform transform;
 
     tf::Quaternion q;
@@ -98,14 +81,17 @@ int main(int argc, char **argv)
         SMA_window.push_back(0.0);
     float SMA_newValue, SMA_oldValue;
 
-    while (n.ok())
+
+
+
+    while (0)
     {
         //int i = getch();
         //printw("Entered: %d ", i);
 
         try
         {
-            listener.lookupTransform("odom", "imu_link", ros::Time(0), transform);
+            mRosWorker->getListener()->lookupTransform("odom", "imu_link", ros::Time(0), transform);
         }
         catch (tf::TransformException &ex)
         {
@@ -135,17 +121,17 @@ int main(int argc, char **argv)
             // Set motor speeds - ankle swing joints
             setMotorParamSrv.request.value = output;
             setMotorParamSrv.request.dxlID = 15;
-            setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv);
+            mRosWorker->setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv);
             setMotorParamSrv.request.dxlID = 16;
-            setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv);
+            mRosWorker->setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv);
 
             // Set motor outputs - ankle swing joints
             position = -PV;
             setMotorParamSrv.request.value = position;
             setMotorParamSrv.request.dxlID = 15;
-            setMotorGoalPositionInRadClient.call(setMotorParamSrv);
+            mRosWorker->setMotorGoalPositionInRadClient.call(setMotorParamSrv);
             setMotorParamSrv.request.dxlID = 16;
-            setMotorGoalPositionInRadClient.call(setMotorParamSrv);
+            mRosWorker->setMotorGoalPositionInRadClient.call(setMotorParamSrv);
 
             std::cout << "pitch angle: " << PV;
             std::cout << "\t output speed: " << output;
@@ -154,9 +140,10 @@ int main(int argc, char **argv)
         else
             std::cout << "Speed too low: " << output << std::endl;
 
-        ros::Duration(0.1).sleep();
+//        ros::Duration(0.1).sleep();
     }
-    //endwin();  // ncurses
 
-    return 0;
+
+
+
 }

@@ -1,7 +1,7 @@
-#include "simplePID.h"
+#include "simplepid.h"
 
 
-SimplePID::SimplePID(float pGain, float iGain, float dGain, float iMin, float iMax) :
+SimplePid::SimplePid(float pGain, float iGain, float dGain, float iMin, float iMax) :
     iMin(iMin), iMax(iMax), pGain(pGain), iGain(iGain), dGain(dGain)
 {
     iState = 0.0;
@@ -9,13 +9,13 @@ SimplePID::SimplePID(float pGain, float iGain, float dGain, float iMin, float iM
 }
 
 
-SimplePID::~SimplePID()
+SimplePid::~SimplePid()
 {
 
 }
 
 
-float SimplePID::update(const float& error, const float& position)
+float SimplePid::update(const float& error, const float& position)
 {
     float pTerm, iTerm, dTerm;
 

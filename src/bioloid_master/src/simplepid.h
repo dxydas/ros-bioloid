@@ -1,14 +1,14 @@
 #ifndef SIMPLEPID_H
 #define SIMPLEPID_H
 
-// PID controller uses code from article "PID without a PhD" from:
+// PID controller is based on code from article "PID without a PhD" from:
 // http://www.embedded.com/design/embedded/4211211/PID-without-a-PhD
 
-class SimplePID
+class SimplePid
 {
 public:
-    SimplePID(float pGain, float iGain, float dGain, float iMin, float iMax);
-    virtual ~SimplePID();
+    SimplePid(float pGain, float iGain, float dGain, float iMin, float iMax);
+    virtual ~SimplePid();
     float update(const float &error, const float &position);
 private:
     float pGain;

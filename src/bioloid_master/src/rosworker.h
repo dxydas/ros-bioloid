@@ -4,6 +4,7 @@
 #include <qt5/QtCore/QTimer>
 #include <qt5/QtWidgets/QWidget>
 #include "ros/ros.h"
+#include <tf/transform_listener.h>
 #include "sensor_msgs/JointState.h"
 #include "geometry_msgs/Vector3.h"
 #include "std_msgs/Float32.h"
@@ -67,6 +68,9 @@ public:
     ros::ServiceClient setMotorTorqueLimitsInDecimalClient;
     //
     ros::ServiceClient homeAllMotorsClient;
+    //
+    tf::TransformListener* getListener() const { return listener; }
+    void setListener(tf::TransformListener* value) { listener = value; }
 
 signals:
     void connectedToRosMaster();
@@ -112,6 +116,7 @@ private:
     std_msgs::Float32 heading;
     geometry_msgs::Vector3 gyro;
     std_msgs::Int16MultiArray fsrs;
+    tf::TransformListener* listener;
 };
 
 #endif // ROSWORKER_H

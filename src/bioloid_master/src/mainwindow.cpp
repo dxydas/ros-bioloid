@@ -38,6 +38,7 @@ MainWindow::MainWindow(int argc, char* argv[], QWidget* parent) :
     moveItHandler = new MoveItHandler(this);
     outputLog = new OutputLog(this);
     sensorGrapher = new SensorGrapher(rosWorker, this);
+    pidBalancerWidget = new PidBalancerWidget(rosWorker, this);
 
     setUpLayout();
     customiseLayout();
@@ -96,10 +97,15 @@ void MainWindow::setUpLayout()
     motorDialsDockWidget->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable |
                                       QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetVerticalTitleBar);
 
-    sensorGrapherDockWidget = new QDockWidget("Sensor Grapher", this);
+    sensorGrapherDockWidget = new QDockWidget("Sensor grapher", this);
     sensorGrapherDockWidget->setWidget(sensorGrapher);
     sensorGrapherDockWidget->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable |
-                                      QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetVerticalTitleBar);
+                                         QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetVerticalTitleBar);
+
+    pidBalancerDockWidget = new QDockWidget("PID balancer", this);
+    pidBalancerDockWidget->setWidget(pidBalancerWidget);
+    pidBalancerDockWidget->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable |
+                                       QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetVerticalTitleBar);
 
     setDockNestingEnabled(true);
     addDockWidget(Qt::LeftDockWidgetArea, motorFeedbackDockWidget);
@@ -108,7 +114,9 @@ void MainWindow::setUpLayout()
     addDockWidget(Qt::RightDockWidgetArea, fileIoDockWidget);
     addDockWidget(Qt::BottomDockWidgetArea, outputLogDockWidget);
     addDockWidget(Qt::LeftDockWidgetArea, sensorGrapherDockWidget);
+    addDockWidget(Qt::LeftDockWidgetArea, pidBalancerDockWidget);
     tabifyDockWidget(motorFeedbackDockWidget, sensorGrapherDockWidget);
+    tabifyDockWidget(motorFeedbackDockWidget, pidBalancerDockWidget);
     motorFeedbackDockWidget->raise();
 
     motorValueEditorDockWidget->setFloating(true);
@@ -149,6 +157,7 @@ void MainWindow::setUpLayout()
     viewMenu->addAction(motorAddressEditorDockWidget->toggleViewAction());
     viewMenu->addAction(motorDialsDockWidget->toggleViewAction());
     viewMenu->addAction(sensorGrapherDockWidget->toggleViewAction());
+    viewMenu->addAction(pidBalancerDockWidget->toggleViewAction());
 
     aboutQtAct = new QAction("About &Qt", this);
     aboutAct = new QAction("&About", this);

@@ -76,6 +76,8 @@ set(HEADER_FILES
   src/motorfeedbackwidget.h
   src/robotcontroller.h
   src/motorcommandswidget.h
+  src/simplepid.h
+  src/pidbalancerwidget.h
 )
 
 set(SOURCE_FILES
@@ -99,6 +101,8 @@ set(SOURCE_FILES
   src/motorfeedbackwidget.cpp
   src/robotcontroller.cpp
   src/motorcommandswidget.cpp
+  src/simplepid.cpp
+  src/pidbalancerwidget.cpp
   ${MOC_FILES}
 )
 

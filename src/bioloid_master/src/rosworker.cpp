@@ -106,6 +106,8 @@ bool RosWorker::init()
             spinner = new ros::AsyncSpinner(0);
             spinner->start();
 
+            listener = new tf::TransformListener;
+
             mIsMasterInitialised = true;
             connectionHealthCheckTimer->start(2000);
 
@@ -177,6 +179,7 @@ void RosWorker::runConnectionHealthCheck()
     {
         spinner->stop();
         delete spinner;
+        delete listener;
         connectionHealthCheckTimer->stop();
 
         // Shutdown all Subscribers

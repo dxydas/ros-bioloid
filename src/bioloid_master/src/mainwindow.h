@@ -17,6 +17,7 @@
 #include "motordials.h"
 #include "moveithandler.h"
 #include "sensorgrapher.h"
+#include "pidbalancerwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -55,6 +56,7 @@ private:
     MoveItHandler* moveItHandler;
     OutputLog* outputLog;
     SensorGrapher* sensorGrapher;
+    PidBalancerWidget* pidBalancerWidget;
 
     QAction* exitAct;
     QAction* aboutQtAct;
@@ -69,6 +71,7 @@ private:
     QDockWidget* motorAddressEditorDockWidget;
     QDockWidget* motorDialsDockWidget;    
     QDockWidget* sensorGrapherDockWidget;
+    QDockWidget* pidBalancerDockWidget;
 };
 
 #endif // MAINWINDOW_H
