@@ -27,9 +27,9 @@ QComboBox {
 
 QDockWidget {
     /*titlebar-close-icon: url(assets/images/pixicus/icons/minus_light_alt.png);
-    titlebar-normal-icon: url(assets/images/pixicus/icons/export_box.png); }
+    titlebar-normal-icon: url(assets/images/pixicus/icons/export_box.png);
     titlebar-close-icon: url(assets/images/pp-icon-set/PP Icon Set - PNG Files/Cross.png);
-    titlebar-normal-icon: url(assets/images/pp-icon-set/PP Icon Set - PNG Files/Images.png); );
+    titlebar-normal-icon: url(assets/images/pp-icon-set/PP Icon Set - PNG Files/Images.png);
     titlebar-close-icon: url(assets/images/WindowsIcons-master/WindowsPhone/svg/appbar.close.svg);
     titlebar-normal-icon: url(assets/images/WindowsIcons-master/WindowsPhone/svg/appbar.door.leave.svg);
     titlebar-close-icon: url(assets/images/open-iconic-master/svg/x.svg);
@@ -37,8 +37,9 @@ QDockWidget {
     titlebar-close-icon: url(assets/images/ionicons-2.0.1/src/close.svg);
     titlebar-normal-icon: url(assets/images/ionicons-2.0.1/src/android-expand.svg);
     border: 2px solid steelblue;
-    /*background-color: grey; }*/
-    background: qradialgradient(cx: 0, cy: 0, radius: 1, fx: 0.5, fy: 0.5, stop: 0 lightgrey, stop: 1 grey);
+    /*background-color: grey;
+    background-color: qradialgradient(cx: 0, cy: 0, radius: 1, fx: 0.5, fy: 0.5, stop: 0 lightgrey, stop: 1 grey);*/
+    background-color: qradialgradient(cx: 0.5, cy: 0.5, radius: 0.5, fx: 0.5, fy: 0.5, stop: 0 lightgrey, stop: 1 grey);
 }
 QDockWidget::title {
       background: steelblue;
@@ -143,49 +144,9 @@ QLineEdit#greenLineEdit:disabled {
 }
 
 
-QLineEdit#ledOffLineEdit {
-    border: 2px solid goldenrod;
-    background-color: darkred;
-}
-QLineEdit#ledOffLineEdit:disabled {
-    color: black;
-}
-
-
-QLineEdit#ledOnLineEdit {
-    border: 2px solid goldenrod;
-    background-color: red;
-}
-QLineEdit#ledOnLineEdit:disabled {
-    color: white;
-}
-
-
-QLineEdit#ledArrayOffLineEdit {
-    font: 10px;
-    margin: 0px;
-    border: 2px solid black;
-    background-color: darkred;
-}
-QLineEdit#ledArrayOffLineEdit:disabled {
-    color: black;
-}
-
-
-QLineEdit#ledArrayOnLineEdit {
-    font: 10px;
-    margin: 0px;
-    border: 2px solid black;
-    background-color: red;
-}
-QLineEdit#ledArrayOnLineEdit:disabled {
-    color: white;
-}
-
-
 QListView {
     background-color: grey;
-    show-decoration-selected: 1;  /* make the selection span the entire width of the view */
+    show-decoration-selected: 1;  /* Make the selection span the entire width of the view */
     qproperty-alternatingRowColors: true;
 }
 QListView::item:alternate {
@@ -210,10 +171,11 @@ QMainWindow {
     qproperty-windowIcon: url(assets/images/ionicons-2.0.1/src/gear-a.svg);
     border: 2px solid steelblue;
     /*background-color: grey;
-    border-image: url(assets/images/carbon-fibre-patterns/carbon3.jpg) 0 0 0 0 stretch stretch; } );
-    background-image: url(assets/images/carbon-fibre-patterns/carbon3.jpg); } );
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 lightsteelblue, stop: 1 steelblue); } );*/
-    background-color: qradialgradient(cx: 0, cy: 0, radius: 1, fx: 0.5, fy: 0.5, stop: 0 lightgrey, stop: 1 grey);
+    border-image: url(assets/images/carbon-fibre-patterns/carbon3.jpg) 0 0 0 0 stretch stretch;
+    background-image: url(assets/images/carbon-fibre-patterns/carbon3.jpg);
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 lightsteelblue, stop: 1 steelblue);
+    background-color: qradialgradient(cx: 0, cy: 0, radius: 1, fx: 0.5, fy: 0.5, stop: 0 lightgrey, stop: 1 grey);*/
+    background-color: qradialgradient(cx: 0.5, cy: 0.5, radius: 0.5, fx: 0.5, fy: 0.5, stop: 0 lightgrey, stop: 1 grey);
 }
 
 
@@ -234,10 +196,10 @@ QPushButton {
     padding: 6px;*/
 }
 QPushButton:flat {
-    border: none;  /* no border for a flat push button */
+    border: none;  /* No border for a flat push button */
 }
 QPushButton:default {
-    border-color: royalblue;  /* make the default button prominent */
+    border-color: royalblue;  /* Make the default button prominent */
 }
 QPushButton:pressed {
     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 royalblue, stop: 1 dodgerblue);
@@ -264,10 +226,10 @@ QPushButton#redPushButton {
     border-radius: 4px;
 }
 QPushButton#redPushButton:flat {
-    border: none;  /* no border for a flat push button */
+    border: none;  /* No border for a flat push button */
 }
 QPushButton#redPushButton:default {
-    border-color: grey;  /* make the default button prominent */
+    border-color: grey;  /* Make the default button prominent */
 }
 QPushButton#redPushButton:pressed {
     color: red;
@@ -295,4 +257,17 @@ QTableView:item:focus {
 
 QTextEdit {
       background-color: grey;
+}
+
+
+QSlider#blueSlider::groove:vertical {
+    border: 1px solid steelblue;
+    background: lightsteelblue;
+    margin: 4px 4px;
+}
+QSlider#blueSlider::handle:vertical {
+    border: 1px solid blue;
+    background: royalblue;
+    height: 12px;
+    margin: 0px -6px; /* Expand outside the groove */
 }

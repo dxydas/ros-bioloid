@@ -27,8 +27,10 @@ public slots:
     void setValue(int value);
     void updateJointStateValues(sensor_msgs::JointState js);
     void updateLineEdits();
+    void toggleAutoRefresh(int toggle);
 
 private:
+    void customiseLayout();
     QVector<QGroupBox*> groupBoxes;
     QVector<QDial*> dials;
     QVector<QComboBox*> dialOptionComboBoxes;
@@ -48,6 +50,10 @@ private:
     QTime callTime;
     QTimer* feedbackTimer;
     bool dialsInitialised;
+    QString ledOffLineEdit;
+    QString ledOnLineEdit;
+    QString ledArrayOffLineEdit;
+    QString ledArrayOnLineEdit;
 };
 
 #endif // MOTORDIALS_H

@@ -2,11 +2,16 @@
 #include <iostream>
 #include <sstream>
 #include <qt5/QtCore/Qt>
+#include <qt5/QtCore/QObject>
 #include <qt5/QtCore/QString>
 #include <qt5/QtCore/QSignalMapper>
+#include <qt5/QtWidgets/QHBoxLayout>
+#include <qt5/QtWidgets/QVBoxLayout>
 #include <qt5/QtWidgets/QGridLayout>
 #include <qt5/QtWidgets/QLabel>
-#include <qt5/QtWidgets/QAbstractSlider>
+#include <qt5/QtWidgets/QAbstractButton>
+#include <qt5/QtWidgets/QPushButton>
+#include <qt5/QtWidgets/QCheckBox>
 #include "commonvars.h"
 #include "../../usb2ax_controller/src/ax12ControlTableMacros.h"
 
@@ -15,8 +20,6 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
     mRosWorker(rosWorker), QWidget(parent), mSelectedMotor(-1), dialsInitialised(false)
 {
     setWindowTitle("Motor Position Dials");
-
-    QGridLayout* mainGridLayout = new QGridLayout;
 
     QSignalMapper* comboBoxSignalMapper = new QSignalMapper(this);
     QSignalMapper* dialSignalMapper = new QSignalMapper(this);
@@ -27,6 +30,8 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
     QVector<QGridLayout*> subGridLayouts3;
     QVector<QGridLayout*> subGridLayouts4;
     QVector<QGridLayout*> subGridLayouts5;
+
+    QGridLayout* mainGridLayout = new QGridLayout;
 
     groupBoxes.resize(NUM_OF_MOTORS);
     gridLayouts.resize(NUM_OF_MOTORS);
@@ -147,11 +152,6 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
         comboBoxSignalMapper->setMapping(dialOptionComboBoxes[i], i + 1);
 
         dials[i] = new QDial;
-//        dials[i]->setMinimum(-2606);
-//        dials[i]->setMaximum(2606);
-//        dials[i]->setWrapping(false);
-//        dials[i]->setNotchesVisible(true);
-        //dials[i]->setNotchTarget(10);
 
         connect( dials[i], SIGNAL(valueChanged(int)), dialSignalMapper, SLOT(map()) );
         connect( dials[i], SIGNAL(valueChanged(int)), this, SLOT(setValue(int)) );
@@ -228,34 +228,34 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
         mainGridLayout->addWidget(groupBoxes[i], row, col);
     }
 
-    for (int i = 0; i < NUM_OF_MOTORS; ++i)
-    {
-        goalValueLineEdits[i]->setObjectName("silverLineEdit");
-        presentVoltageLineEdits[i]->setObjectName("greenLineEdit");
-        presentTempLineEdits[i]->setObjectName("greenLineEdit");
-        torqueEnableLineEdits[i]->setObjectName("ledOffLineEdit");
-        ledLineEdits[i]->setObjectName("ledOffLineEdit");
-        for (int j = 0; j < alarmLedVectors[i].size(); ++j)
-            alarmLedVectors[i][j]->setObjectName("ledArrayOffLineEdit");
-    }
+    QPushButton* refreshButton = new QPushButton("Refresh");
 
-    setLayout(mainGridLayout);
+    QCheckBox* autoRefreshCheckBox = new QCheckBox("Auto-Refresh (1 Hz)");
+
+    QHBoxLayout* buttonsLayout = new QHBoxLayout;
+    buttonsLayout->addWidget(refreshButton);
+    buttonsLayout->addWidget(autoRefreshCheckBox);
+    buttonsLayout->addStretch();  // Prevent widgets from filling horizontal space
+
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    mainLayout->addLayout(mainGridLayout);
+    mainLayout->addLayout(buttonsLayout);
+    setLayout(mainLayout);
+
+    customiseLayout();
 
     callTime.start();
 
     feedbackTimer = new QTimer(this);
 
-
     connect( comboBoxSignalMapper, SIGNAL(mapped(int)), this, SLOT(setMotor(int)) );
     connect( dialSignalMapper, SIGNAL(mapped(int)), this, SLOT(setMotor(int)) );
     connect( mRosWorker, SIGNAL(jointStateUpdated(sensor_msgs::JointState)),
              this, SLOT(updateJointStateValues(sensor_msgs::JointState)) );
+    connect( refreshButton, SIGNAL(clicked()), this, SLOT(updateLineEdits()) );
+    connect( autoRefreshCheckBox, SIGNAL(stateChanged(int)), this, SLOT(toggleAutoRefresh(int)) );
     connect( feedbackTimer, SIGNAL(timeout()), this, SLOT(updateLineEdits()) );
-
-    feedbackTimer->start(1000);
 }
-
-
 
 
 void MotorDials::initialiseDials(bool visible)
@@ -299,7 +299,7 @@ void MotorDials::setDialOption(int index)
         {
             int i = mSelectedMotor - 1;
 
-            // Temporarily disonnect signal-slot to avoid calling setValue() while the dial option is changing
+            // Temporarily disconnect signal-slot to avoid calling setValue() while the dial option is changing
             disconnect( dials[i], SIGNAL(valueChanged(int)), this, SLOT(setValue(int)) );
 
             mSelectedDialOption[i] = index;
@@ -321,8 +321,7 @@ void MotorDials::setDialOption(int index)
             {
                 // Position
                 // -2.56..2.555 rad, converted to -2560..2555 int range
-                dials[i]->setMinimum(-2560);
-                dials[i]->setMaximum(2555);
+                dials[i]->setRange(-2560, 2555);
                 if ( (js.position.size() >= NUM_OF_MOTORS) )
                 {
                     dials[i]->setValue( static_cast<float>(js.position[i])*1000 );
@@ -335,8 +334,7 @@ void MotorDials::setDialOption(int index)
             {
                 // Speed
                 // -12.276..12.276 rad/s, converted to -1227..1227 int range
-                dials[i]->setMinimum(-1227);
-                dials[i]->setMaximum(1227);
+                dials[i]->setRange(-1227, 1227);
                 if ( (js.position.size() >= NUM_OF_MOTORS) )
                 {
                     dials[i]->setValue( static_cast<float>(js.velocity[i])*1000 );
@@ -349,8 +347,7 @@ void MotorDials::setDialOption(int index)
             {
                 // Load
                 // -1.023..1.023 torque, converted to -1023..1023 int range
-                dials[i]->setMinimum(-1023);
-                dials[i]->setMaximum(1023);
+                dials[i]->setRange(-1023, 1023);
                 if ( (js.position.size() >= NUM_OF_MOTORS) )
                 {
                     dials[i]->setValue( static_cast<float>(js.effort[i])*1000 );
@@ -542,9 +539,9 @@ void MotorDials::updateLineEdits()
             for (int i = 0; i < torqueEnableLineEdits.size(); ++i)
             {
                 if (srv.response.values[i])
-                    torqueEnableLineEdits[i]->setObjectName("ledOnLineEdit");
+                    torqueEnableLineEdits[i]->setStyleSheet(ledOnLineEdit);
                 else
-                    torqueEnableLineEdits[i]->setObjectName("ledOffLineEdit");
+                    torqueEnableLineEdits[i]->setStyleSheet(ledOffLineEdit);
             }
         }
     }
@@ -559,9 +556,9 @@ void MotorDials::updateLineEdits()
             for (int i = 0; i < ledLineEdits.size(); ++i)
             {
                 if (srv.response.values[i])
-                    ledLineEdits[i]->setObjectName("ledOnLineEdit");
+                    ledLineEdits[i]->setStyleSheet(ledOnLineEdit);
                 else
-                    ledLineEdits[i]->setObjectName("ledOffLineEdit");
+                    ledLineEdits[i]->setStyleSheet(ledOffLineEdit);
             }
         }
     }
@@ -577,16 +574,77 @@ void MotorDials::updateLineEdits()
             {
                 for (int j = 0; j < alarmLedVectors[i].size(); ++j)
                 {
-//                    std::cout << "2^" << j << " = " << pow(2, j) << std::endl;
-//                    std::cout << srv.response.values[i] << " AND " << (int)pow(2, j) << " = "
-//                              << (srv.response.values[i] & (int)pow(2, j)) << std::endl;
                     if ( srv.response.values[i] & (int)pow(2, j) )  // Extract bit value
-                        alarmLedVectors[i][j]->setObjectName("ledArrayOnLineEdit");
+                        alarmLedVectors[i][j]->setStyleSheet(ledArrayOnLineEdit);
                     else
-                        alarmLedVectors[i][j]->setObjectName("ledArrayOffLineEdit");
+                        alarmLedVectors[i][j]->setStyleSheet(ledArrayOffLineEdit);
                 }
             }
         }
     }
 
+}
+
+
+void MotorDials::toggleAutoRefresh(int toggle)
+{
+    if (toggle)
+        feedbackTimer->start(1000);
+    else
+        feedbackTimer->stop();
+}
+
+
+void MotorDials::customiseLayout()
+{
+    ledOffLineEdit =
+            " QLineEdit { "
+            "     border: 2px solid goldenrod; "
+            "     background-color: darkred; "
+            " } "
+            " QLineEdit:disabled { "
+            "     color: black; "
+            " } ";
+
+    ledOnLineEdit =
+            " QLineEdit { "
+            "     border: 2px solid goldenrod; "
+            "     background-color: red; "
+            " } "
+            " QLineEdit:disabled { "
+            "     color: white; "
+            " } ";
+
+    ledArrayOffLineEdit =
+            " QLineEdit { "
+            "     font: 10px; "
+            "     margin: 0px; "
+            "     border: 2px solid black; "
+            "     background-color: darkred; "
+            " } "
+            " QLineEdit:disabled { "
+            "     color: black; "
+            " } ";
+
+    ledArrayOnLineEdit =
+            " QLineEdit { "
+            "     font: 10px; "
+            "     margin: 0px; "
+            "     border: 2px solid black; "
+            "     background-color: red; "
+            " } "
+            " QLineEdit:disabled { "
+            "     color: white; "
+            " } ";
+
+    for (int i = 0; i < NUM_OF_MOTORS; ++i)
+    {
+        goalValueLineEdits[i]->setObjectName("silverLineEdit");
+        presentVoltageLineEdits[i]->setObjectName("greenLineEdit");
+        presentTempLineEdits[i]->setObjectName("greenLineEdit");
+        torqueEnableLineEdits[i]->setStyleSheet(ledOffLineEdit);
+        ledLineEdits[i]->setStyleSheet(ledOffLineEdit);
+        for (int j = 0; j < alarmLedVectors[i].size(); ++j)
+            alarmLedVectors[i][j]->setStyleSheet(ledArrayOffLineEdit);
+    }
 }
