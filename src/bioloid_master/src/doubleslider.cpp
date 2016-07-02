@@ -3,7 +3,6 @@
 #include <qt5/QtCore/QRect>
 #include <qt5/QtGui/QPainter>
 #include <qt5/QtGui/QColor>
-#include <qt5/QtWidgets/QAbstractSlider>
 #include <qt5/QtWidgets/QStyle>
 #include <qt5/QtWidgets/QStyleOptionSlider>
 #include <qt5/QtWidgets/QApplication>

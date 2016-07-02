@@ -38,11 +38,11 @@ SensorGrapher::SensorGrapher(RosWorker* rosWorker, QWidget* parent) :
             yLabel = "Pressure";
             break;
         }
-        sensorGraphs[i] = new SensorGraph(this, lineNames, yLabel);
+        sensorGraphs[i] = new SensorGraph(lineNames, yLabel, this);
         gridLayout->addWidget(sensorGraphs[i], row++, col);
     }
 
-    setMinimumSize(800, 600);
+    //setMinimumSize(800, 600);
 
     setLayout(gridLayout);
 
@@ -61,6 +61,7 @@ SensorGrapher::SensorGrapher(RosWorker* rosWorker, QWidget* parent) :
 
     elapsedTimer->start();
 }
+
 
 void SensorGrapher::updateAccelGraphData(geometry_msgs::Vector3 vec)
 {

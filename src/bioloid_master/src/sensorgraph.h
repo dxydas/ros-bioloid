@@ -14,7 +14,7 @@ class SensorGraph : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SensorGraph(QWidget* parent = 0, QStringList lineNames = QStringList(), QString yLabel = "Value");
+    explicit SensorGraph(QStringList lineNames = QStringList(), QString yLabel = "Value", QWidget* parent = 0);
 
 signals:
 

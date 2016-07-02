@@ -1,10 +1,12 @@
 #include "sensorgraph.h"
 #include <qt5/QtGui/QPen>
+#include <qt5/QtGui/QColor>
 #include <qt5/QtWidgets/QHBoxLayout>
 
 
-SensorGraph::SensorGraph(QWidget* parent, QStringList lineNames, QString yLabel) :
-    QWidget(parent), numOfLines(lineNames.size()), lineNames(lineNames), bufferXData(numOfLines), bufferYData(numOfLines)
+SensorGraph::SensorGraph(QStringList lineNames, QString yLabel, QWidget* parent) :
+    numOfLines(lineNames.size()), lineNames(lineNames), bufferXData(numOfLines), bufferYData(numOfLines),
+    QWidget(parent)
 {
     customPlot = new QCustomPlot(this);
 
@@ -44,9 +46,7 @@ SensorGraph::SensorGraph(QWidget* parent, QStringList lineNames, QString yLabel)
     customPlot->xAxis->setLabel("Time (msec)");
     customPlot->yAxis->setLabel(yLabel);
 
-
     pauseCheckBox = new QCheckBox("Paused");
-
 
     QHBoxLayout* hBoxLayout = new QHBoxLayout;
     hBoxLayout->addWidget(customPlot, 1);
@@ -54,12 +54,11 @@ SensorGraph::SensorGraph(QWidget* parent, QStringList lineNames, QString yLabel)
     setLayout(hBoxLayout);
 
     customiseLayout();
-    customPlot->replot();
 
+    customPlot->replot();
 
     elapsedTimer = new QElapsedTimer();
     graphUpdateTimer = new QTimer(this);
-
 
     connect( graphUpdateTimer, SIGNAL(timeout()), this, SLOT(updateGraphs()) );
     connect( pauseCheckBox, SIGNAL(toggled(bool)), this, SLOT(togglePause(bool)) );
@@ -81,8 +80,6 @@ void SensorGraph::appendData(int index, double x, double y)
 void SensorGraph::updateGraphs()
 {
     double tInMsec = elapsedTimer->elapsed();
-    double yMin;
-    double yMax;
     for (int i = 0; i < numOfLines; ++i)
     {
         customPlot->graph(i)->setData(bufferXData[i], bufferYData[i]);

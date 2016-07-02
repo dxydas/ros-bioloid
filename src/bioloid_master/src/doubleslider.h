@@ -3,6 +3,7 @@
 
 #include <qt5/QtCore/Qt>
 #include <qt5/QtCore/QEvent>
+#include <qt5/QtWidgets/QAbstractSlider>
 #include <qt5/QtWidgets/QSlider>
 #include <qt5/QtWidgets/QWidget>
 

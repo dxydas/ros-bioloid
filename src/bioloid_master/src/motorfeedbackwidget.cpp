@@ -32,19 +32,19 @@ MotorFeedbackWidget::MotorFeedbackWidget(QWidget* parent) :
     presentSpeedLabel->setObjectName("royalBlueLabel");
     movingSpeedLabel->setObjectName("midnightBlueLabel");
 
-    QGridLayout* motorFeedbackSubLayout = new QGridLayout;
+    QGridLayout* motorFeedbackLayout = new QGridLayout;
     int row = 0;
     int col = 0;
-    motorFeedbackSubLayout->addWidget(motorLabel, row, col++);
+    motorFeedbackLayout->addWidget(motorLabel, row, col++);
     ++col;  // Leave a blank column in order to add vline spacer later
-    motorFeedbackSubLayout->addWidget(presentPositionAndSelectedPoseLabel, row, col++);
-    motorFeedbackSubLayout->addWidget(presentPositionLabel, row, col++);
+    motorFeedbackLayout->addWidget(presentPositionAndSelectedPoseLabel, row, col++);
+    motorFeedbackLayout->addWidget(presentPositionLabel, row, col++);
     ++col;  // For vline
-    motorFeedbackSubLayout->addWidget(goalPositionLabel, row, col++);
+    motorFeedbackLayout->addWidget(goalPositionLabel, row, col++);
     ++col;  // For vline
-    motorFeedbackSubLayout->addWidget(presentSpeedLabel, row, col++);
+    motorFeedbackLayout->addWidget(presentSpeedLabel, row, col++);
     ++col;  // For vline
-    motorFeedbackSubLayout->addWidget(movingSpeedLabel, row, col++);
+    motorFeedbackLayout->addWidget(movingSpeedLabel, row, col++);
 
     QVector<QLabel*> motorIdLabels(NUM_OF_MOTORS);
     presentPosSliders.resize(NUM_OF_MOTORS);
@@ -56,8 +56,7 @@ MotorFeedbackWidget::MotorFeedbackWidget(QWidget* parent) :
     {
         motorIdLabels[i] = new QLabel(QString::number(i + 1));
         presentPosSliders[i] = new DoubleSlider(Qt::Horizontal, this);
-        presentPosSliders[i]->setMinimum(-2560);
-        presentPosSliders[i]->setMaximum(2555);
+        presentPosSliders[i]->setRange(-2560, 2555);
         presentPosSliders[i]->setValue(0);
         presentPosSliders[i]->setSecondValue(0);
 
@@ -97,23 +96,23 @@ MotorFeedbackWidget::MotorFeedbackWidget(QWidget* parent) :
 
         row = i + 1;
         col = 0;
-        motorFeedbackSubLayout->addWidget(motorIdLabels[i], row, col++);
+        motorFeedbackLayout->addWidget(motorIdLabels[i], row, col++);
         ++col;  // For vline
-        motorFeedbackSubLayout->addWidget(presentPosSliders[i], row, col++);
-        motorFeedbackSubLayout->addWidget(presentPosLineEdits[i], row, col++);
+        motorFeedbackLayout->addWidget(presentPosSliders[i], row, col++);
+        motorFeedbackLayout->addWidget(presentPosLineEdits[i], row, col++);
         ++col;  // For vline
-        motorFeedbackSubLayout->addWidget(goalPosLineEdits[i], row, col++);
+        motorFeedbackLayout->addWidget(goalPosLineEdits[i], row, col++);
         ++col;  // For vline
-        motorFeedbackSubLayout->addWidget(presentSpeedLineEdits[i], row, col++);
+        motorFeedbackLayout->addWidget(presentSpeedLineEdits[i], row, col++);
         ++col;  // For vline
-        motorFeedbackSubLayout->addWidget(movingSpeedLineEdits[i], row, col++);
+        motorFeedbackLayout->addWidget(movingSpeedLineEdits[i], row, col++);
     }
-    motorFeedbackSubLayout->setAlignment(Qt::AlignTop);
-    motorFeedbackSubLayout->setColumnStretch(0, 0);
-    motorFeedbackSubLayout->setColumnStretch(1, 2);
-    motorFeedbackSubLayout->setColumnStretch(2, 1);
-    motorFeedbackSubLayout->setColumnStretch(3, 1);
-    motorFeedbackSubLayout->setColumnStretch(4, 1);
+    motorFeedbackLayout->setAlignment(Qt::AlignTop);
+    motorFeedbackLayout->setColumnStretch(0, 0);
+    motorFeedbackLayout->setColumnStretch(1, 2);
+    motorFeedbackLayout->setColumnStretch(2, 1);
+    motorFeedbackLayout->setColumnStretch(3, 1);
+    motorFeedbackLayout->setColumnStretch(4, 1);
     // Vertical spacers
     QVector<QFrame*> vlineFrames(4);
     for (int i = 0; i < vlineFrames.size(); ++i)
@@ -121,15 +120,11 @@ MotorFeedbackWidget::MotorFeedbackWidget(QWidget* parent) :
         vlineFrames[i] = new QFrame;
         vlineFrames[i]->setFrameShape(QFrame::VLine);
     }
-    motorFeedbackSubLayout->addWidget(vlineFrames[3], 0, 8, motorFeedbackSubLayout->rowCount(), 1);
-    motorFeedbackSubLayout->addWidget(vlineFrames[2], 0, 6, motorFeedbackSubLayout->rowCount(), 1);
-    motorFeedbackSubLayout->addWidget(vlineFrames[1], 0, 4, motorFeedbackSubLayout->rowCount(), 1);
-    motorFeedbackSubLayout->addWidget(vlineFrames[0], 0, 1, motorFeedbackSubLayout->rowCount(), 1);
-
-
-    //QWidget* motorFeedbackWidget = new QWidget(this);
-    //motorFeedbackWidget->setLayout(motorFeedbackSubLayout);
-    setLayout(motorFeedbackSubLayout);
+    motorFeedbackLayout->addWidget(vlineFrames[3], 0, 8, motorFeedbackLayout->rowCount(), 1);
+    motorFeedbackLayout->addWidget(vlineFrames[2], 0, 6, motorFeedbackLayout->rowCount(), 1);
+    motorFeedbackLayout->addWidget(vlineFrames[1], 0, 4, motorFeedbackLayout->rowCount(), 1);
+    motorFeedbackLayout->addWidget(vlineFrames[0], 0, 1, motorFeedbackLayout->rowCount(), 1);
+    setLayout(motorFeedbackLayout);
 }
 
 

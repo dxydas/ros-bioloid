@@ -6,7 +6,6 @@
 #include <qt5/QtWidgets/QGridLayout>
 #include <qt5/QtWidgets/QFormLayout>
 #include <qt5/QtWidgets/QHBoxLayout>
-#include <qt5/QtWidgets/QSizePolicy>
 #include <qt5/QtWidgets/QMessageBox>
 #include <qt5/QtWidgets/QSpinBox>
 #include <qt5/QtWidgets/QApplication>
@@ -126,7 +125,7 @@ void MotorAddressEditor::updateSelectedMotor(int index)
 
 void MotorAddressEditor::refreshData()
 {
-    // Flash refresh label for 0.5 a sec
+    // Flash refresh label for 0.5 sec
     refreshLabel->setVisible(true);
     QTimer::singleShot( 500, this, SLOT(hideRefreshLabel()) );
 

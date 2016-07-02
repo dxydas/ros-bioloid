@@ -5,7 +5,6 @@
 #include <qt5/QtCore/QObject>
 #include <qt5/QtCore/QList>
 #include <qt5/QtCore/QString>
-#include <moveit/move_group_interface/move_group.h>
 #include "commonvars.h"
 
 class RobotPosesListModel : public QAbstractListModel
