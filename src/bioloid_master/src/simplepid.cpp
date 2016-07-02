@@ -1,8 +1,15 @@
 #include "simplepid.h"
 
 
-SimplePid::SimplePid(float pGain, float iGain, float dGain, float iMin, float iMax) :
-    iMin(iMin), iMax(iMax), pGain(pGain), iGain(iGain), dGain(dGain)
+SimplePid::SimplePid()
+{
+}
+
+
+SimplePid::SimplePid(float proportionalGain, float integralGain, float derivativeGain,
+                     float outputMax, float outputMin) :
+    pGain(proportionalGain), iGain(integralGain), dGain(derivativeGain),
+    outMax(outputMax), outMin(outputMin)
 {
     iState = 0.0;
     dState = 0.0;
@@ -11,26 +18,30 @@ SimplePid::SimplePid(float pGain, float iGain, float dGain, float iMin, float iM
 
 SimplePid::~SimplePid()
 {
-
 }
 
 
-float SimplePid::update(const float& error, const float& position)
+float SimplePid::update(float error, float position)
 {
-    float pTerm, iTerm, dTerm;
+    float pTerm, iTerm, dTerm, out;
 
-    pTerm = pGain * error;
+    pTerm = pGain*error;
 
     iState += error;
-    if (iState > iMax)
-        iState = iMax;
-    else if (iState < iMin)
-        iState = iMin;
-
     iTerm = iGain*iState;
+    if (iTerm > outMax)
+        iTerm = outMax;
+    else if (iTerm < outMin)
+        iTerm = outMin;
 
     dTerm = dGain*(position - dState);
     dState = position;
 
-    return pTerm + iTerm - dTerm;
+    out = pTerm + iTerm - dTerm;
+    if (out > outMax)
+        return outMax;
+    else if (iTerm < outMin)
+        return outMin;
+
+    return out;
 }

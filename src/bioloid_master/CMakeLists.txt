@@ -56,6 +56,8 @@ set(HEADER_FILES
   src/robotcontroller.h
   src/motorcommandswidget.h
   src/simplepid.h
+  src/simplepidstandardform.h
+  src/pidwidget.h
   src/pidbalancerwidget.h
 )
 
@@ -81,6 +83,8 @@ set(SOURCE_FILES
   src/robotcontroller.cpp
   src/motorcommandswidget.cpp
   src/simplepid.cpp
+  src/simplepidstandardform.cpp
+  src/pidwidget.cpp
   src/pidbalancerwidget.cpp
   ${MOC_FILES}
 )
