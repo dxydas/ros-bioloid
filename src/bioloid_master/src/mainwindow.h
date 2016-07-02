@@ -33,8 +33,12 @@ public slots:
     void initRosNode();
     void initMoveItHandler();
 
+    void nodeInitialised();
+    void nodeTerminated();
     void nodeConnectedToRosMaster();
     void nodeDisconnectedFromRosMaster();
+
+    void moveItHandlerInitialised();
 
     void aboutQt();
     void about();

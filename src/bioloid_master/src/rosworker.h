@@ -26,9 +26,8 @@ class RosWorker : public QObject
 public:
     RosWorker(int argc, char* argv[], const char* nodeName, QWidget* parent = 0);
     ~RosWorker();
-    bool init();
-//    void stop();
-//    bool isMasterRunning() const { return mIsMasterRunning; }
+    bool isInitialised() const { return mIsInitialised; }
+    bool isConnectedToRosMaster() const { return mIsConnectedToRosMaster; }
     sensor_msgs::JointState getCurrentJointState() const { return currentJointState; }
     sensor_msgs::JointState getGoalJointState() const { return goalJointState; }
 //    geometry_msgs::Vector3 getAccel() const { return accel; }
@@ -73,6 +72,8 @@ public:
     void setListener(tf::TransformListener* value) { listener = value; }
 
 signals:
+    void initialised();
+    bool terminated();
     void connectedToRosMaster();
     void disconnectedFromRosMaster();
     void jointStateUpdated(sensor_msgs::JointState js);
@@ -84,6 +85,9 @@ signals:
     void fsrsDataUpdated(std_msgs::Int16MultiArray arr);
 
 public slots:
+    void initialise();
+    void connectToRosMaster();
+    void terminate();
     void runConnectionHealthCheck();
     void homeAllMotors();
     void setAllMotorTorquesOff();
@@ -92,7 +96,8 @@ private:
     int argc;
     char** argv;
     const char* mNodeName;
-    bool mIsMasterInitialised;
+    bool mIsInitialised;
+    bool mIsConnectedToRosMaster;
     ros::AsyncSpinner* spinner;
     QTimer* connectionHealthCheckTimer;
     void jointStateCallback(const sensor_msgs::JointState::ConstPtr& msg);

@@ -9,7 +9,7 @@ MoveItHandler::MoveItHandler(QWidget* parent) :
 }
 
 
-void MoveItHandler::init()
+void MoveItHandler::initialise()
 {
     group = new moveit::planning_interface::MoveGroup("robot");
     group->setPlannerId("PRMkConfigDefault");
@@ -22,6 +22,8 @@ void MoveItHandler::init()
                 group->getCurrentState()->getRobotModel()->getJointModelGroup(group->getName()),
                 startJointValues );
     targetJointValues = startJointValues;
+
+    emit initialised();
 }
 
 

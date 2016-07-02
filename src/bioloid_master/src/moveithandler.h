@@ -13,9 +13,10 @@ class MoveItHandler : public QWidget
 
 public:
     explicit MoveItHandler(QWidget* parent = 0);
-    void init();
+    void initialise();
 
 signals:
+    void initialised();
 
 public slots:
     void setCurrentAsStartState();

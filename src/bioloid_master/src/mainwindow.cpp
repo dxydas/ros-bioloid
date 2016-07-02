@@ -114,9 +114,7 @@ void MainWindow::setUpLayout()
     addDockWidget(Qt::RightDockWidgetArea, fileIoDockWidget);
     addDockWidget(Qt::BottomDockWidgetArea, outputLogDockWidget);
     addDockWidget(Qt::LeftDockWidgetArea, sensorGrapherDockWidget);
-    addDockWidget(Qt::LeftDockWidgetArea, pidBalancerDockWidget);
     tabifyDockWidget(motorFeedbackDockWidget, sensorGrapherDockWidget);
-    tabifyDockWidget(motorFeedbackDockWidget, pidBalancerDockWidget);
     motorFeedbackDockWidget->raise();
 
     motorValueEditorDockWidget->setFloating(true);
@@ -134,11 +132,10 @@ void MainWindow::setUpLayout()
                                 motorDialsDockWidget->rect().center() );
     motorDialsDockWidget->hide();
 
-//    sensorGrapherDockWidget->setFloating(true);
-//    sensorGrapherDockWidget->move( QApplication::desktop()->screenGeometry().center() -
-//                                sensorGrapherDockWidget->rect().center() );
-//    sensorGrapherDockWidget->hide();
-
+    pidBalancerDockWidget->setFloating(true);
+    pidBalancerDockWidget->move( QApplication::desktop()->screenGeometry().center() -
+                                pidBalancerDockWidget->rect().center() );
+    pidBalancerDockWidget->hide();
 
     exitAct = new QAction("E&xit", this);
     QMenu* fileMenu = new QMenu;
@@ -211,14 +208,22 @@ void MainWindow::connectSignalsAndSlots()
     connect( fileIoController->loadAvailablePosesFileButton, SIGNAL(clicked()), robotController->availablePosesCustomListWidget, SLOT(loadPosesFile()) );
     connect( fileIoController->loadQueuedPosesFileButton, SIGNAL(clicked()), robotController->queuedPosesCustomListWidget, SLOT(loadPosesFile()) );
 
+    connect( rosWorker, SIGNAL(initialised()), this, SLOT(nodeInitialised()) );
+    connect( rosWorker, SIGNAL(terminated()), this, SLOT(nodeTerminated()) );
     connect( rosWorker, SIGNAL(connectedToRosMaster()), this, SLOT(nodeConnectedToRosMaster()) );
-    connect( rosWorker, SIGNAL(connectedToRosMaster()), robotController, SLOT(enableMotionButtons()) );
     connect( rosWorker, SIGNAL(disconnectedFromRosMaster()), this, SLOT(nodeDisconnectedFromRosMaster()) );
-    connect( rosWorker, SIGNAL(disconnectedFromRosMaster()), robotController, SLOT(disableMotionButtons()) );
+
+    connect( rosWorker, SIGNAL(initialised()), robotController, SLOT(nodeInitialised()) );
+    connect( rosWorker, SIGNAL(terminated()), robotController, SLOT(nodeTerminated()) );
+    connect( rosWorker, SIGNAL(connectedToRosMaster()), robotController, SLOT(nodeConnectedToRosMaster()) );
+    connect( rosWorker, SIGNAL(disconnectedFromRosMaster()), robotController, SLOT(nodeDisconnectedFromRosMaster()) );
+
     connect( rosWorker, SIGNAL(jointStateUpdated(sensor_msgs::JointState)),
              motorFeedbackWidget, SLOT(updateJointStateValues(sensor_msgs::JointState)) );
     connect( rosWorker, SIGNAL(secondaryDataUpdated(sensor_msgs::JointState)),
              motorFeedbackWidget, SLOT(updateSecondaryRobotValues(sensor_msgs::JointState)) );
+
+    connect( moveItHandler, SIGNAL(initialised()), this, SLOT(moveItHandlerInitialised()) );
 
     connect( motorCommandsWidget->homeAllMotorsButton, SIGNAL(clicked()), rosWorker, SLOT(homeAllMotors()) );
     connect( motorCommandsWidget->setAllMotorTorquesOffButton, SIGNAL(clicked()), rosWorker, SLOT(setAllMotorTorquesOff()) );
@@ -233,27 +238,46 @@ void MainWindow::connectSignalsAndSlots()
 
 void MainWindow::initRosNode()
 {
-    if (rosWorker->init())
-        outputLog->appendTimestamped("ROS node initialised");
+    if ( !rosWorker->isInitialised() )
+        rosWorker->initialise();
+    else
+        rosWorker->terminate();
 }
 
 
 void MainWindow::initMoveItHandler()
 {
-    moveItHandler->init();
-    outputLog->appendTimestamped("MoveIt! handler initialised");
+    moveItHandler->initialise();
+}
+
+
+void MainWindow::nodeInitialised()
+{
+    outputLog->appendTimestamped("ROS node initialised");
+}
+
+
+void MainWindow::nodeTerminated()
+{
+    outputLog->appendTimestamped("ROS node terminated");
 }
 
 
 void MainWindow::nodeConnectedToRosMaster()
 {
-    outputLog->appendTimestamped("ROS node connected to master");
+    outputLog->appendTimestamped("ROS node connected to ROS master");
 }
 
 
 void MainWindow::nodeDisconnectedFromRosMaster()
 {
-    outputLog->appendTimestamped("ROS node disconnected from master");
+    outputLog->appendTimestamped("ROS node disconnected from ROS master");
+}
+
+
+void MainWindow::moveItHandlerInitialised()
+{
+    outputLog->appendTimestamped("MoveIt! handler initialised");
 }
 
 

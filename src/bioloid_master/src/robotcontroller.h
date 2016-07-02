@@ -3,7 +3,7 @@
 
 #include <qt5/QtCore/QThread>
 #include <qt5/QtCore/QMutex>
-#include <qt5/QtWidgets/QWidget>
+#include <qt5/QtWidgets/QFrame>
 #include <qt5/QtWidgets/QPushButton>
 #include "sensor_msgs/JointState.h"
 #include "rosworker.h"
@@ -15,6 +15,7 @@ class PlanAndExecuteChainWorker : public QObject
 
 public:
     explicit PlanAndExecuteChainWorker(QList<RobotPose> poses, RosWorker* rw, QMutex* mutex);
+    ~PlanAndExecuteChainWorker();
 
 public slots:
     void doWork();
@@ -28,7 +29,7 @@ private:
     QMutex* mutex;
 };
 
-class RobotController : public QWidget
+class RobotController : public QFrame
 {
     Q_OBJECT
 
@@ -64,11 +65,16 @@ public slots:
     void addToQueue();
     void removeFromQueue();
 
-    void enableMotionButtons();
-    void disableMotionButtons();
+    void nodeInitialised();
+    void nodeTerminated();
+    void nodeConnectedToRosMaster();
+    void nodeDisconnectedFromRosMaster();
+
     void updateJointStateValuesFromPoseHelper(const QModelIndex &modelIndex);
 
 private:
+    void enableMotionButtons();
+    void disableMotionButtons();
     RosWorker* mRosWorker;
     QThread* workerThread;
     QMutex moveMutex;

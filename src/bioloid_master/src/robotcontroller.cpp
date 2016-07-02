@@ -4,6 +4,7 @@
 #include <qt5/QtWidgets/QGridLayout>
 #include <qt5/QtWidgets/QInputDialog>
 #include <qt5/QtWidgets/QMessageBox>
+#include <qt5/QtWidgets/QAbstractButton>
 #include "commonvars.h"
 #include "../../usb2ax_controller/src/ax12ControlTableMacros.h"
 
@@ -11,6 +12,12 @@
 PlanAndExecuteChainWorker::PlanAndExecuteChainWorker(QList<RobotPose> poses, RosWorker* rw, QMutex* mutex) :
     poses(poses), rw(rw), mutex(mutex)
 {
+}
+
+
+PlanAndExecuteChainWorker::~PlanAndExecuteChainWorker()
+{
+    emit finished();
 }
 
 
@@ -75,7 +82,7 @@ void PlanAndExecuteChainWorker::doWork()
 
 
 RobotController::RobotController(RosWorker* rosWorker, QWidget* parent) :
-    mRosWorker(rosWorker), QWidget(parent)
+    mRosWorker(rosWorker), QFrame(parent)
 {
     QLabel* rosButtonsLabel = new QLabel("ROS control");
     initRosNodeButton = new QPushButton("Initialise ROS node");
@@ -93,7 +100,7 @@ RobotController::RobotController(RosWorker* rosWorker, QWidget* parent) :
     planAndExecuteChainButton = new QPushButton("Plan and execute chain");
     testButton = new QPushButton("Test");
 
-    disableMotionButtons();
+    nodeDisconnectedFromRosMaster();
 
     QGridLayout* rosButtonsSubLayout = new QGridLayout;
     int row = 0;
@@ -145,7 +152,6 @@ RobotController::RobotController(RosWorker* rosWorker, QWidget* parent) :
         availablePosesList.push_back(robotPose);
     }
 
-
     availablePosesCustomListWidget = new CustomListWidget(availablePosesList, "Available poses", 0, this);
     queuedPosesCustomListWidget = new CustomListWidget(queuedPosesList, "Queued poses", 1, this);
 
@@ -171,6 +177,9 @@ RobotController::RobotController(RosWorker* rosWorker, QWidget* parent) :
     //QWidget* poseControlWidget =  new QWidget(this);
     //poseControlWidget->setLayout(poseControlLayout);
     setLayout(poseControlLayout);
+
+    setObjectName("connectionFrame");
+    setStyleSheet("QFrame#connectionFrame { border: 4px solid red; }");
 }
 
 
@@ -244,6 +253,42 @@ void RobotController::removeFromQueue()
 }
 
 
+void RobotController::nodeInitialised()
+{
+    initRosNodeButton->setText("Terminate ROS node");
+}
+
+
+void RobotController::nodeTerminated()
+{
+    initRosNodeButton->setText("Initialise ROS node");
+}
+
+
+void RobotController::nodeConnectedToRosMaster()
+{
+    initRosNodeButton->setText("Terminate ROS node");
+    enableMotionButtons();
+    setStyleSheet("QFrame#connectionFrame { border: 4px solid green; }");
+}
+
+
+void RobotController::nodeDisconnectedFromRosMaster()
+{
+    initRosNodeButton->setText("Initialise ROS node");
+    disableMotionButtons();
+    setStyleSheet("QFrame#connectionFrame { border: 4px solid red; }");
+}
+
+
+void RobotController::updateJointStateValuesFromPoseHelper(const QModelIndex &modelIndex)
+{
+    sensor_msgs::JointState js = availablePosesCustomListWidget->
+            getRobotPosesListModel()->getCurrentPose(modelIndex).jointState;
+    emit jointStateValuesFromPoseReady(js);
+}
+
+
 void RobotController::enableMotionButtons()
 {
     initMoveItHandlerButton->setEnabled(true);
@@ -265,12 +310,4 @@ void RobotController::disableMotionButtons()
     planMotionButton->setEnabled(false);
     executeMotionButton->setEnabled(false);
     planAndExecuteChainButton->setEnabled(false);
-}
-
-
-void RobotController::updateJointStateValuesFromPoseHelper(const QModelIndex &modelIndex)
-{
-    sensor_msgs::JointState js = availablePosesCustomListWidget->
-            getRobotPosesListModel()->getCurrentPose(modelIndex).jointState;
-    emit jointStateValuesFromPoseReady(js);
 }
