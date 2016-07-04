@@ -5,6 +5,7 @@
 OutputLog::OutputLog(QWidget *parent) :
     QTextEdit(parent)
 {
+    setReadOnly(true);
 }
 
 

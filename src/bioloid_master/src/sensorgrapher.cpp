@@ -41,10 +41,9 @@ SensorGrapher::SensorGrapher(RosWorker* rosWorker, QWidget* parent) :
         sensorGraphs[i] = new SensorGraph(lineNames, yLabel, this);
         gridLayout->addWidget(sensorGraphs[i], row++, col);
     }
-
-    //setMinimumSize(800, 600);
-
     setLayout(gridLayout);
+
+    setMinimumSize(800, 600);
 
     elapsedTimer = new QElapsedTimer();
 

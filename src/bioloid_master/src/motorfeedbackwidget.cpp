@@ -125,8 +125,9 @@ MotorFeedbackWidget::MotorFeedbackWidget(QWidget* parent) :
     motorFeedbackLayout->addWidget(vlineFrames[1], 0, 4, motorFeedbackLayout->rowCount(), 1);
     motorFeedbackLayout->addWidget(vlineFrames[0], 0, 1, motorFeedbackLayout->rowCount(), 1);
     setLayout(motorFeedbackLayout);
-}
 
+    setMinimumWidth(500);
+}
 
 
 void MotorFeedbackWidget::updateJointStateValues(sensor_msgs::JointState js)

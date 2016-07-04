@@ -55,8 +55,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::setUpLayout()
 {
-    outputLog->setReadOnly(true);
-
     motorFeedbackDockWidget = new QDockWidget("Motor feedback", this);
     motorFeedbackDockWidget->setWidget(motorFeedbackWidget);
     motorFeedbackDockWidget->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable |
