@@ -2,7 +2,6 @@
 #define ROBOTCONTROLLER_H
 
 #include <qt5/QtCore/QThread>
-#include <qt5/QtCore/QMutex>
 #include <qt5/QtWidgets/QFrame>
 #include <qt5/QtWidgets/QPushButton>
 #include "sensor_msgs/JointState.h"
@@ -14,7 +13,7 @@ class PlanAndExecuteChainWorker : public QObject
     Q_OBJECT
 
 public:
-    explicit PlanAndExecuteChainWorker(QList<RobotPose> poses, RosWorker* rw, QMutex* mutex);
+    explicit PlanAndExecuteChainWorker(QList<RobotPose> poses, RosWorker* rw);
     ~PlanAndExecuteChainWorker();
 
 public slots:
@@ -26,7 +25,6 @@ signals:
 private:
     QList<RobotPose> poses;
     RosWorker* rw;
-    QMutex* mutex;
 };
 
 class RobotController : public QFrame
@@ -77,7 +75,6 @@ private:
     void disableMotionButtons();
     RosWorker* mRosWorker;
     QThread* workerThread;
-    QMutex moveMutex;
 };
 
 #endif // ROBOTCONTROLLER_H

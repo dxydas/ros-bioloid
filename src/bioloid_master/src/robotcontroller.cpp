@@ -1,5 +1,4 @@
 #include "robotcontroller.h"
-#include <qt5/QtCore/QMutexLocker>
 #include <qt5/QtWidgets/QLabel>
 #include <qt5/QtWidgets/QGridLayout>
 #include <qt5/QtWidgets/QInputDialog>
@@ -9,8 +8,8 @@
 #include "../../usb2ax_controller/src/ax12ControlTableMacros.h"
 
 
-PlanAndExecuteChainWorker::PlanAndExecuteChainWorker(QList<RobotPose> poses, RosWorker* rw, QMutex* mutex) :
-    poses(poses), rw(rw), mutex(mutex)
+PlanAndExecuteChainWorker::PlanAndExecuteChainWorker(QList<RobotPose> poses, RosWorker* rw) :
+    poses(poses), rw(rw)
 {
 }
 
@@ -23,11 +22,6 @@ PlanAndExecuteChainWorker::~PlanAndExecuteChainWorker()
 
 void PlanAndExecuteChainWorker::doWork()
 {
-    QMutexLocker locker(mutex);
-
-    //std::cout << "Hello from worker with thread ID: " << thread()->currentThreadId() << std::endl;
-
-
     for (int i = 0; i < poses.size(); ++i)
     {
         usb2ax_controller::SetMotorParams srv;
@@ -230,8 +224,7 @@ void RobotController::planAndExecuteChain()
     QList<RobotPose> robotPosesList = queuedPosesCustomListWidget->getRobotPosesListModel()->getRobotPosesList();
 
     workerThread = new QThread;
-    PlanAndExecuteChainWorker* planAndExecuteChainWorker =
-            new PlanAndExecuteChainWorker(robotPosesList, mRosWorker, &moveMutex);
+    PlanAndExecuteChainWorker* planAndExecuteChainWorker = new PlanAndExecuteChainWorker(robotPosesList, mRosWorker);
     planAndExecuteChainWorker->moveToThread(workerThread);
     connect( workerThread, SIGNAL(started()), planAndExecuteChainWorker, SLOT(doWork()) );
     connect( planAndExecuteChainWorker, SIGNAL(finished()), workerThread, SLOT(quit()) );
