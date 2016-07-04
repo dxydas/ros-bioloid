@@ -3,10 +3,10 @@
 
 #include <qt5/QtCore/QObject>
 #include <qt5/QtCore/QThread>
-#include <qt5/QtCore/QMutex>
 #include <qt5/QtCore/QElapsedTimer>
 #include <qt5/QtCore/QWaitCondition>
 #include <qt5/QtWidgets/QWidget>
+#include <qt5/QtWidgets/QTextEdit>
 #include <qt5/QtWidgets/QGroupBox>
 #include <qt5/QtWidgets/QPushButton>
 #include "rosworker.h"
@@ -18,23 +18,24 @@ class PidWorker : public QObject
     Q_OBJECT
 
 public:
-    explicit PidWorker(RosWorker* rw, SimplePid* pid, QMutex* mutex);
+    explicit PidWorker(RosWorker* rw, SimplePid* pid, QTextEdit* logTextEdit);
 
 public slots:
     void doWork();
-    void pause();
-    void resume();
-    void stop();
     void stepPid();
+    void pause() { paused = true; }
+    void resume() { paused = false; }
+    void stop() { running = false; }
 
 signals:
     void ioGraphDataUpdated(float SP, float PV);
     void finished();
 
 private:
+    void initialiseMotors();
     RosWorker* rw;
     SimplePid* pid;
-    QMutexLocker locker;
+    QTextEdit* logTextEdit;
     bool running;
     bool paused;
     QWaitCondition pauseCondition;
@@ -74,7 +75,6 @@ private:
     QGroupBox* ankleBalancingGroupBox;
     RosWorker* mRosWorker;
     QThread* workerThread;
-    QMutex moveMutex;
     SimplePid* pid;
     PidWidget* pidWidget;
     PidWorker* pidWorker;

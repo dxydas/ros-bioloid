@@ -108,20 +108,20 @@ PidWidget::PidWidget(SimplePid *pid, QWidget* parent) :
     outMinLayout->addLayout(outMinSliderLayout);
     outMinLayout->addLayout(outMinMinLayout);
 
-    pGainGroupBox = new QGroupBox("Proportional Gain");
+    pGainGroupBox = new QGroupBox("P-Gain");
     pGainGroupBox->setLayout(pGainLayout);
 
-    iGainGroupBox = new QGroupBox("Integral Gain");
+    iGainGroupBox = new QGroupBox("I-Gain");
     iGainGroupBox->setLayout(iGainLayout);
 
-    dGainGroupBox = new QGroupBox("Derivative Gain");
+    dGainGroupBox = new QGroupBox("D-Gain");
     dGainGroupBox->setLayout(dGainLayout);
 
-    outMaxGroupBox = new QGroupBox("Output Max");
+    outMaxGroupBox = new QGroupBox("O/p Max");
     outMaxGroupBox->setLayout(outMaxLayout);
     outMaxGroupBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
-    outMinGroupBox = new QGroupBox("Output Min");
+    outMinGroupBox = new QGroupBox("O/p Min");
     outMinGroupBox->setLayout(outMinLayout);
     outMinGroupBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 

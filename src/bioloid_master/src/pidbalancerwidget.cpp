@@ -2,11 +2,13 @@
 #include <qt5/QtCore/Qt>
 #include <qt5/QtCore/QStringList>
 #include <qt5/QtWidgets/QVBoxLayout>
+#include <qt5/QtWidgets/QHBoxLayout>
 #include <qt5/QtWidgets/QAbstractButton>
+#include <qt5/QtWidgets/QLabel>
 
 
-PidWorker::PidWorker(RosWorker* rw, SimplePid* pid, QMutex* mutex) :
-    rw(rw), pid(pid), locker(mutex), running(true), paused(true)
+PidWorker::PidWorker(RosWorker* rw, SimplePid* pid, QTextEdit* logTextEdit) :
+    rw(rw), pid(pid), running(true), paused(true), logTextEdit(logTextEdit)
 {
     // Initialise setpoint
     SP = 0.0;
@@ -20,61 +22,24 @@ PidWorker::PidWorker(RosWorker* rw, SimplePid* pid, QMutex* mutex) :
 
 void PidWorker::doWork()
 {
-    // Initialise motors
-
-    // Set slow speed
-    setMotorParamSrv.request.dxlID = 254;
-    setMotorParamSrv.request.value = 1.0;
-    rw->setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv);
-    QThread::msleep(500);
-
-    // Home all motors
-    rw->homeAllMotorsClient.call(emptySrv);
-    // Personalised fix for left_hip_swing_joint which is slightly offset from home position
-    setMotorParamSrv.request.dxlID = 12;
-    setMotorParamSrv.request.value = 0.1173;
-    rw->setMotorGoalPositionInRadClient.call(setMotorParamSrv);
-    QThread::msleep(3000);
-
-    // Set full speed
-    setMotorParamSrv.request.dxlID = 254;
-    setMotorParamSrv.request.value = 0.0;
-    rw->setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv);
-    QThread::msleep(500);
+    initialiseMotors();
 
     while (running)
     {
-        if (paused)
-            pauseCondition.wait(locker.mutex());
-
-        stepPid();
+        if (!paused)
+            stepPid();
+        QThread::msleep(100);
     }
 
     emit finished();
 }
 
 
-void PidWorker::pause()
-{
-    paused = true;
-}
-
-
-void PidWorker::resume()
-{
-    paused = false;
-    pauseCondition.wakeAll();
-}
-
-
-void PidWorker::stop()
-{
-    running = false;
-}
-
-
 void PidWorker::stepPid()
 {
+    if ( !rw->isConnectedToRosMaster() )
+        return;
+
     try
     {
         rw->getListener()->lookupTransform("odom", "imu_link", ros::Time(0), transform);
@@ -98,7 +63,7 @@ void PidWorker::stepPid()
     PV = SMA;
     output = pid->update(SP - PV, PV);
 
-    // Graph updates
+    // Trigger graph update
     emit ioGraphDataUpdated(SP, PV);
 
     if ( fabs(output) >= 0.0116 )
@@ -117,15 +82,33 @@ void PidWorker::stepPid()
         rw->setMotorGoalPositionInRadClient.call(setMotorParamSrv);
         setMotorParamSrv.request.dxlID = 16;
         rw->setMotorGoalPositionInRadClient.call(setMotorParamSrv);
-
-        //            std::cout << "pitch angle: " << PV;
-        //            std::cout << "\t output speed: " << output;
-        //            std::cout << "\t output pos: " << position << std::endl;
     }
-    //        else
-    //            std::cout << "Speed too low: " << output << std::endl;
+    else
+        logTextEdit->append( "Speed too low: " + QString::number(output) );
+}
 
-    QThread::msleep(100);
+
+void PidWorker::initialiseMotors()
+{
+    // Set slow speed
+    setMotorParamSrv.request.dxlID = 254;
+    setMotorParamSrv.request.value = 1.0;
+    rw->setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv);
+    QThread::msleep(500);
+
+    // Home all motors
+    rw->homeAllMotorsClient.call(emptySrv);
+    // Personalised fix for left_hip_swing_joint which is slightly offset from home position
+    setMotorParamSrv.request.dxlID = 12;
+    setMotorParamSrv.request.value = 0.1173;
+    rw->setMotorGoalPositionInRadClient.call(setMotorParamSrv);
+    QThread::msleep(3000);
+
+    // Set full speed
+    setMotorParamSrv.request.dxlID = 254;
+    setMotorParamSrv.request.value = 0.0;
+    rw->setMotorGoalSpeedInRadPerSecClient.call(setMotorParamSrv);
+    QThread::msleep(500);
 }
 
 
@@ -146,18 +129,33 @@ PidBalancerWidget::PidBalancerWidget(RosWorker* rosWorker, QWidget* parent) :
     ankleBalancingLayout->addWidget(pidWidget, 0, Qt::AlignCenter);
     ankleBalancingLayout->addWidget(toggleBalancingButton);
 
-    ankleBalancingGroupBox = new QGroupBox("Ankle Balancing", this);
-    ankleBalancingGroupBox->setMinimumSize(800, 600);
+    ankleBalancingGroupBox = new QGroupBox("Ankle Balancing");
+    //ankleBalancingGroupBox->setMinimumSize(800, 600);
     ankleBalancingGroupBox->setLayout(ankleBalancingLayout);
+
+    QLabel* logLabel = new QLabel("Log:");
+    QTextEdit* logTextEdit = new QTextEdit;
+    logTextEdit->setReadOnly(true);
+    QVBoxLayout* logLayout = new QVBoxLayout;
+    logLayout->addWidget(logLabel);
+    logLayout->addWidget(logTextEdit);
+    logLayout->addStretch();
+
+    QHBoxLayout* mainLayout = new QHBoxLayout(this);
+    mainLayout->addWidget(ankleBalancingGroupBox);
+    mainLayout->addLayout(logLayout);
+
+    setLayout(mainLayout);
 
     ioGraph->setMinimumHeight(200);
     pidWidget->setMinimumWidth(500);
-    setMinimumSize(1300, 700);
+    logTextEdit->setMaximumSize(300, 100);
+    setMaximumSize(1300, 700);
 
     elapsedTimer = new QElapsedTimer();
 
     workerThread = new QThread;
-    pidWorker = new PidWorker(mRosWorker, pid, &moveMutex);
+    pidWorker = new PidWorker(mRosWorker, pid, logTextEdit);
     pidWorker->moveToThread(workerThread);
     connect( workerThread, SIGNAL(started()), pidWorker, SLOT(doWork()) );
     connect( pidWorker, SIGNAL(finished()), workerThread, SLOT(quit()) );
@@ -175,8 +173,6 @@ PidBalancerWidget::PidBalancerWidget(RosWorker* rosWorker, QWidget* parent) :
 PidBalancerWidget::~PidBalancerWidget()
 {
     pidWorker->stop();
-    workerThread->quit();
-    workerThread->wait();
 }
 
 
