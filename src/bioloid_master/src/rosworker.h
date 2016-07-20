@@ -18,13 +18,14 @@
 #include "usb2ax_controller/SetMotorParam.h"
 #include "usb2ax_controller/GetMotorParams.h"
 #include "usb2ax_controller/SetMotorParams.h"
+#include "outputlog.h"
 
 class RosWorker : public QObject
 {
     Q_OBJECT
 
 public:
-    RosWorker(int argc, char* argv[], const char* nodeName, QWidget* parent = 0);
+    RosWorker(int argc, char* argv[], const char* nodeName, OutputLog* outputLog, QWidget* parent = 0);
     ~RosWorker();
     bool isInitialised() const { return mIsInitialised; }
     bool isConnectedToRosMaster() const { return mIsConnectedToRosMaster; }
@@ -96,6 +97,7 @@ private:
     int argc;
     char** argv;
     const char* mNodeName;
+    OutputLog* outputLog;
     bool mIsInitialised;
     bool mIsConnectedToRosMaster;
     ros::AsyncSpinner* spinner;

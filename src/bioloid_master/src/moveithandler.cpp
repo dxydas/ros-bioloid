@@ -2,10 +2,9 @@
 #include <qt5/QtCore/QVector>
 
 
-MoveItHandler::MoveItHandler(QWidget* parent) :
-    QWidget(parent)
+MoveItHandler::MoveItHandler(OutputLog* outputLog, QWidget* parent) :
+    outputLog(outputLog), QWidget(parent)
 {
-
 }
 
 
@@ -24,6 +23,7 @@ void MoveItHandler::initialise()
     targetJointValues = startJointValues;
 
     emit initialised();
+    outputLog->appendTimestamped("MoveIt! handler initialised");
 }
 
 

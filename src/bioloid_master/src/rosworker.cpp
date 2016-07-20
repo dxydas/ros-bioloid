@@ -3,8 +3,8 @@
 #include "../../usb2ax_controller/src/ax12ControlTableMacros.h"
 
 
-RosWorker::RosWorker(int argc, char* argv[], const char* nodeName, QWidget* parent) :
-    argc(argc), argv(argv), mNodeName(nodeName), QObject(parent),
+RosWorker::RosWorker(int argc, char* argv[], const char* nodeName, OutputLog* outputLog, QWidget* parent) :
+    argc(argc), argv(argv), mNodeName(nodeName), outputLog(outputLog), QObject(parent),
     mIsInitialised(false), mIsConnectedToRosMaster(false)
 {
     connectionHealthCheckTimer = new QTimer(this);
@@ -36,9 +36,12 @@ void RosWorker::initialise()
 
         mIsInitialised = true;
         emit initialised();
+        outputLog->appendTimestamped("ROS node initialised");
 
         connectToRosMaster();
     }
+    else
+        terminate();
 }
 
 
@@ -119,6 +122,7 @@ void RosWorker::connectToRosMaster()
 
         mIsConnectedToRosMaster = true;
         emit connectedToRosMaster();
+        outputLog->appendTimestamped("ROS node connected to ROS master");
 
         connectionHealthCheckTimer->start(2000);
     }
@@ -171,6 +175,7 @@ void RosWorker::terminate()
 
         mIsConnectedToRosMaster = false;
         emit disconnectedFromRosMaster();
+        outputLog->appendTimestamped("ROS node disconnected from ROS master");
     }
 
     if (mIsInitialised)
@@ -180,6 +185,7 @@ void RosWorker::terminate()
 
         mIsInitialised = false;
         emit terminated();
+        outputLog->appendTimestamped("ROS node terminated");
     }
 }
 

@@ -26,7 +26,10 @@ MainWindow::MainWindow(int argc, char* argv[], QWidget* parent) :
     qRegisterMetaType<std_msgs::Float32>("Float32");
     qRegisterMetaType<std_msgs::Int16MultiArray>("Int16MultiArray");
 
-    rosWorker = new RosWorker(argc, argv, "rosoloid_gui", this);
+    outputLog = new OutputLog(this);
+
+    rosWorker = new RosWorker(argc, argv, "rosoloid_gui", outputLog, this);
+    moveItHandler = new MoveItHandler(outputLog, this);
 
     robotController = new RobotController(rosWorker, this);
     motorCommandsWidget = new MotorCommandsWidget(this);
@@ -35,8 +38,6 @@ MainWindow::MainWindow(int argc, char* argv[], QWidget* parent) :
     motorValueEditor = new MotorValueEditor(rosWorker, this);
     motorAddressEditor = new MotorAddressEditor(rosWorker, this);
     motorDials = new MotorDials(rosWorker, this);
-    moveItHandler = new MoveItHandler(this);
-    outputLog = new OutputLog(this);
     sensorGrapher = new SensorGrapher(rosWorker, this);
     pidBalancerWidget = new PidBalancerWidget(rosWorker, this);
 
@@ -83,12 +84,14 @@ void MainWindow::setUpLayout()
     motorValueEditorDockWidget = new QDockWidget("Motor value editor", this);
     motorValueEditorDockWidget->setWidget(motorValueEditor);
     motorValueEditorDockWidget->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable |
-                                            QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetVerticalTitleBar);
+                                            QDockWidget::DockWidgetFloatable |
+                                            QDockWidget::DockWidgetVerticalTitleBar);
 
     motorAddressEditorDockWidget = new QDockWidget("Motor address editor", this);
     motorAddressEditorDockWidget->setWidget(motorAddressEditor);
     motorAddressEditorDockWidget->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable |
-                                              QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetVerticalTitleBar);
+                                              QDockWidget::DockWidgetFloatable |
+                                              QDockWidget::DockWidgetVerticalTitleBar);
 
     motorDialsDockWidget = new QDockWidget("Motor position dials", this);
     motorDialsDockWidget->setWidget(motorDials);
@@ -180,16 +183,19 @@ void MainWindow::customiseLayout()
 
 void MainWindow::connectSignalsAndSlots()
 {
-    connect( robotController->initRosNodeButton, SIGNAL(clicked()), this, SLOT(initRosNode()) );
-    connect( robotController->initMoveItHandlerButton, SIGNAL(clicked()), this, SLOT(initMoveItHandler()) );
+    connect( robotController->initRosNodeButton, SIGNAL(clicked()), rosWorker, SLOT(initialise()) );
+    connect( robotController->initMoveItHandlerButton, SIGNAL(clicked()), moveItHandler, SLOT(initialise()) );
     connect( robotController->addPoseButton, SIGNAL(clicked()), robotController, SLOT(addPose()) );
     connect( robotController->removePoseButton, SIGNAL(clicked()), robotController, SLOT(removePose()) );
 
-    connect( robotController->setCurrentAsStartStateButton, SIGNAL(clicked()), moveItHandler, SLOT(setCurrentAsStartState()) );
-    connect( robotController->setCurrentAsGoalStateButton, SIGNAL(clicked()), moveItHandler, SLOT(setCurrentAsGoalState()) );
+    connect( robotController->setCurrentAsStartStateButton, SIGNAL(clicked()),
+             moveItHandler, SLOT(setCurrentAsStartState()) );
+    connect( robotController->setCurrentAsGoalStateButton, SIGNAL(clicked()),
+             moveItHandler, SLOT(setCurrentAsGoalState()) );
     connect( robotController->planMotionButton, SIGNAL(clicked()), moveItHandler, SLOT(planMotion()) );
     connect( robotController->executeMotionButton, SIGNAL(clicked()), moveItHandler, SLOT(executeMotion()) );
-    connect( robotController->planAndExecuteChainButton, SIGNAL(clicked()), robotController, SLOT(planAndExecuteChain()) );
+    connect( robotController->planAndExecuteChainButton, SIGNAL(clicked()),
+             robotController, SLOT(planAndExecuteChain()) );
 
     connect( robotController->addToQueueButton, SIGNAL(clicked()), robotController, SLOT(addToQueue()) );
     connect( robotController->removeFromQueueButton, SIGNAL(clicked()), robotController, SLOT(removeFromQueue()) );
@@ -201,15 +207,14 @@ void MainWindow::connectSignalsAndSlots()
     connect( robotController, SIGNAL(jointStateValuesFromPoseReady(sensor_msgs::JointState)),
              motorFeedbackWidget, SLOT(updateJointStateValuesFromPose(sensor_msgs::JointState)) );
 
-    connect( fileIoController->saveAvailablePosesFileButton, SIGNAL(clicked()), robotController->availablePosesCustomListWidget, SLOT(savePosesFile()) );
-    connect( fileIoController->saveQueuedPosesFileButton, SIGNAL(clicked()), robotController->queuedPosesCustomListWidget, SLOT(savePosesFile()) );
-    connect( fileIoController->loadAvailablePosesFileButton, SIGNAL(clicked()), robotController->availablePosesCustomListWidget, SLOT(loadPosesFile()) );
-    connect( fileIoController->loadQueuedPosesFileButton, SIGNAL(clicked()), robotController->queuedPosesCustomListWidget, SLOT(loadPosesFile()) );
-
-    connect( rosWorker, SIGNAL(initialised()), this, SLOT(nodeInitialised()) );
-    connect( rosWorker, SIGNAL(terminated()), this, SLOT(nodeTerminated()) );
-    connect( rosWorker, SIGNAL(connectedToRosMaster()), this, SLOT(nodeConnectedToRosMaster()) );
-    connect( rosWorker, SIGNAL(disconnectedFromRosMaster()), this, SLOT(nodeDisconnectedFromRosMaster()) );
+    connect( fileIoController->saveAvailablePosesFileButton, SIGNAL(clicked()),
+             robotController->availablePosesCustomListWidget, SLOT(savePosesFile()) );
+    connect( fileIoController->saveQueuedPosesFileButton, SIGNAL(clicked()),
+             robotController->queuedPosesCustomListWidget, SLOT(savePosesFile()) );
+    connect( fileIoController->loadAvailablePosesFileButton, SIGNAL(clicked()),
+             robotController->availablePosesCustomListWidget, SLOT(loadPosesFile()) );
+    connect( fileIoController->loadQueuedPosesFileButton, SIGNAL(clicked()),
+             robotController->queuedPosesCustomListWidget, SLOT(loadPosesFile()) );
 
     connect( rosWorker, SIGNAL(initialised()), robotController, SLOT(nodeInitialised()) );
     connect( rosWorker, SIGNAL(terminated()), robotController, SLOT(nodeTerminated()) );
@@ -221,61 +226,15 @@ void MainWindow::connectSignalsAndSlots()
     connect( rosWorker, SIGNAL(secondaryDataUpdated(sensor_msgs::JointState)),
              motorFeedbackWidget, SLOT(updateSecondaryRobotValues(sensor_msgs::JointState)) );
 
-    connect( moveItHandler, SIGNAL(initialised()), this, SLOT(moveItHandlerInitialised()) );
-
     connect( motorCommandsWidget->homeAllMotorsButton, SIGNAL(clicked()), rosWorker, SLOT(homeAllMotors()) );
-    connect( motorCommandsWidget->setAllMotorTorquesOffButton, SIGNAL(clicked()), rosWorker, SLOT(setAllMotorTorquesOff()) );
+    connect( motorCommandsWidget->setAllMotorTorquesOffButton, SIGNAL(clicked()),
+             rosWorker, SLOT(setAllMotorTorquesOff()) );
 
     connect( motorDialsDockWidget, SIGNAL(visibilityChanged(bool)), motorDials, SLOT(initialiseDials(bool)) );
 
     connect( aboutQtAct, SIGNAL(triggered()), this, SLOT(aboutQt()) );
     connect( aboutAct, SIGNAL(triggered()), this, SLOT(about()) );
     connect( exitAct, SIGNAL(triggered()), this, SLOT(quit()) );
-}
-
-
-void MainWindow::initRosNode()
-{
-    if ( !rosWorker->isInitialised() )
-        rosWorker->initialise();
-    else
-        rosWorker->terminate();
-}
-
-
-void MainWindow::initMoveItHandler()
-{
-    moveItHandler->initialise();
-}
-
-
-void MainWindow::nodeInitialised()
-{
-    outputLog->appendTimestamped("ROS node initialised");
-}
-
-
-void MainWindow::nodeTerminated()
-{
-    outputLog->appendTimestamped("ROS node terminated");
-}
-
-
-void MainWindow::nodeConnectedToRosMaster()
-{
-    outputLog->appendTimestamped("ROS node connected to ROS master");
-}
-
-
-void MainWindow::nodeDisconnectedFromRosMaster()
-{
-    outputLog->appendTimestamped("ROS node disconnected from ROS master");
-}
-
-
-void MainWindow::moveItHandlerInitialised()
-{
-    outputLog->appendTimestamped("MoveIt! handler initialised");
 }
 
 

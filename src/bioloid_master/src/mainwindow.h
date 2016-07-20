@@ -6,16 +6,16 @@
 #include <qt5/QtWidgets/QDockWidget>
 #include <qt5/QtWidgets/QMenu>
 #include <qt5/QtWidgets/QAction>
+#include "outputlog.h"
 #include "robotcontroller.h"
 #include "motorcommandswidget.h"
 #include "motorfeedbackwidget.h"
 #include "fileiocontroller.h"
 #include "rosworker.h"
-#include "outputlog.h"
+#include "moveithandler.h"
 #include "motorvalueeditor.h"
 #include "motoraddresseditor.h"
 #include "motordials.h"
-#include "moveithandler.h"
 #include "sensorgrapher.h"
 #include "pidbalancerwidget.h"
 
@@ -30,16 +30,6 @@ public:
 signals:
 
 public slots:
-    void initRosNode();
-    void initMoveItHandler();
-
-    void nodeInitialised();
-    void nodeTerminated();
-    void nodeConnectedToRosMaster();
-    void nodeDisconnectedFromRosMaster();
-
-    void moveItHandlerInitialised();
-
     void aboutQt();
     void about();
     void quit();
@@ -49,16 +39,16 @@ private:
     void customiseLayout();
     void connectSignalsAndSlots();
 
+    OutputLog* outputLog;
     RobotController* robotController;
     MotorCommandsWidget* motorCommandsWidget;
     MotorFeedbackWidget* motorFeedbackWidget;
     FileIoController* fileIoController;
     RosWorker* rosWorker;
+    MoveItHandler* moveItHandler;
     MotorValueEditor* motorValueEditor;
     MotorAddressEditor* motorAddressEditor;
     MotorDials* motorDials;
-    MoveItHandler* moveItHandler;
-    OutputLog* outputLog;
     SensorGrapher* sensorGrapher;
     PidBalancerWidget* pidBalancerWidget;
 
