@@ -29,6 +29,7 @@ public slots:
 
 signals:
     void ioGraphDataUpdated(float SP, float PV);
+    void newLogMessageReady(QString text);
     void finished();
 
 private:
@@ -70,9 +71,11 @@ signals:
 public slots:
     void setBalancingActive(bool activate);
     void updateIoGraphData(float SP, float PV);
+    void appendLogMessage(QString text);
 
 private:
     QGroupBox* ankleBalancingGroupBox;
+    QTextEdit* logTextEdit;
     RosWorker* mRosWorker;
     QThread* workerThread;
     SimplePid* pid;

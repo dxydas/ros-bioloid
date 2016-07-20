@@ -28,7 +28,7 @@ void PidWorker::doWork()
     {
         if (!paused)
             stepPid();
-        QThread::msleep(100);
+        QThread::msleep(1);
     }
 
     emit finished();
@@ -82,9 +82,12 @@ void PidWorker::stepPid()
         rw->setMotorGoalPositionInRadClient.call(setMotorParamSrv);
         setMotorParamSrv.request.dxlID = 16;
         rw->setMotorGoalPositionInRadClient.call(setMotorParamSrv);
+
+        emit newLogMessageReady( "Output: " + QString::number(output) );
+        emit newLogMessageReady( "Position: " + QString::number(position) );
     }
     else
-        logTextEdit->append( "Speed too low: " + QString::number(output) );
+        emit newLogMessageReady( "Speed too low: " + QString::number(output) );
 }
 
 
@@ -134,7 +137,7 @@ PidBalancerWidget::PidBalancerWidget(RosWorker* rosWorker, QWidget* parent) :
     ankleBalancingGroupBox->setLayout(ankleBalancingLayout);
 
     QLabel* logLabel = new QLabel("Log:");
-    QTextEdit* logTextEdit = new QTextEdit;
+    logTextEdit = new QTextEdit;
     logTextEdit->setReadOnly(true);
     QVBoxLayout* logLayout = new QVBoxLayout;
     logLayout->addWidget(logLabel);
@@ -157,13 +160,15 @@ PidBalancerWidget::PidBalancerWidget(RosWorker* rosWorker, QWidget* parent) :
     workerThread = new QThread;
     pidWorker = new PidWorker(mRosWorker, pid, logTextEdit);
     pidWorker->moveToThread(workerThread);
+
+    connect( toggleBalancingButton, SIGNAL(clicked(bool)), this, SLOT(setBalancingActive(bool)) );
+    connect( pidWorker, SIGNAL(newLogMessageReady(QString)), this, SLOT(appendLogMessage(QString)) );
     connect( workerThread, SIGNAL(started()), pidWorker, SLOT(doWork()) );
     connect( pidWorker, SIGNAL(finished()), workerThread, SLOT(quit()) );
     connect( pidWorker, SIGNAL(finished()), pidWorker, SLOT(deleteLater()) );
     connect( workerThread, SIGNAL(finished()), workerThread, SLOT(deleteLater()) );
     connect( pidWorker, SIGNAL(ioGraphDataUpdated(float, float)),
              this, SLOT(updateIoGraphData(float, float)) );
-    connect( toggleBalancingButton, SIGNAL(clicked(bool)), this, SLOT(setBalancingActive(bool)) );
 
     workerThread->start();
     elapsedTimer->start();
@@ -196,4 +201,12 @@ void PidBalancerWidget::updateIoGraphData(float SP, float PV)
     int t = elapsedTimer->elapsed();
     ioGraph->appendData(0, t, SP);
     ioGraph->appendData(1, t, PV);
+}
+
+
+void PidBalancerWidget::appendLogMessage(QString text)
+{
+    // Use a signal/slot here, because QtWidget and subclasses are not reentrant, so they can only be used from the
+    // main thread
+    logTextEdit->append(text);
 }
