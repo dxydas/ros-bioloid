@@ -79,10 +79,6 @@ roslaunch bioloid_master bioloid_rviz.launch                                    
 roslaunch usb2ax_controller controller.launch
 roslaunch bioloid_sensors_interface avr_sensors_serial_process.launch
 rosrun usb2ax_controller test_interface                                         # Run test program: home position and arm wave
-# Test PID balancer
-roslaunch usb2ax_controller controller.launch
-roslaunch bioloid_sensors_interface avr_sensors_serial_process.launch
-rosrun usb2ax_controller test_balancer                                          # Run test program: home position and balancing
 ################
 
 ## MoveIt! ##
