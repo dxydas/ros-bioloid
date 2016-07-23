@@ -210,24 +210,31 @@ void MotorValueEditor::getValue(int dxlId)
         {
             usb2ax_controller::GetMotorParam srv;
             srv.request.dxlID = dxlId;
-            mRosWorker->getMotorGoalPositionInRadClient.call(srv);
-            oss << srv.response.value;
-            str = QString::fromStdString(oss.str());
-            currentValueLineEdits[dxlId - 1]->setText(str);
+            if ( mRosWorker->getMotorGoalPositionInRadClient.call(srv) )
+            {
+                oss << srv.response.value;
+                str = QString::fromStdString(oss.str());
+                currentValueLineEdits[dxlId - 1]->setText(str);
+            }
         }
         else if (dxlId == 254)
         {
             usb2ax_controller::GetMotorParams srv;
             for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
                 srv.request.dxlIDs.push_back(dxlId);
-            mRosWorker->getMotorGoalPositionsInRadClient.call(srv);
-            for (int i = 0; i < NUM_OF_MOTORS; ++i)
+            if ( mRosWorker->getMotorGoalPositionsInRadClient.call(srv) )
             {
-                oss.str("");
-                oss.width(7);  // Not 'sticky'
-                oss << srv.response.values[i];
-                str = QString::fromStdString(oss.str());
-                currentValueLineEdits[i]->setText(str);
+                if ( srv.response.values.size() >= NUM_OF_MOTORS )
+                {
+                    for (int i = 0; i < NUM_OF_MOTORS; ++i)
+                    {
+                        oss.str("");
+                        oss.width(7);  // Not 'sticky'
+                        oss << srv.response.values[i];
+                        str = QString::fromStdString(oss.str());
+                        currentValueLineEdits[i]->setText(str);
+                    }
+                }
             }
         }
         else
@@ -241,24 +248,31 @@ void MotorValueEditor::getValue(int dxlId)
         {
             usb2ax_controller::GetMotorParam srv;
             srv.request.dxlID = dxlId;
-            mRosWorker->getMotorGoalSpeedInRadPerSecClient.call(srv);
-            oss << srv.response.value;
-            str = QString::fromStdString(oss.str());
-            currentValueLineEdits[dxlId - 1]->setText(str);
+            if ( mRosWorker->getMotorGoalSpeedInRadPerSecClient.call(srv) )
+            {
+                oss << srv.response.value;
+                str = QString::fromStdString(oss.str());
+                currentValueLineEdits[dxlId - 1]->setText(str);
+            }
         }
         else if (dxlId == 254)
         {
             usb2ax_controller::GetMotorParams srv;
             for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
                 srv.request.dxlIDs.push_back(dxlId);
-            mRosWorker->getMotorGoalSpeedsInRadPerSecClient.call(srv);
-            for (int i = 0; i < NUM_OF_MOTORS; ++i)
+            if ( mRosWorker->getMotorGoalSpeedsInRadPerSecClient.call(srv) )
             {
-                oss.str("");
-                oss.width(7);  // Not 'sticky'
-                oss << srv.response.values[i];
-                str = QString::fromStdString(oss.str());
-                currentValueLineEdits[i]->setText(str);
+                if ( srv.response.values.size() >= NUM_OF_MOTORS )
+                {
+                    for (int i = 0; i < NUM_OF_MOTORS; ++i)
+                    {
+                        oss.str("");
+                        oss.width(7);  // Not 'sticky'
+                        oss << srv.response.values[i];
+                        str = QString::fromStdString(oss.str());
+                        currentValueLineEdits[i]->setText(str);
+                    }
+                }
             }
         }
         else
@@ -272,24 +286,31 @@ void MotorValueEditor::getValue(int dxlId)
         {
             usb2ax_controller::GetMotorParam srv;
             srv.request.dxlID = dxlId;
-            mRosWorker->getMotorTorqueLimitInDecimalClient.call(srv);
-            oss << srv.response.value;
-            str = QString::fromStdString(oss.str());
-            currentValueLineEdits[dxlId - 1]->setText(str);
+            if ( mRosWorker->getMotorTorqueLimitInDecimalClient.call(srv) )
+            {
+                oss << srv.response.value;
+                str = QString::fromStdString(oss.str());
+                currentValueLineEdits[dxlId - 1]->setText(str);
+            }
         }
         else if (dxlId == 254)
         {
             usb2ax_controller::GetMotorParams srv;
             for (int dxlId = 1; dxlId <= NUM_OF_MOTORS; ++dxlId)
                 srv.request.dxlIDs.push_back(dxlId);
-            mRosWorker->getMotorTorqueLimitsInDecimalClient.call(srv);
-            for (int i = 0; i < NUM_OF_MOTORS; ++i)
+            if ( mRosWorker->getMotorTorqueLimitsInDecimalClient.call(srv) )
             {
-                oss.str("");
-                oss.width(7);  // Not 'sticky'
-                oss << srv.response.values[i];
-                str = QString::fromStdString(oss.str());
-                currentValueLineEdits[i]->setText(str);
+                if ( srv.response.values.size() >= NUM_OF_MOTORS )
+                {
+                    for (int i = 0; i < NUM_OF_MOTORS; ++i)
+                    {
+                        oss.str("");
+                        oss.width(7);  // Not 'sticky'
+                        oss << srv.response.values[i];
+                        str = QString::fromStdString(oss.str());
+                        currentValueLineEdits[i]->setText(str);
+                    }
+                }
             }
         }
         else
@@ -326,10 +347,12 @@ void MotorValueEditor::getValue(int dxlId)
             usb2ax_controller::ReceiveFromAX srv;
             srv.request.dxlID = dxlId;
             srv.request.address = mSelectedControlTableAddress;
-            mRosWorker->receiveFromAXClient.call(srv);
-            oss << srv.response.value;
-            str = QString::fromStdString(oss.str());
-            currentValueLineEdits[dxlId - 1]->setText(str);
+            if ( mRosWorker->receiveFromAXClient.call(srv) )
+            {
+                oss << srv.response.value;
+                str = QString::fromStdString(oss.str());
+                currentValueLineEdits[dxlId - 1]->setText(str);
+            }
         }
         else if (dxlId == 254)
         {
@@ -338,14 +361,19 @@ void MotorValueEditor::getValue(int dxlId)
                 srv.request.dxlIDs.push_back(dxlId);
             srv.request.startAddress = mSelectedControlTableAddress;
             srv.request.numOfValuesPerMotor = 1;
-            mRosWorker->receiveSyncFromAXClient.call(srv);
-            for (int i = 0; i < NUM_OF_MOTORS; ++i)
+            if ( mRosWorker->receiveSyncFromAXClient.call(srv) )
             {
-                oss.str("");
-                oss.width(7);  // Not 'sticky'
-                oss << srv.response.values[i];
-                str = QString::fromStdString(oss.str());
-                currentValueLineEdits[i]->setText(str);
+                if ( srv.response.values.size() >= NUM_OF_MOTORS )
+                {
+                    for (int i = 0; i < NUM_OF_MOTORS; ++i)
+                    {
+                        oss.str("");
+                        oss.width(7);  // Not 'sticky'
+                        oss << srv.response.values[i];
+                        str = QString::fromStdString(oss.str());
+                        currentValueLineEdits[i]->setText(str);
+                    }
+                }
             }
         }
         else
