@@ -5,6 +5,7 @@
 #include <qt5/QtWidgets/QWidget>
 #include <qt5/QtWidgets/QListView>
 #include <qt5/QtWidgets/QPushButton>
+#include <qt5/QtWidgets/QLineEdit>
 #include "robotposeslistmodel.h"
 
 class CustomListWidget : public QWidget
@@ -27,8 +28,10 @@ public slots:
     void moveDown();
     void savePosesFile();
     void loadPosesFile();
+    void updateRobotPosesFormLayout(const QModelIndex &index);
 
 private:
+    QLineEdit* dwellTimeLineEdit;
     QPushButton* moveUpButton;
     QPushButton* moveDownButton;
     RobotPosesListModel* mRobotPosesListModel;

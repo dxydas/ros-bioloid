@@ -7,6 +7,7 @@
 #include <qt5/QtWidgets/QFileDialog>
 #include <qt5/QtWidgets/QMessageBox>
 #include <qt5/QtWidgets/QAbstractButton>
+#include <qt5/QtWidgets/QFormLayout>
 
 
 CustomListWidget::CustomListWidget(QList<RobotPose> posesList, QString title,
@@ -24,6 +25,11 @@ CustomListWidget::CustomListWidget(QList<RobotPose> posesList, QString title,
     mListView->setModel(mRobotPosesListModel);
     mListView->setSelectionMode(QAbstractItemView::SingleSelection);
 
+    dwellTimeLineEdit = new QLineEdit("");
+    dwellTimeLineEdit->setEnabled(false);
+    QFormLayout* robotPosesFormLayout = new QFormLayout;
+    robotPosesFormLayout->addRow("Dwell time (s):", dwellTimeLineEdit);
+
     moveUpButton = new QPushButton("Move up");
     moveDownButton = new QPushButton("Move down");
 
@@ -33,11 +39,16 @@ CustomListWidget::CustomListWidget(QList<RobotPose> posesList, QString title,
     int row = 0;
     layout->addWidget(label, row++, 0, 1, -1);
     layout->addWidget(mListView, row++, 0, 1, -1);
+    layout->addLayout(robotPosesFormLayout, row++, 0, 1, -1);
     layout->addWidget(moveUpButton, row, 0);
     layout->addWidget(moveDownButton, row++, 1);
 
     connect( moveUpButton, SIGNAL(clicked()), this, SLOT(moveUp()) );
     connect( moveDownButton, SIGNAL(clicked()), this, SLOT(moveDown()) );
+    connect( mListView, SIGNAL(clicked(const QModelIndex &)),
+             this, SLOT(updateRobotPosesFormLayout(const QModelIndex &)) );
+    connect( mListView, SIGNAL(activated(const QModelIndex &)),
+             this, SLOT(updateRobotPosesFormLayout(const QModelIndex &)) );
 }
 
 
@@ -126,4 +137,10 @@ void CustomListWidget::loadPosesFile()
     QModelIndex index;
     mRobotPosesListModel->loadPosesFile(fileName, index);
     mListView->setCurrentIndex(index);
+}
+
+
+void CustomListWidget::updateRobotPosesFormLayout(const QModelIndex &index)
+{
+    dwellTimeLineEdit->setText( QString::number(mRobotPosesListModel->getCurrentPose(index).dwellTimeInSec) );
 }
