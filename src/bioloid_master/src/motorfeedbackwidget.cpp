@@ -89,10 +89,10 @@ MotorFeedbackWidget::MotorFeedbackWidget(QWidget* parent) :
         presentSpeedLineEdits[i]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         movingSpeedLineEdits[i]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-        presentPosLineEdits[i]->setEnabled(false);
-        goalPosLineEdits[i]->setEnabled(false);
-        presentSpeedLineEdits[i]->setEnabled(false);
-        movingSpeedLineEdits[i]->setEnabled(false);
+        presentPosLineEdits[i]->setReadOnly(true);
+        goalPosLineEdits[i]->setReadOnly(true);
+        presentSpeedLineEdits[i]->setReadOnly(true);
+        movingSpeedLineEdits[i]->setReadOnly(true);
 
         row = i + 1;
         col = 0;

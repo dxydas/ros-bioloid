@@ -107,7 +107,7 @@ MotorValueEditor::MotorValueEditor(RosWorker* rosWorker, QWidget* parent) :
         {
             motorIdLabels[i]->setText(QString::number(i + 1));
             currentValueLineEdits[i]->setText(str);
-            currentValueLineEdits[i]->setEnabled(false);
+            currentValueLineEdits[i]->setReadOnly(true);
 
             getSignalMapper->setMapping(getValueButtons[i], i + 1);
             setSignalMapper->setMapping(setValueButtons[i], i + 1);
@@ -115,7 +115,7 @@ MotorValueEditor::MotorValueEditor(RosWorker* rosWorker, QWidget* parent) :
         else
         {
             motorIdLabels[i]->setText("All");
-            currentValueLineEdits[i]->setEnabled(false);
+            currentValueLineEdits[i]->setReadOnly(true);
 
             QFrame* hlineFrame = new QFrame;
             hlineFrame->setFrameShape(QFrame::HLine);

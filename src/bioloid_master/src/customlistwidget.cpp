@@ -26,7 +26,7 @@ CustomListWidget::CustomListWidget(QList<RobotPose> posesList, QString title,
     mListView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     dwellTimeLineEdit = new QLineEdit("");
-    dwellTimeLineEdit->setEnabled(false);
+    dwellTimeLineEdit->setReadOnly(true);
     QFormLayout* robotPosesFormLayout = new QFormLayout;
     robotPosesFormLayout->addRow("Dwell time (s):", dwellTimeLineEdit);
 

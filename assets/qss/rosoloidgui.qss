@@ -121,26 +121,19 @@ QLineEdit {
     selection-color: white;
     selection-background-color: lightsteelblue;
 }
-QLineEdit:disabled {
-    color: black;
-}
 
 
 QLineEdit#silverLineEdit {
     border: 2px solid grey;
-    background-color: silver;
-}
-QLineEdit#silverLineEdit:disabled {
     color: black;
+    background-color: silver;
 }
 
 
 QLineEdit#greenLineEdit {
     border: 2px solid green;
-    background-color: darkgreen;
-}
-QLineEdit#greenLineEdit:disabled {
     color: lime;
+    background-color: darkgreen;
 }
 
 

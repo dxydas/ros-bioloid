@@ -91,14 +91,14 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
         str = QString::fromStdString(oss.str());
         presentTempLineEdits[i] = new QLineEdit(str + " °C");
 
-        presentPosLineEdits[i]->setEnabled(false);
-        presentSpeedLineEdits[i]->setEnabled(false);
-        presentLoadLineEdits[i]->setEnabled(false);
-        goalValueLineEdits[i]->setEnabled(false);
-        presentVoltageLineEdits[i]->setEnabled(false);
-        presentTempLineEdits[i]->setEnabled(false);
-        torqueEnableLineEdits[i]->setEnabled(false);
-        ledLineEdits[i]->setEnabled(false);
+        presentPosLineEdits[i]->setReadOnly(true);
+        presentSpeedLineEdits[i]->setReadOnly(true);
+        presentLoadLineEdits[i]->setReadOnly(true);
+        goalValueLineEdits[i]->setReadOnly(true);
+        presentVoltageLineEdits[i]->setReadOnly(true);
+        presentTempLineEdits[i]->setReadOnly(true);
+        torqueEnableLineEdits[i]->setReadOnly(true);
+        ledLineEdits[i]->setReadOnly(true);
 
         presentPosLineEdits[i]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         presentSpeedLineEdits[i]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -134,7 +134,7 @@ MotorDials::MotorDials(RosWorker* rosWorker, QWidget* parent) :
         alarmLedLineEdits[6]->setToolTip("Instruction Error");
         for (int j = 0; j < alarmLedLineEdits.size(); ++j)
         {
-            alarmLedLineEdits[j]->setEnabled(false);
+            alarmLedLineEdits[j]->setReadOnly(true);
             alarmLedLineEdits[j]->setAlignment(Qt::AlignCenter);
             alarmLedLineEdits[j]->setMaximumSize(26, 30);
         }
