@@ -11,7 +11,7 @@ Panels:
         - /MotionPlanning1/Planning Metrics1
         - /MotionPlanning1/Planned Path1
       Splitter Ratio: 0.472843
-    Tree Height: 452
+    Tree Height: 748
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -49,8 +49,18 @@ Visualization Manager:
       MoveIt_Use_Constraint_Aware_IK: true
       MoveIt_Warehouse_Host: 127.0.0.1
       MoveIt_Warehouse_Port: 33829
+      MoveIt_Workspace:
+        Center:
+          X: 0
+          Y: 0
+          Z: 0
+        Size:
+          X: 2
+          Y: 2
+          Z: 2
       Name: MotionPlanning
       Planned Path:
+        Interrupt Display: false
         Links:
           All Links Enabled: true
           Expand Joint Details: false
@@ -191,7 +201,7 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-        Loop Animation: true
+        Loop Animation: false
         Robot Alpha: 0.5
         Show Robot Collision: false
         Show Robot Visual: true
@@ -211,7 +221,7 @@ Visualization Manager:
         Goal State Color: 250; 128; 0
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
-        Planning Group: right_leg
+        Planning Group: robot
         Query Goal State: true
         Query Start State: false
         Show Workspace: false
@@ -387,15 +397,15 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 0.423748
+      Distance: 0.284614
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.235098
-        Y: -0.11112
+        X: 0.355432
+        Y: -0.170325
         Z: 2.39719e-07
       Name: Current View
       Near Clip Distance: 0.01
@@ -407,16 +417,16 @@ Visualization Manager:
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 718
+  Height: 1028
   Help:
     collapsed: false
   Hide Left Dock: false
   Hide Right Dock: false
   Motion Planning:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000001000000000000027400000275fc0200000004fc0000003d00000275000001b90100001bfa000000000100000002fb000000100044006900730070006c0061007900730100000000ffffffff0000010f00fffffffb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000000ffffffff0000027400fffffffb0000000800480065006c00700000000342000000bb0000007300fffffffb0000000a0056006900650077007300000003b0000000b0000000ad00fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000000002da0000027500000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000010000000000000274000003a1fc0200000004fc00000043000003a1000001f20100001dfa000000000100000002fb000000100044006900730070006c0061007900730100000000ffffffff0000016a00fffffffb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000000ffffffff0000024f00fffffffb0000000800480065006c00700000000342000000bb0000007800fffffffb0000000a0056006900650077007300000003b0000000b0000000b800fffffffb0000000c00430061006d00650072006100000002ff00000161000000000000000000000504000003a100000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1364
-  X: -9
+  Width: 1918
+  X: 1671
   Y: -8
