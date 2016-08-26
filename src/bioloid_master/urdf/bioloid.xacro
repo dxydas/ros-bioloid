@@ -75,7 +75,7 @@
             <origin xyz="0 -0.0153 ${reflect*0.05}" rpy="${reflect*pi/2} 0 0"/>
             <xacro:z_rot/>
             <child link="${prefix}_hip_lateral_link"/>
-            <limit lower="${-0.3}" upper="${0.3}" effort="10" velocity="1.0"/>
+            <limit lower="${-0.3}" upper="${1.0}" effort="10" velocity="1.0"/>
         </joint>
     </xacro:macro>
     <xacro:macro name="hip_swing_joint" params="prefix reflect rotatex">
@@ -84,7 +84,7 @@
             <origin xyz="0 0 ${reflect*(-0.032)}" rpy="${rotatex*pi} ${-pi/2} 0"/>
             <xacro:z_rot/>
             <child link="${prefix}_upper_leg_link"/>
-            <limit lower="${-pi/2}" upper="${pi/2}" effort="10" velocity="1.0"/>
+            <limit lower="${-pi/2}" upper="${1.9}" effort="10" velocity="1.0"/>
         </joint>
     </xacro:macro>
     <xacro:macro name="knee_joint" params="prefix reflect">

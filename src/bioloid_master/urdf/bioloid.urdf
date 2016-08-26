@@ -924,7 +924,7 @@
     <origin rpy="1.570795 0 0" xyz="0 -0.0153 0.05"/>
     <axis xyz="0 0 1"/>
     <child link="right_hip_lateral_link"/>
-    <limit effort="10" lower="-0.3" upper="0.3" velocity="1.0"/>
+    <limit effort="10" lower="-0.3" upper="1.0" velocity="1.0"/>
   </joint>
   <link name="right_hip_lateral_link">
     <!-- Motor 9 -->
@@ -983,7 +983,7 @@
     <origin rpy="-1.570795 0 0" xyz="0 -0.0153 -0.05"/>
     <axis xyz="0 0 1"/>
     <child link="left_hip_lateral_link"/>
-    <limit effort="10" lower="-0.3" upper="0.3" velocity="1.0"/>
+    <limit effort="10" lower="-0.3" upper="1.0" velocity="1.0"/>
   </joint>
   <link name="left_hip_lateral_link">
     <!-- Motor 10 -->
@@ -1042,7 +1042,7 @@
     <origin rpy="0.0 -1.570795 0" xyz="0 0 -0.032"/>
     <axis xyz="0 0 1"/>
     <child link="right_upper_leg_link"/>
-    <limit effort="10" lower="-1.570795" upper="1.570795" velocity="1.0"/>
+    <limit effort="10" lower="-1.570795" upper="1.9" velocity="1.0"/>
   </joint>
   <link name="right_upper_leg_link">
     <visual>
@@ -1081,7 +1081,7 @@
     <origin rpy="3.14159 -1.570795 0" xyz="0 0 0.032"/>
     <axis xyz="0 0 1"/>
     <child link="left_upper_leg_link"/>
-    <limit effort="10" lower="-1.570795" upper="1.570795" velocity="1.0"/>
+    <limit effort="10" lower="-1.570795" upper="1.9" velocity="1.0"/>
   </joint>
   <link name="left_upper_leg_link">
     <visual>
