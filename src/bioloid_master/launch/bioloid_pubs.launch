@@ -2,10 +2,12 @@
 <launch>
     <arg name="dummy_base" default="false"/>
     <arg name="dummy_imu" default="false"/>
+    <arg name="gui" default="false"/>
     <param name="robot_description" command="$(find xacro)/xacro.py $(find bioloid_master)/urdf/bioloid.xacro"/>
     <rosparam param="source_list">['ax_joint_states']</rosparam>
     <param name="rate" value="1000"/>
     <param name="publish_frequency" value="1000"/>
+    <param name="use_gui" value="$(arg gui)"/>
     <node pkg="tf" type="static_transform_publisher" name="dummy_odom_frame_broadcaster" args="0 0 0 0 0 0 map odom 1000"/>
     <node if="$(arg dummy_base)" pkg="tf" type="static_transform_publisher" name="dummy_base_frame_broadcaster" args="0 0 0 0 0 0 odom base_link 1000"/>
     <node if="$(arg dummy_imu)" pkg="tf" type="static_transform_publisher" name="dummy_imu_frame_broadcaster" args="0 0 0 0 0 0 odom imu_link 1000"/>

@@ -1,6 +1,4 @@
 <launch>
-    <!-- Start rviz with saved config file and show joint sliders GUI -->
-    <arg name="gui" default="true"/>
-    <param name="use_gui" value="$(arg gui)"/>
+    <!-- Start rviz with saved config file -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find bioloid_master)/config/bioloid.rviz" required="true"/>
 </launch>

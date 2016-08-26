@@ -56,25 +56,25 @@ export ROSCONSOLE_CONFIG_FILE=$ROS_DIR/my_rosconsole.config
 # My roslaunch/rosrun files
 
 ## Simulated robot ##
-# Load robot description and start state publishers
+# Load robot description and start state publishers, publish dummy IMU frame
 roslaunch bioloid_master bioloid_pubs.launch dummy_imu:=true
 # Visualise robot using URDF, no IMU
-roslaunch bioloid_master bioloid_pubs.launch dummy_imu:=true
-roslaunch bioloid_master bioloid_rviz.launch                                    # Start RViz, publish robot/joint state, publish dummy IMU frame
+roslaunch bioloid_master bioloid_pubs.launch dummy_imu:=true gui:=true          # Display gui for joint position sliders (joint_state_publisher)
+roslaunch bioloid_master bioloid_rviz.launch                                    # Start RViz
 # Start Gazebo with empty world
 roslaunch bioloid_master bioloid_pubs.launch dummy_imu:=true
-roslaunch bioloid_master bioloid_gazebo.launch                                  # Loads bioloid.world from bioloid_master/worlds/
+roslaunch bioloid_master bioloid_gazebo.launch                                  # Loads bioloid.world from bioloid_master/worlds folder
 # Start a previously saved Gazebo world
 gazebo bioloid_sandbox.world                                                    # Use as test only, all robot data is hard-coded in this file
 #####################
 
 ## Real robot ##
 # Visualise real sensor data
-roslaunch bioloid_sensors_interface avr_sensors_serial_plot.launch              # Start sensors interface, rqt_plot
+roslaunch bioloid_sensors_interface avr_sensors_serial_plot.launch              # Start sensors interface and rqt_plot
 # Visualise robot using URDF
-roslaunch usb2ax_controller controller.launch                                   # Initialise servo controller with position control disabled
+roslaunch usb2ax_controller controller.launch                                   # Launch bioloid_rviz.launch and initialise servo controller with position control disabled
 roslaunch bioloid_sensors_interface avr_sensors_serial_process.launch           # Start sensors interface, publish IMU frame
-roslaunch bioloid_master bioloid_rviz.launch                                    # Start RViz, publish robot/joint state
+roslaunch bioloid_master bioloid_rviz.launch
 # Test servo motion
 roslaunch usb2ax_controller controller.launch
 roslaunch bioloid_sensors_interface avr_sensors_serial_process.launch
@@ -88,16 +88,21 @@ roslaunch bioloid_moveit_config setup_assistant.launch                          
 roslaunch bioloid_moveit_config demo.launch                                     # Start RViz with MoveIt MotionPlanning plugin
 # Run the MoveIt RViz plugin with default database
 roslaunch bioloid_moveit_config demo.launch db:=true                            # Start RViz with MoveIt MotionPlanning plugin and default database
-# Run the MoveIt RViz plugin with custom database
+# Run the MoveIt RViz plugin with custom database (old way)
 roslaunch bioloid_moveit_config warehouse.launch moveit_warehouse_database_path:=~/bioloid_warehouse_mongo_db
 roslaunch bioloid_moveit_config demo.launch
+# Run the MoveIt RViz plugin with custom database
+roslaunch bioloid_moveit_config demo.launch db:=true db_path:=~/bioloid_warehouse_mongo_db
+# Run bioloid_pubs and the MoveIt RViz plugin with custom database
+roslaunch bioloid_master bioloid_pubs.launch dummy_imu:=true gui:=true
+roslaunch bioloid_moveit_config demo_custom.launch db:=true db_path:=~/bioloid_warehouse_mongo_db load_robot_description:=false    # Load URDF robot_description from a separate launch file (using xacro.py)
 # Test MoveIt Move Group API
 rosrun bioloid_master moveit_api_test                                           # Run test program: MoveIt Move Group Interface/C++ API
 # Run MoveIt with ros_control controller interface to hardware
 roslaunch usb2ax_controller controller.launch pos_control:=true                 # Position control enabled. Use arg dummy_imu:=true if IMU is not running.
 roslaunch bioloid_master bioloid_controllers.launch                             # Start ros_control controller spawner
 roslaunch bioloid_sensors_interface avr_sensors_serial_process.launch
-roslaunch bioloid_moveit_config demo_custom.launch                              # Loads controller configuration instead of fake controllers
+roslaunch bioloid_moveit_config demo_custom.launch load_robot_description:=false fake_execution:=false    # Load controller configuration instead of fake controllers
 #############
 
 # GUIs ##
