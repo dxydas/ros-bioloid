@@ -43,7 +43,7 @@ catkin_create_pkg usb2ax_controller std_msgs rospy roscpp
 # Copy the USB2AX library to src
 # Note: USB2AX uses a different dxl_hal.c file than the Robotis' Dynamixel SDK for Linux
 # See link: http://www.xevelabs.com/doku.php?id=product:usb2ax:faq#qdynamixel_sdkhow_do_i_use_it_with_the_usb2ax
-cp -r /mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/Program_Files/USB2AX $CATKIN_WS/src/usb2ax_controller/src/usb2ax
+cp -r /mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/Program_Files/USB2AX_Files/My_Config/USB2AX $CATKIN_WS/src/usb2ax_controller/src/usb2ax
 # Build
 cd $CATKIN_WS
 catkin_make
