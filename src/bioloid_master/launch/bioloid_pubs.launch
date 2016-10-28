@@ -3,7 +3,7 @@
     <arg name="dummy_base" default="false"/>
     <arg name="dummy_imu" default="false"/>
     <arg name="gui" default="false"/>
-    <param name="robot_description" command="$(find xacro)/xacro.py $(find bioloid_master)/urdf/bioloid.xacro"/>
+    <param name="robot_description" command="$(find xacro)/xacro $(find bioloid_master)/urdf/bioloid.xacro"/>
     <rosparam param="source_list">['ax_joint_states']</rosparam>
     <param name="rate" value="1000"/>
     <param name="publish_frequency" value="1000"/>

@@ -1,18 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bioloid">
 
-    <!-- Select one and only one of the following include files -->
-    <!-- 1) Standard parts of Bioloid Comprehensive humanoid with 18 AX-12+ servos, which have been replaced in custom version -->
-    <!--    When using this URDF, ensure a transform from odom to base_link is being published -->
-    <!-- <xacro:include filename="$(find bioloid_master)/urdf/bioloid_std_parts.xacro" ns="std_parts"/> -->
-    <!-- 2) Custom parts of modified Bioloid Comprehensive humanoid, with CM-5 replaced by PC and custom sensors -->
-    <!--    When using this URDF, ensure a transform from odom to imu_link is being published -->
-    <xacro:include filename="$(find bioloid_master)/urdf/bioloid_custom_parts.xacro" ns="custom_parts"/>
-
-    <!-- Import gazebo_ros_control plugin -->
-    <xacro:include filename="$(find bioloid_master)/urdf/bioloid_gazebo.xacro" ns="gazebo"/>
-
-    <xacro:property name="pi" value="3.14159"/>
+    <!-- Pi is now predefined -->
+    <!-- <xacro:property name="pi" value="3.14159"/> -->
     <xacro:property name="cad_dir" value="file://$(find bioloid_master)/../../assets/cad"/>
     <!-- Typically, STL/DAE model units are in mm, but RViz units are in m, hence models must be scaled down by 1000. -->
     <xacro:macro name="default_geometry" params="cad_file suffix:=_FCD-Conv_BDR-Col extension:=dae">
@@ -23,6 +13,18 @@
     <xacro:macro name="z_rot">
         <axis xyz="0 0 1"/>
     </xacro:macro>
+
+    <!-- Select one and only one of the following include files -->
+    <!-- 1) Standard parts of Bioloid Comprehensive humanoid with 18 AX-12+ servos, which have been replaced in custom version -->
+    <!--    When using this URDF, ensure a transform from odom to base_link is being published -->
+    <!-- <xacro:include filename="$(find bioloid_master)/urdf/bioloid_std_parts.xacro" ns="std_parts"/> -->
+    <!-- 2) Custom parts of modified Bioloid Comprehensive humanoid, with CM-5 replaced by PC and custom sensors -->
+    <!--    When using this URDF, ensure a transform from odom to imu_link is being published -->
+    <xacro:include filename="$(find bioloid_master)/urdf/bioloid_custom_parts.xacro"/>
+
+    <!-- Import gazebo_ros_control plugin -->
+    <xacro:include filename="$(find bioloid_master)/urdf/bioloid_gazebo.xacro"/>
+
     <!-- <xacro:macro name="shoulder_swing_joint" params="prefix reflect x"> -->
     <xacro:macro name="shoulder_swing_joint" params="prefix reflect">
         <joint name="${prefix}_shoulder_swing_joint" type="revolute">
