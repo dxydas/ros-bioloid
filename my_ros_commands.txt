@@ -1,4 +1,4 @@
-# Using ROS Indigo
+# Using ROS Kinetic
 
 # Single machine configuration (add to ~/.bashrc)
 export ROS_HOSTNAME=localhost
@@ -8,8 +8,8 @@ export ROS_MASTER_URI=http://localhost:11311
 export ROS_DIR=/mnt/STORAGE/Dropbox/Personal/Programming/Bioloid/Linux/ROS
 export CATKIN_WS=$ROS_DIR/catkin_ws
 
-# Source the environment setup file
-source /opt/ros/indigo/setup.bash
+# Source the environment setup file (also add to ~/.bashrc)
+source /opt/ros/kinetic/setup.bash
 
 
 # Create a ROS workspace
@@ -21,7 +21,7 @@ catkin_init_workspace
 # Build
 cd ..
 catkin_make
-# Source the new setup.*sh file (also add to ~/.bashrc)
+# Source the new setup.*sh file - Overlays this workspace on top of your environment (also add to ~/.bashrc)
 source devel/setup.bash
 
 

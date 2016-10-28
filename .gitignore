@@ -51,9 +51,10 @@ ehthumbs.db
 Thumbs.db
 
 # Directories
-build*/
+build/
 devel/
 src/beginner_tutorials/
+src/CMakeLists.txt
 
 # Qt Creator project directories/files
 qt_creator*/
