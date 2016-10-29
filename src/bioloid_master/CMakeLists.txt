@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   message_generation
   moveit_ros_planning_interface
+  usb2ax_controller
 )
 
 ## System dependencies are found with CMake's conventions
@@ -198,6 +199,7 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+#  ${usb2ax_controller_INCLUDE_DIRS}
 )
 
 ## Declare a cpp library
@@ -214,6 +216,7 @@ add_executable(rosoloid_gui ${SOURCE_FILES})
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(bioloid_master_node bioloid_master_generate_messages_cpp)
+#add_dependencies(rosoloid_gui ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(bioloid_master_node
