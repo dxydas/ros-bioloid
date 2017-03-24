@@ -65,6 +65,7 @@ roslaunch bioloid_master bioloid_rviz.launch                                    
 roslaunch bioloid_master bioloid_pubs.launch dummy_imu:=true
 roslaunch bioloid_master bioloid_gazebo.launch                                  # Loads bioloid.world from bioloid_master/worlds folder
 # Start a previously saved Gazebo world
+roscd bioloid_master/worlds/
 gazebo bioloid_sandbox.world                                                    # Use as test only, all robot data is hard-coded in this file
 #####################
 
